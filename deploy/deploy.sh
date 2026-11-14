@@ -14,7 +14,9 @@ if [ -n "${GHCR_TOKEN:-}" ]; then
 fi
 
 export IMAGE_TAG="$TAG"
-docker compose pull web
+if [ -z "${SKIP_PULL:-}" ]; then
+  docker compose pull web
+fi
 docker compose up -d --remove-orphans web
 
 for i in $(seq 1 30); do

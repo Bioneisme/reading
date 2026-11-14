@@ -1,0 +1,11 @@
+[Unit]
+Description=SoundOut: deploy new commits from main
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+ExecStart=/home/deploy/soundout/autodeploy.sh
+TimeoutStartSec=900

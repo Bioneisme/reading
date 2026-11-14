@@ -43,6 +43,21 @@ Both keys are optional for local development: without `ANTHROPIC_API_KEY` storie
 
 Test payment: card `4242 4242 4242 4242`, any future date, any CVC.
 
+## Deploy
+
+Production: https://reading.13lab.tech (server `lab`, user `deploy`, `/home/deploy/soundout`).
+
+- A systemd timer on the server (`soundout-autodeploy.timer`) checks `main` every minute. On a new commit it builds the Docker image (lint, typecheck and tests run inside the build), starts it with `docker compose` on `127.0.0.1:3030` and waits for `/api/health`. A failing commit is not deployed and not retried.
+- nginx terminates HTTPS (Let's Encrypt via certbot) and proxies to the container: `deploy/nginx.conf`.
+- Runtime secrets live only on the server in `/home/deploy/soundout/.env` (`STRIPE_SECRET_KEY`, `ANTHROPIC_API_KEY`, `SITE_URL`).
+- GitHub Actions (`.github/workflows/ci.yml`) runs the same checks on pushes and pull requests; it does not deploy.
+
+```bash
+ssh lab journalctl -u soundout-autodeploy -f     # deploy log
+ssh lab systemctl start soundout-autodeploy      # deploy now instead of waiting
+./deploy/build-on-server.sh                      # manual deploy of local HEAD
+```
+
 ## Tests
 
 `tests/engine/` covers the control set from the spec (10/10 typical misreadings classified correctly), distractor/classifier consistency, mastery and focus selection, plan building, the story validator, every library story, and the LLM → validator → retry → library pipeline (with a stub writer).

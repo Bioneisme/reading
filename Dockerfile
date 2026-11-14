@@ -8,6 +8,8 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG RUN_CHECKS=1
+RUN if [ "$RUN_CHECKS" = "1" ]; then npm run lint && npm run typecheck && npm test; fi
 RUN npm run build
 
 FROM node:20-alpine AS runner
