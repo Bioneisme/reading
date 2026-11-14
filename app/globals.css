@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-paper: #fbf8f3;
+  --color-surface: #ffffff;
+  --color-ink: #1e2b33;
+  --color-ink-soft: #52616b;
+  --color-line: #e7e0d5;
+  --color-brand: #2f6b5e;
+  --color-brand-strong: #234f45;
+  --color-brand-soft: #e3efea;
+  --color-accent: #c8643a;
+  --color-accent-soft: #fbe9df;
+  --color-mark: #ffe08a;
+  --color-mark-line: #b7791f;
+  --color-sun: #f6c85f;
+
+  --font-sans: var(--nf-ui), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--nf-display), Georgia, serif;
+  --font-reading: var(--nf-reading), "Andika", ui-sans-serif, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+.reading-text {
+  font-family: var(--font-reading);
+  font-size: 30px;
+  line-height: 1.9;
+  word-spacing: 0.22em;
+  letter-spacing: 0.01em;
+}
+@media (min-width: 640px) {
+  .reading-text {
+    font-size: 40px;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0.5in;
+    background: white !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .print-area .reading-text {
+    font-size: 34pt;
+    line-height: 2;
+  }
+  .print-area .word-btn {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: black !important;
+  }
+  .print-area .print-hide,
+  .print-area .print-hide * {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+.print-only {
+  display: none;
+}

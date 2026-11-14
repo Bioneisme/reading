@@ -1,0 +1,58 @@
+A web app for parents of children aged 5–8 who are learning to read. Every evening the child reads a short text aloud (from paper or the screen), the parent taps the words the child misses and picks what the child said. SoundOut works out which reading skill is weak and gives the parent a plan for tomorrow: what to practise, what to say, and a practice story in which every word is checked by code.
+
+No microphone, no iPad, no sign-up. Child data stays in the browser (localStorage).
+
+## What the code does and what the LLM does
+
+| Step | Who | Where |
+|---|---|---|
+| Splitting each word into letter-sound chunks over CMUdict (sh, ai, ar, silent e…) and tagging its skills | **Code** | `lib/engine/phonics.ts` |
+| Offering likely misreadings ("bike" → bik, bake, bite) | **Code**: skill rules applied in reverse | `lib/engine/distractors.ts`, `variants.ts` |
+| Deciding which skill explains a miss | **Code**: priority rules (ТЗ §5.4) | `lib/engine/classify.ts` |
+| Mastery, weak spot, focus for tomorrow | **Code**: decayed error rate `(errors+1)/(attempts+2)` | `lib/engine/mastery.ts` |
+| Tomorrow's plan: word pairs, word list, "Say this" scripts | **Code** + hand-written content | `lib/engine/plan.ts`, `skills.ts` |
+| Practice story text | **LLM** (Claude Sonnet 5.5, Haiku 5.5 if slow) | `lib/server/claude.ts` |
+| Checking every story word is readable for this child | **Code**: validator, 2 retries, then a ready-made story | `lib/engine/validate.ts`, `lib/server/story-service.ts` |
+
+The LLM never decides anything about the child. If it is slow, refuses or writes a word the child can't decode yet, the parent gets a hand-written library story that passed the same validator.
+
+## Architecture
+
+```
+lib/engine/   domain core: pure TypeScript, no I/O. Runs in the browser and on the server
+lib/server/   server-only services (Stripe, Claude, full dictionary); `import "server-only"`
+lib/client/   browser-only: storage behind a repository interface, typed API wrappers
+app/api/      thin route handlers: validate input (zod) → call a service → JSON
+app/, components/   UI. Rendering only; logic comes from lib/engine
+data/         word bank, Dolch list, CMUdict, generated client lexicon
+```
+
+The core loop (check → classify → profile → plan) runs in the browser. The server is used only for what needs secrets or heavy data: Stripe Checkout, Claude, and the full 135k-word CMUdict for validating LLM stories. The browser gets a 1.4k-word lexicon (`data/lexicon-core.json`, ~30 KB) built by `npm run lexicon`.
+
+## Run
+
+```bash
+cp .env.example .env.local   # add STRIPE_SECRET_KEY (test mode) and ANTHROPIC_API_KEY
+npm install
+npm run dev                  # http://localhost:3000
+npm test                     # engine tests (vitest)
+npm run lexicon              # rebuild data/lexicon-core.json after editing words or stories
+```
+
+Both keys are optional for local development: without `ANTHROPIC_API_KEY` stories come from the library, and without `STRIPE_SECRET_KEY` the paywall shows a friendly error.
+
+Test payment: card `4242 4242 4242 4242`, any future date, any CVC.
+
+## Tests
+
+`tests/engine/` covers the control set from the spec (10/10 typical misreadings classified correctly), distractor/classifier consistency, mastery and focus selection, plan building, the story validator, every library story, and the LLM → validator → retry → library pipeline (with a stub writer).
+
+## Data sources and licences
+
+- **CMUdict 0.7b** (Carnegie Mellon University), BSD-style licence, commercial use allowed: `data/raw/cmudict.dict`.
+- **Dolch sight words** (220 service words, published 1936/1948): treated as public domain. To be re-checked before release.
+- **K–2 word bank, passages, stories, scripts**: written for SoundOut (`data/wordbank.ts`, `lib/engine/content.ts`, `lib/engine/skills.ts`).
+- **Andika** font (SIL), SIL Open Font License.
+- Not used (non-commercial licences): UFLI, CKLA, Open Source Phonics.
+
+SoundOut is a coaching tool, not a medical or dyslexia diagnosis.
