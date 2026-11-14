@@ -44,29 +44,41 @@ export function vocabularyFor(req: StoryRequest, lex: Lexicon): { focusWords: st
 export function buildPrompt(req: StoryRequest, lex: Lexicon, rejected: string[] = []): string {
   const { focusWords, otherWords } = vocabularyFor(req, lex);
   const skill = SKILLS[req.focus];
+  const names = STORY_NAMES.filter((n) => analyzeWord(n, lex)?.decodable);
+  const allowed = [...new Set([...focusWords, ...otherWords, ...DOLCH.filter((w) => !w.includes("'"))])].sort();
   return [
     `Write a short practice story for a beginning reader (age 5–8) who is working on: ${skill.name} (${skill.example}).`,
-    `The story is read aloud by the child to a parent. Warm, simple, a tiny plot with a happy ending.`,
+    `The child reads it aloud to a parent. Warm and simple, a tiny plot with a happy ending.`,
     ``,
-    `Hard rules:`,
-    `- 60 to 100 words. Short sentences (3–9 words).`,
-    `- Use ONLY words from the lists below (any capitalization). No other words, no contractions, no possessives with 's.`,
-    `- Use at least 8 different words from the FOCUS list.`,
-    `- Characters may only be named: ${STORY_NAMES.join(", ")}.`,
-    `- Title: 2–5 words, from the same lists.`,
+    `The child can only read the words in ALLOWED WORDS. Any other word breaks the exercise.`,
+    ``,
+    `Rules:`,
+    `- 60 to 100 words. Short sentences of 3–9 words.`,
+    `- Every word of the title and the story must appear in ALLOWED WORDS, spelled exactly as listed.`,
+    `- Do not add endings (-s, -es, -ed, -ing) unless that exact form is listed. No contractions, no possessive 's.`,
+    `- Use at least 8 different FOCUS words; repeat them.`,
+    `- Character names: only ${names.join(", ")}.`,
+    `- Before answering, re-read the story word by word and replace any word that is not in ALLOWED WORDS.`,
     ``,
     `FOCUS words: ${focusWords.join(" ")}`,
-    `Other decodable words: ${otherWords.join(" ")}`,
-    `Sight words: ${DOLCH.filter((w) => !w.includes("'")).join(" ")}`,
-    rejected.length ? `\nYour previous draft used words that are NOT allowed: ${rejected.join(", ")}. Do not use them.` : "",
+    ``,
+    `ALLOWED WORDS: ${allowed.join(" ")}`,
+    rejected.length
+      ? `\nYour previous draft used words the child cannot read yet: ${rejected.join(", ")}. Write a new story without them.`
+      : "",
   ].join("\n");
 }
 
-export async function generateStory(req: StoryRequest, deps: { writer: StoryWriter | null; lex: Lexicon }): Promise<StoryResult> {
+export async function generateStory(
+  req: StoryRequest,
+  deps: { writer: StoryWriter | null; lex: Lexicon; deadlineMs?: number },
+): Promise<StoryResult> {
   const rejected: string[] = [];
+  const started = Date.now();
   let attempts = 0;
   if (deps.writer) {
-    for (attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
+    while (attempts < MAX_ATTEMPTS && Date.now() - started < (deps.deadlineMs ?? 40_000)) {
+      attempts++;
       try {
         const draft = await deps.writer.write(buildPrompt(req, deps.lex, rejected));
         const all = `${draft.title}. ${draft.text}`;

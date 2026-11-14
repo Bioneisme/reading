@@ -11,14 +11,14 @@ const FAST = "claude-haiku-5-5";
 
 export function createClaudeWriter(): StoryWriter | null {
   if (!process.env.ANTHROPIC_API_KEY) return null;
-  const client = new Anthropic({ timeout: 12_000, maxRetries: 0 });
+  const client = new Anthropic({ timeout: 25_000, maxRetries: 0 });
 
   const call = async (model: string, prompt: string): Promise<StoryDraft> => {
     const res = await client.beta.messages.parse({
       model,
-      max_tokens: 2000,
+      max_tokens: 8000,
       ...(model === PRIMARY ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" as const } : {}),
-      output_config: { effort: "low", format: betaZodOutputFormat(Draft) },
+      output_config: { effort: "medium", format: betaZodOutputFormat(Draft) },
       system: "You write tiny decodable stories for children who are learning to read. You follow word-list constraints exactly.",
       messages: [{ role: "user", content: prompt }],
     });

@@ -106,7 +106,7 @@ function Session({ state }: { state: AppState }) {
         return [plan.focus];
       }
     })();
-    generateStory({ focus: plan.focus, allowed, childName: child.name }, { timeoutMs: 10000 })
+    generateStory({ focus: plan.focus, allowed, childName: child.name }, { timeoutMs: 45000 })
       .then(({ story: s, tokens }) => {
         if (!alive) return;
         if (s.text.trim()) {

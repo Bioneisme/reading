@@ -35,12 +35,13 @@ describe("generateStory", () => {
     expect(r.source).toBe("llm");
     expect(r.attempts).toBe(2);
     expect(r.rejected).toContain("rain");
-    expect(w.calls[1]).toContain("NOT allowed: rain");
+    expect(w.calls[1]).toContain("cannot read yet: rain");
   });
   it("falls back to the library after 3 bad drafts", async () => {
     const w = writer(BAD);
     const r = await generateStory(req, { writer: w, lex: fullLexicon() });
     expect(w.calls).toHaveLength(3);
+    expect(r.attempts).toBe(3);
     expect(r.source).toBe("library");
     expect(r.story.title).toBe("Jake's Kite");
   });
@@ -51,6 +52,7 @@ describe("generateStory", () => {
   it("prompt lists focus words and only allowed vocabulary", () => {
     const p = buildPrompt(req, fullLexicon());
     expect(p).toMatch(/FOCUS words: .*\bcake\b/);
-    expect(p).not.toMatch(/Other decodable words: .*\brain\b/);
+    expect(p).not.toMatch(/ALLOWED WORDS: .*\brain\b/);
+    expect(p).toMatch(/ALLOWED WORDS: .*\bsaid\b/);
   });
 });
