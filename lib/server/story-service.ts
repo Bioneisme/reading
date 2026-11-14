@@ -9,7 +9,6 @@ import type { Lexicon } from "@/lib/engine/lexicon";
 export interface StoryRequest {
   focus: SkillId;
   allowed: SkillId[];
-  childName: string;
 }
 
 export interface StoryDraft {

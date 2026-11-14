@@ -1,23 +1,59 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-paper: #fbf8f3;
-  --color-surface: #ffffff;
-  --color-ink: #1e2b33;
-  --color-ink-soft: #52616b;
-  --color-line: #e7e0d5;
-  --color-brand: #2f6b5e;
-  --color-brand-strong: #234f45;
-  --color-brand-soft: #e3efea;
-  --color-accent: #c8643a;
-  --color-accent-soft: #fbe9df;
-  --color-mark: #ffe08a;
-  --color-mark-line: #b7791f;
-  --color-sun: #f6c85f;
+@theme {
+  --color-paper: #FBF7F0;
+  --color-card: #FFFFFF;
+  --color-sand: #F3EDE2;
+  --color-line: #ECE4D6;
+  --color-line-soft: #F0E9DC;
+  --color-line-strong: #DCD3C3;
+  --color-edge: #E4DBCB;
+  --color-ink: #1C1A3B;
+  --color-ink-2: #4D4A6B;
+  --color-ink-3: #6A6787;
+  --color-night: #24216A;
+  --color-night-2: #2F2B85;
+  --color-night-deep: #17145A;
+  --color-night-edge: #14124A;
+  --color-indigo: #4B3FE0;
+  --color-indigo-edge: #3328B0;
+  --color-indigo-tint: #EEEBFF;
+  --color-indigo-soft: #D6D3F5;
+  --color-indigo-line: #B8B0F5;
+  --color-lamp: #FFC93C;
+  --color-lamp-edge: #D99A0B;
+  --color-highlighter: #FFE07A;
+  --color-highlighter-edge: #F2B915;
+  --color-lamp-tint: #FFF1C7;
+  --color-lamp-line: #F2CF6B;
+  --color-lamp-ink: #6B4A00;
+  --color-mastered: #22A06B;
+  --color-mastered-tint: #DDF3E6;
+  --color-mastered-ink: #17734A;
+  --color-improving: #3B82F6;
+  --color-improving-tint: #E3EDFE;
+  --color-improving-ink: #1F5BC4;
+  --color-needs: #F08A3C;
+  --color-needs-tint: #FFEAD9;
+  --color-needs-ink: #A4480C;
+  --color-unchecked: #F2EEE6;
+  --color-unchecked-line: #CFC6B6;
 
-  --font-sans: var(--nf-ui), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--nf-display), Georgia, serif;
-  --font-reading: var(--nf-reading), "Andika", ui-sans-serif, sans-serif;
+  --font-sans: var(--font-nunito), ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --font-read: var(--font-andika), "Andika", ui-sans-serif, sans-serif;
+
+  --radius-chip: 14px;
+  --radius-button: 16px;
+  --radius-card: 24px;
+  --radius-hero: 32px;
+
+  --shadow-edge: 0 4px 0 #ECE4D6;
+  --shadow-edge-strong: 0 4px 0 #DCD3C3;
+  --shadow-edge-sand: 0 4px 0 #E4DBCB;
+  --shadow-edge-indigo: 0 4px 0 #3328B0;
+  --shadow-edge-lamp: 0 4px 0 #D99A0B;
+  --shadow-edge-night: 0 6px 0 #14124A;
+  --shadow-lift: 0 24px 48px -28px rgba(36, 33, 106, 0.35);
 }
 
 :root {
@@ -35,60 +71,43 @@ body {
   overflow-x: hidden;
 }
 
-.reading-text {
-  font-family: var(--font-reading);
-  font-size: 30px;
-  line-height: 1.9;
-  word-spacing: 0.22em;
-  letter-spacing: 0.01em;
+.read-text {
+  font-family: var(--font-read);
+  font-size: 28px;
+  line-height: 2;
+  word-spacing: 0.12em;
 }
-@media (min-width: 640px) {
-  .reading-text {
-    font-size: 40px;
+
+@media (min-width: 768px) {
+  .read-text {
+    font-size: 44px;
   }
 }
 
-:focus-visible {
-  outline: 3px solid var(--color-brand);
-  outline-offset: 2px;
-  border-radius: 6px;
+.tactile:disabled {
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.print-only {
+  display: none;
 }
 
 @media print {
-  body * {
-    visibility: hidden !important;
+  @page {
+    size: letter;
+    margin: 0.75in;
   }
-  .print-area,
-  .print-area * {
-    visibility: visible !important;
+  body {
+    background: #fff;
   }
-  .print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    padding: 0.5in;
-    background: white !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-  .print-area .reading-text {
-    font-size: 34pt;
-    line-height: 2;
-  }
-  .print-area .word-btn {
-    background: transparent !important;
-    border-color: transparent !important;
-    color: black !important;
-  }
-  .print-area .print-hide,
-  .print-area .print-hide * {
+  .no-print {
     display: none !important;
   }
   .print-only {
     display: block !important;
   }
-}
-.print-only {
-  display: none;
+  .read-text {
+    font-size: 30pt;
+  }
 }

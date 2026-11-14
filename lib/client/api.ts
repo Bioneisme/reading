@@ -35,7 +35,7 @@ export async function verifyCheckout(sessionId: string): Promise<{ paid: boolean
 }
 
 export async function generateStory(
-  req: { focus: SkillId; allowed: SkillId[]; childName: string },
+  req: { focus: SkillId; allowed: SkillId[]; childName?: string },
   opts: { timeoutMs?: number } = {},
 ): Promise<{ story: Story; source: "llm" | "library"; tokens: StoryToken[] | null }> {
   const ctrl = new AbortController();
@@ -44,7 +44,7 @@ export async function generateStory(
     const res = await fetch("/api/story", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req),
+      body: JSON.stringify({ focus: req.focus, allowed: req.allowed }),
       signal: ctrl.signal,
     });
     const data = await json<{ story?: Story; source?: "llm" | "library"; tokens?: StoryToken[] }>(res);
@@ -56,5 +56,21 @@ export async function generateStory(
     };
   } finally {
     clearTimeout(t);
+  }
+}
+
+export async function fetchLexicon(words: string[]): Promise<Record<string, string[]>> {
+  const unique = [...new Set(words.map((w) => w.toLowerCase()).filter((w) => /^[a-z']{1,30}$/.test(w)))].slice(0, 300);
+  if (!unique.length) return {};
+  try {
+    const res = await fetch("/api/lexicon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ words: unique }),
+    });
+    const data = await json<{ entries?: Record<string, string[]> }>(res);
+    return data.entries ?? {};
+  } catch {
+    return {};
   }
 }

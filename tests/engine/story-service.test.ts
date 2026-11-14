@@ -3,7 +3,7 @@ vi.mock("server-only", () => ({}));
 import { buildPrompt, generateStory, type StoryWriter } from "@/lib/server/story-service";
 import { fullLexicon } from "./helpers";
 
-const req = { focus: "magicE" as const, allowed: ["shortVowels" as const], childName: "Mia" };
+const req = { focus: "magicE" as const, allowed: ["shortVowels" as const] };
 const GOOD = {
   title: "Jake and the Kite",
   text: "Jake has a kite. It is red and white. Jake and Mom ride a bike to the lake. Jake can see a big pine. Jake said, \"Let me fly my kite!\" Up, up went the kite. It rode up to the sun. Mom gave Jake a cake. Jake ate the cake at the lake. It is a fine kite and a fine cake, said Mom. Jake had a fun time. Then they rode home.",

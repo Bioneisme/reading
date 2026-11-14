@@ -257,7 +257,7 @@ export const store = {
     emit();
   },
 
-  jumpToDay5() {
+  simulateWeek() {
     if (getMode() !== "demo") rawSet(MODE_KEY, "demo");
     const s = demoRepo.load();
     demoRepo.save({

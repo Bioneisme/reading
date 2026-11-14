@@ -1,30 +1,49 @@
 import type { Metadata } from "next";
-import { Shell } from "@/components/Shell";
-import { H1 } from "@/components/ui";
+import { LegalPage, LegalSection, Mail } from "@/components/landing/LegalPage";
 
-export const metadata: Metadata = { title: "Privacy — Readly" };
+export const metadata: Metadata = {
+  title: "Privacy",
+  description: "Readly's privacy policy, in plain words: your child's first name and grade stay in your browser.",
+};
 
-const ITEMS = [
-  ["No account, no sign-up", "Readly works without a login. We don't ask for your email, your name or your child's last name."],
-  ["Your child's data stays on your device", "The first name, grade, quiz answers and reading history are stored in your browser (local storage). We don't keep them on our servers."],
-  ["No microphone, no recordings", "Readly never listens to your child. You tap the words; nothing is recorded."],
-  ["Payments", "Payments are handled by Stripe on Stripe's secure page. We never see your card number. We only check whether a payment went through."],
-  ["Practice stories", "When we write a new practice story, we send the skill to practice and your child's first name to our story service. Nothing else."],
-  ["Deleting your data", "Go to Journal → Settings → Reset all data. It's gone from this device immediately."],
-];
-
-export default function Privacy() {
+export default function PrivacyPage() {
   return (
-    <Shell>
-      <H1>Privacy, in plain language</H1>
-      <dl className="mt-6 grid gap-5">
-        {ITEMS.map(([t, d]) => (
-          <div key={t}>
-            <dt className="font-semibold">{t}</dt>
-            <dd className="mt-1 leading-relaxed text-ink-soft">{d}</dd>
-          </div>
-        ))}
-      </dl>
-    </Shell>
+    <LegalPage
+      current="/privacy"
+      title="Privacy, in plain words"
+      tone="mastered"
+      summary="We collect your child's first name and grade. That's it — no photos, no voice, no email, no account."
+    >
+      <LegalSection title="What we collect">
+        <p>
+          Your child&apos;s first name and grade, your quiz answers, the words you mark during reading, and what you
+          picked for what your child said. Nothing else.
+        </p>
+      </LegalSection>
+      <LegalSection title="Where it's kept">
+        <p>
+          In this browser, on this device. We don&apos;t keep your child&apos;s profile on our servers. If you clear your
+          browser data, it&apos;s gone.
+        </p>
+      </LegalSection>
+      <LegalSection title="What leaves your browser">
+        <p>
+          To write a practice story, we send the skills being practiced to our story service. We don&apos;t save the
+          request, and your child&apos;s name is never passed to the AI that writes the story. Payments go through
+          Stripe; we never see your full card number.
+        </p>
+      </LegalSection>
+      <LegalSection title="No trackers">
+        <p>No ads, no ad trackers, no microphone. Nothing listens to your child, and nothing is recorded.</p>
+      </LegalSection>
+      <LegalSection title="Deleting everything">
+        <p>Open Settings in the journal and tap Reset all data. It&apos;s removed from this browser right away.</p>
+      </LegalSection>
+      <LegalSection title="Questions">
+        <p>
+          Write to us at <Mail />. A person reads every message.
+        </p>
+      </LegalSection>
+    </LegalPage>
   );
 }

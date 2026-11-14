@@ -1,36 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { Andika, Figtree, Fraunces } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import "./readly-states.css";
 
-const ui = Figtree({ variable: "--nf-ui", subsets: ["latin"], display: "swap" });
-const display = Fraunces({
-  variable: "--nf-display",
-  subsets: ["latin"],
+const nunito = localFont({
+  variable: "--font-nunito",
   display: "swap",
-  weight: ["500", "600", "700"],
+  src: [{ path: "./fonts/nunito-500-900-latin.woff2", weight: "500 900", style: "normal" }],
 });
-const reading = Andika({
-  variable: "--nf-reading",
-  subsets: ["latin"],
+
+const andika = localFont({
+  variable: "--font-andika",
   display: "swap",
-  weight: ["400", "700"],
+  src: [
+    { path: "./fonts/andika-400-latin.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/andika-700-latin.woff2", weight: "700", style: "normal" },
+  ],
 });
+
+const title = "Readly — find out why your child guesses words";
+const description =
+  "A 3-minute reading check for parents of K–2 kids. See which sound patterns trip your child up, then follow a 10-minute plan each night.";
 
 export const metadata: Metadata = {
-  title: "Readly — a reading coach for parents",
-  description:
-    "Your child reads a short text aloud, you tap the words they miss, and Readly tells you what to practice and what to say tomorrow. 10 minutes a night. No microphone, no iPad, no sign-up.",
+  metadataBase: new URL(process.env.SITE_URL ?? "https://reading.13lab.tech"),
+  title: { default: title, template: "%s · Readly" },
+  description,
+  applicationName: "Readly",
+  openGraph: { type: "website", siteName: "Readly", title, description, locale: "en_US" },
+  twitter: { card: "summary_large_image", title, description },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#fbf8f3",
+  themeColor: "#FBF7F0",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${ui.variable} ${display.variable} ${reading.variable}`}>
+    <html lang="en" className={`${nunito.variable} ${andika.variable}`}>
       <body className="min-h-screen bg-paper font-sans text-ink antialiased">{children}</body>
     </html>
   );

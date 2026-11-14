@@ -1,30 +1,55 @@
 import type { Metadata } from "next";
-import { Shell } from "@/components/Shell";
-import { H1 } from "@/components/ui";
+import { LegalPage, LegalSection, Mail } from "@/components/landing/LegalPage";
 
-export const metadata: Metadata = { title: "Terms — Readly" };
+export const metadata: Metadata = {
+  title: "Terms",
+  description: "Readly's terms, in plain words: plans, billing, cancelling and refunds.",
+};
 
-const ITEMS = [
-  ["What Readly is", "A coaching tool that helps parents practice reading with their child for about 10 minutes a night. It's not a medical, psychological or dyslexia test, and it doesn't replace your child's teacher. If you're worried, talk to the teacher."],
-  ["Who it's for", "Parents and caregivers of children aged 5–8. The parent uses the app; the child only reads."],
-  ["Plans and billing", "1 week for $6.93, then $19.99 every 4 weeks. 4 weeks for $14.99, then $19.99 every 4 weeks. 1 year for $119. Plans renew automatically until you cancel."],
-  ["Cancelling", "Cancel anytime in one click from Journal → Settings. You keep access until the end of the period you paid for."],
-  ["Your data", "Your data lives on your device. See the privacy page for details."],
-  ["Fair use", "Please don't resell or copy the stories and plans in bulk. They're for your family."],
+const PLANS = [
+  "1 week: $6.93, then $19.99 every 4 weeks.",
+  "4 weeks: $14.99, then $19.99 every 4 weeks.",
+  "1 year: $119 a year.",
 ];
 
-export default function Terms() {
+export default function TermsPage() {
   return (
-    <Shell>
-      <H1>Terms, in plain language</H1>
-      <dl className="mt-6 grid gap-5">
-        {ITEMS.map(([t, d]) => (
-          <div key={t}>
-            <dt className="font-semibold">{t}</dt>
-            <dd className="mt-1 leading-relaxed text-ink-soft">{d}</dd>
-          </div>
-        ))}
-      </dl>
-    </Shell>
+    <LegalPage
+      current="/terms"
+      title="Terms, in plain words"
+      tone="lamp"
+      summary="Readly is a coaching tool for parents — not a medical or dyslexia diagnosis. If you're worried, talk to your child's teacher."
+    >
+      <LegalSection title="Plans and billing">
+        <ul className="list-disc pl-[22px] leading-[1.7]">
+          {PLANS.map((p) => (
+            <li key={p}>{p}</li>
+          ))}
+        </ul>
+        <p>Plans renew automatically until you cancel.</p>
+      </LegalSection>
+      <LegalSection title="Cancel anytime">
+        <p>
+          Cancel anytime in one click from your journal settings. No more charges after that, and you keep access until
+          the end of the period you paid for.
+        </p>
+      </LegalSection>
+      <LegalSection title="Refunds">
+        <p>
+          For refunds within 14 days of a charge, email <Mail />.
+        </p>
+      </LegalSection>
+      <LegalSection title="Your data">
+        <p>It lives in your browser. If you clear it or switch devices, your progress doesn&apos;t come along.</p>
+      </LegalSection>
+      <LegalSection title="Fair use">
+        <p>Readly is for your own family. Please don&apos;t resell the stories or copy the app.</p>
+      </LegalSection>
+      <LegalSection title="Questions">
+        <p>
+          Write to us at <Mail />.
+        </p>
+      </LegalSection>
+    </LegalPage>
   );
 }

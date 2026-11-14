@@ -1,0 +1,25 @@
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 3px solid #4B3FE0; outline-offset: 3px; }
+:is(input, textarea, select):focus-visible { outline-offset: 2px; border-color: #4B3FE0; }
+.on-dark :focus-visible { outline-color: #FFC93C; }
+
+.tactile, .option, .word {
+  transition: transform 90ms ease-out, filter 120ms ease-out, background-color 120ms ease-out,
+    border-color 120ms ease-out, box-shadow 90ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tactile:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  .option:not([aria-checked="true"]):not([aria-pressed="true"]):hover { border-color: #B8B0F5; background-color: #F7F5FF; }
+  .word:not([aria-pressed="true"]):hover { background-color: #F3EEE4; }
+  .text-link:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+}
+
+.tactile:active { transform: translateY(3px); box-shadow: none; filter: none; }
+.option:active, .word:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tactile, .option, .word { transition: none; }
+  .tactile:hover, .tactile:active, .option:active, .word:active { transform: none; }
+}

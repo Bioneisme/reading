@@ -12,7 +12,6 @@ const Skill = z.enum(SKILL_ORDER as [SkillId, ...SkillId[]]);
 const Body = z.object({
   focus: Skill,
   allowed: z.array(Skill).max(11),
-  childName: z.string().trim().max(40).default("your child"),
 });
 
 export async function POST(req: Request) {

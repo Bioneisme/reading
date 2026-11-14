@@ -8,3 +8,5 @@ export { summarizeCheck, computeProfile, allowedSkills } from "./mastery";
 export { buildPlan } from "./plan";
 export { annotateText, validateStory } from "./validate";
 export { PASSAGES, passageForGrade, STORIES, getStory, storyForSkill } from "./content";
+export { coreLexicon, extendLexicon, type Lexicon } from "./lexicon";
+export { wordsOf } from "./text";

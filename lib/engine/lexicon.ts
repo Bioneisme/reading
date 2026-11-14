@@ -27,3 +27,8 @@ export const stressOf = (ph: string) => {
   const m = /\d/.exec(ph);
   return m ? Number(m[0]) : undefined;
 };
+
+export function extendLexicon(base: Lexicon, entries: Record<string, string[]>): Lexicon {
+  const extra = createLexicon(entries);
+  return { get: (w) => base.get(w) ?? extra.get(w) };
+}
