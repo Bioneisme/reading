@@ -17,9 +17,9 @@ const reading = Andika({
 });
 
 export const metadata: Metadata = {
-  title: "SoundOut — a reading coach for parents",
+  title: "Readly — a reading coach for parents",
   description:
-    "Your child reads a short text aloud, you tap the words they miss, and SoundOut tells you what to practice and what to say tomorrow. 10 minutes a night. No microphone, no iPad, no sign-up.",
+    "Your child reads a short text aloud, you tap the words they miss, and Readly tells you what to practice and what to say tomorrow. 10 minutes a night. No microphone, no iPad, no sign-up.",
 };
 
 export const viewport: Viewport = {

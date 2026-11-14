@@ -9,7 +9,7 @@ export const PLANS: Record<PlanId, { label: string }> = {
   year: { label: "1 year $119" },
 };
 
-const INTRO_COUPON = "soundout-intro-4w-500";
+const INTRO_COUPON = "readly-intro-4w-500";
 
 export function stripeClient(): Stripe | null {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -25,7 +25,7 @@ async function ensureIntroCoupon(stripe: Stripe): Promise<string> {
   return INTRO_COUPON;
 }
 
-const product = { name: "SoundOut reading plan" };
+const product = { name: "Readly reading plan" };
 const every4Weeks = { unit_amount: 1999, currency: "usd", product_data: product, recurring: { interval: "week" as const, interval_count: 4 } };
 
 export async function createCheckoutSession(stripe: Stripe, plan: PlanId, origin: string): Promise<string> {
@@ -51,7 +51,7 @@ export async function createCheckoutSession(stripe: Stripe, plan: PlanId, origin
       ...base,
       line_items: [
         { quantity: 1, price_data: every4Weeks },
-        { quantity: 1, price_data: { unit_amount: 693, currency: "usd", product_data: { name: "SoundOut first week" } } },
+        { quantity: 1, price_data: { unit_amount: 693, currency: "usd", product_data: { name: "Readly first week" } } },
       ],
       subscription_data: { trial_period_days: 7 },
     };

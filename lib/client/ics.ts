@@ -12,11 +12,11 @@ export function buildReminderIcs(time: string, childName: string): string {
     `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
   const stamp = now.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   const name = childName || "your child";
-  const uid = `soundout-reminder-${Date.now()}@soundout.app`;
+  const uid = `readly-reminder-${Date.now()}@readly.app`;
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//SoundOut//Reading reminder//EN",
+    "PRODID:-//Readly//Reading reminder//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${uid}`,
@@ -25,7 +25,7 @@ export function buildReminderIcs(time: string, childName: string): string {
     `DTEND:${local(end)}`,
     "RRULE:FREQ=DAILY",
     `SUMMARY:10 minutes of reading with ${name}`,
-    "DESCRIPTION:Open SoundOut and start tonight's 10-minute session.",
+    "DESCRIPTION:Open Readly and start tonight's 10-minute session.",
     "BEGIN:VALARM",
     "TRIGGER:-PT0M",
     "ACTION:DISPLAY",
@@ -43,7 +43,7 @@ export function downloadReminderIcs(time: string, childName: string) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "soundout-reading-reminder.ics";
+    a.download = "readly-reading-reminder.ics";
     document.body.appendChild(a);
     a.click();
     a.remove();

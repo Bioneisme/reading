@@ -2,7 +2,7 @@
 set -euo pipefail
 
 TAG="${1:?usage: deploy.sh <image-tag>}"
-APP_DIR="${APP_DIR:-$HOME/soundout}"
+APP_DIR="${APP_DIR:-$HOME/readly}"
 IMAGE="ghcr.io/bioneisme/reading"
 export DOCKER_CONFIG="$APP_DIR/.docker"
 

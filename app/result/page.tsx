@@ -213,7 +213,7 @@ function Result({ state, check }: { state: AppState; check: SessionRecord }) {
       </section>
 
       <p className="mt-8 text-sm text-ink-soft">
-        SoundOut is a coaching tool, not a medical or dyslexia test. If you&apos;re worried, talk to {name}&apos;s teacher.
+        Readly is a coaching tool, not a medical or dyslexia test. If you&apos;re worried, talk to {name}&apos;s teacher.
       </p>
     </Shell>
   );

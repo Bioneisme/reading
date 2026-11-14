@@ -14,11 +14,11 @@ permissions:
 
 env:
   IMAGE: ghcr.io/bioneisme/reading
-  APP_DIR: /home/deploy/soundout
+  APP_DIR: /home/deploy/readly
 
 jobs:
   deploy:
-    runs-on: [self-hosted, soundout]
+    runs-on: [self-hosted, readly]
     environment:
       name: production
       url: https://reading.13lab.tech

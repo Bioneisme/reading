@@ -1,9 +1,9 @@
-name: soundout
+name: readly
 
 services:
   web:
     image: ghcr.io/bioneisme/reading:${IMAGE_TAG:-latest}
-    container_name: soundout-web
+    container_name: readly-web
     restart: unless-stopped
     env_file: .env
     ports:

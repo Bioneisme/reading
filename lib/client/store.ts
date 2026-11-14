@@ -123,9 +123,27 @@ export function localStorageRepository(key: string, demo: boolean): Repository {
   };
 }
 
-const REAL_KEY = "soundout:v1";
-const DEMO_KEY = "soundout:demo:v1";
-const MODE_KEY = "soundout:mode";
+const REAL_KEY = "readly:v1";
+const DEMO_KEY = "readly:demo:v1";
+const MODE_KEY = "readly:mode";
+
+const LEGACY_KEYS: [string, string][] = [
+  ["soundout:v1", REAL_KEY],
+  ["soundout:demo:v1", DEMO_KEY],
+  ["soundout:mode", MODE_KEY],
+];
+
+function migrateLegacyKeys() {
+  if (typeof window === "undefined") return;
+  try {
+    for (const [from, to] of LEGACY_KEYS) {
+      const value = window.localStorage.getItem(from);
+      if (value !== null && window.localStorage.getItem(to) === null) window.localStorage.setItem(to, value);
+      window.localStorage.removeItem(from);
+    }
+  } catch {}
+}
+migrateLegacyKeys();
 
 const realRepo = localStorageRepository(REAL_KEY, false);
 const demoRepo = localStorageRepository(DEMO_KEY, true);

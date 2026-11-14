@@ -1,4 +1,4 @@
-A web app for parents of children aged 5–8 who are learning to read. Every evening the child reads a short text aloud (from paper or the screen), the parent taps the words the child misses and picks what the child said. SoundOut works out which reading skill is weak and gives the parent a plan for tomorrow: what to practise, what to say, and a practice story in which every word is checked by code.
+A web app for parents of children aged 5–8 who are learning to read. Every evening the child reads a short text aloud (from paper or the screen), the parent taps the words the child misses and picks what the child said. Readly works out which reading skill is weak and gives the parent a plan for tomorrow: what to practise, what to say, and a practice story in which every word is checked by code.
 
 No microphone, no iPad, no sign-up. Child data stays in the browser (localStorage).
 
@@ -45,12 +45,12 @@ Test payment: card `4242 4242 4242 4242`, any future date, any CVC.
 
 ## Deploy
 
-Production: https://reading.13lab.tech (server `lab`, user `deploy`, `/home/deploy/soundout`).
+Production: https://reading.13lab.tech (server `lab`, user `deploy`, `/home/deploy/readly`).
 
-- Every push to `main` runs `.github/workflows/deploy.yml` on a self-hosted GitHub Actions runner on the server (`lab-soundout`, label `soundout`). It builds the Docker image (lint, typecheck and tests run inside the build), starts it with `docker compose` on `127.0.0.1:3030` and waits for `/api/health`. A failing commit is not deployed.
+- Every push to `main` runs `.github/workflows/deploy.yml` on a self-hosted GitHub Actions runner on the server (`lab-readly`, label `readly`). It builds the Docker image (lint, typecheck and tests run inside the build), starts it with `docker compose` on `127.0.0.1:3030` and waits for `/api/health`. A failing commit is not deployed.
 - The runner never runs pull requests: the workflow triggers only on `push` to `main` and manual dispatch, and workflows from outside contributors need approval.
 - nginx terminates HTTPS (Let's Encrypt via certbot) and proxies to the container: `deploy/nginx.conf`.
-- Runtime secrets live only on the server in `/home/deploy/soundout/.env` (`STRIPE_SECRET_KEY`, `ANTHROPIC_API_KEY`, `SITE_URL`).
+- Runtime secrets live only on the server in `/home/deploy/readly/.env` (`STRIPE_SECRET_KEY`, `ANTHROPIC_API_KEY`, `SITE_URL`).
 
 ```bash
 gh workflow run deploy.yml                       # redeploy main
@@ -65,8 +65,8 @@ gh workflow run deploy.yml                       # redeploy main
 
 - **CMUdict 0.7b** (Carnegie Mellon University), BSD-style licence, commercial use allowed: `data/raw/cmudict.dict`.
 - **Dolch sight words** (220 service words, published 1936/1948): treated as public domain. To be re-checked before release.
-- **K–2 word bank, passages, stories, scripts**: written for SoundOut (`data/wordbank.ts`, `lib/engine/content.ts`, `lib/engine/skills.ts`).
+- **K–2 word bank, passages, stories, scripts**: written for Readly (`data/wordbank.ts`, `lib/engine/content.ts`, `lib/engine/skills.ts`).
 - **Andika** font (SIL), SIL Open Font License.
 - Not used (non-commercial licences): UFLI, CKLA, Open Source Phonics.
 
-SoundOut is a coaching tool, not a medical or dyslexia diagnosis.
+Readly is a coaching tool, not a medical or dyslexia diagnosis.

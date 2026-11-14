@@ -13,7 +13,7 @@ export function Logo() {
         <path d="M9 20c2.5 2.6 5 2.6 7 0s4.5-2.6 7 0" stroke="#f6c85f" strokeWidth="2.6" fill="none" strokeLinecap="round" />
         <path d="M9 13c2.5 2.6 5 2.6 7 0s4.5-2.6 7 0" stroke="#fff" strokeWidth="2.6" fill="none" strokeLinecap="round" />
       </svg>
-      SoundOut
+      Readly
     </Link>
   );
 }
@@ -47,7 +47,7 @@ export function Footer() {
   return (
     <footer className="print:hidden mt-16 border-t border-line">
       <div className="mx-auto flex max-w-3xl flex-col gap-3 px-4 py-8 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between">
-        <p>SoundOut is a coaching tool for parents, not a medical test.</p>
+        <p>Readly is a coaching tool for parents, not a medical test.</p>
         <nav className="flex gap-5">
           <Link href="/privacy" className="underline-offset-4 hover:underline">Privacy</Link>
           <Link href="/terms" className="underline-offset-4 hover:underline">Terms</Link>

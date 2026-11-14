@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Shell } from "@/components/Shell";
 import { H1 } from "@/components/ui";
 
-export const metadata: Metadata = { title: "Terms — SoundOut" };
+export const metadata: Metadata = { title: "Terms — Readly" };
 
 const ITEMS = [
-  ["What SoundOut is", "A coaching tool that helps parents practice reading with their child for about 10 minutes a night. It's not a medical, psychological or dyslexia test, and it doesn't replace your child's teacher. If you're worried, talk to the teacher."],
+  ["What Readly is", "A coaching tool that helps parents practice reading with their child for about 10 minutes a night. It's not a medical, psychological or dyslexia test, and it doesn't replace your child's teacher. If you're worried, talk to the teacher."],
   ["Who it's for", "Parents and caregivers of children aged 5–8. The parent uses the app; the child only reads."],
   ["Plans and billing", "1 week for $6.93, then $19.99 every 4 weeks. 4 weeks for $14.99, then $19.99 every 4 weeks. 1 year for $119. Plans renew automatically until you cancel."],
   ["Cancelling", "Cancel anytime in one click from Journal → Settings. You keep access until the end of the period you paid for."],

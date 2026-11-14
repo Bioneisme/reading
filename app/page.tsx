@@ -24,7 +24,7 @@ const GETS = [
 
 const FAQ = [
   { q: "Is my child supposed to use the app?", a: "No. You do. Your child just reads a short text aloud, from the screen or a printout. No games, no avatars, no screen time for them." },
-  { q: "Is this a dyslexia test?", a: "No. SoundOut is a coaching tool that shows which reading skill to practice next. If you're worried about your child's reading, talk to their teacher." },
+  { q: "Is this a dyslexia test?", a: "No. Readly is a coaching tool that shows which reading skill to practice next. If you're worried about your child's reading, talk to their teacher." },
   { q: "How long does it take?", a: "About 10 minutes a night: 2 minutes of word pairs, 3 minutes of a word list, 5 minutes of a story." },
   { q: "What ages is it for?", a: "Children 5–8, from kindergarten to 2nd grade, who are learning to sound out words." },
   { q: "Do I need a microphone or an iPad?", a: "No. Any phone or laptop browser works. You listen; you tap. Nothing is recorded." },

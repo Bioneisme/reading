@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Shell } from "@/components/Shell";
 import { H1 } from "@/components/ui";
 
-export const metadata: Metadata = { title: "Privacy — SoundOut" };
+export const metadata: Metadata = { title: "Privacy — Readly" };
 
 const ITEMS = [
-  ["No account, no sign-up", "SoundOut works without a login. We don't ask for your email, your name or your child's last name."],
+  ["No account, no sign-up", "Readly works without a login. We don't ask for your email, your name or your child's last name."],
   ["Your child's data stays on your device", "The first name, grade, quiz answers and reading history are stored in your browser (local storage). We don't keep them on our servers."],
-  ["No microphone, no recordings", "SoundOut never listens to your child. You tap the words; nothing is recorded."],
+  ["No microphone, no recordings", "Readly never listens to your child. You tap the words; nothing is recorded."],
   ["Payments", "Payments are handled by Stripe on Stripe's secure page. We never see your card number. We only check whether a payment went through."],
   ["Practice stories", "When we write a new practice story, we send the skill to practice and your child's first name to our story service. Nothing else."],
   ["Deleting your data", "Go to Journal → Settings → Reset all data. It's gone from this device immediately."],
