@@ -1,0 +1,40 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  IMAGE: ghcr.io/bioneisme/reading
+  APP_DIR: /home/deploy/soundout
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, soundout]
+    environment:
+      name: production
+      url: https://reading.13lab.tech
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image (lint, typecheck, tests, next build)
+        run: |
+          docker build \
+            --build-arg APP_VERSION=${{ github.sha }} \
+            -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+
+      - name: Deploy
+        run: |
+          cp deploy/docker-compose.yml $APP_DIR/docker-compose.yml
+          SKIP_PULL=1 bash deploy/deploy.sh ${{ github.sha }}
+
+      - name: Check production
+        run: curl -fsS https://reading.13lab.tech/api/health
