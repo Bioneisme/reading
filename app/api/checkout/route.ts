@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   const stripe = stripeClient();
   if (!stripe) return NextResponse.json({ error: "Payments are not configured" }, { status: 503 });
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin;
+  const origin = process.env.SITE_URL || req.nextUrl.origin;
   try {
     const url = await createCheckoutSession(stripe, parsed.data.plan, origin);
     return NextResponse.json({ url });

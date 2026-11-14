@@ -1,0 +1,15 @@
+name: soundout
+
+services:
+  web:
+    image: ghcr.io/bioneisme/reading:${IMAGE_TAG:-latest}
+    container_name: soundout-web
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:3030:3000"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
