@@ -11,7 +11,7 @@ export default function NotFound() {
     <StatusPage
       art="book"
       title="We couldn't find that page."
-      body="The link may be old or mistyped. Your child's progress is safe — it's saved in this browser."
+      body="The link may be old or mistyped. Your child's progress is safe."
       actions={
         <>
           <Link href="/" className={cta("primary", STATUS_BUTTON)}>

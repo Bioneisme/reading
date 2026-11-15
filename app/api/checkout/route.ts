@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { currentUser } from "@/lib/server/session";
 import { createCheckoutSession, stripeClient } from "@/lib/server/stripe";
 
 export const runtime = "nodejs";
@@ -13,7 +14,8 @@ export async function POST(req: NextRequest) {
   if (!stripe) return NextResponse.json({ error: "Payments are not configured" }, { status: 503 });
   const origin = process.env.SITE_URL || req.nextUrl.origin;
   try {
-    const url = await createCheckoutSession(stripe, parsed.data.plan, origin);
+    const user = await currentUser();
+    const url = await createCheckoutSession(stripe, parsed.data.plan, origin, user?.email);
     return NextResponse.json({ url });
   } catch (err) {
     console.error("[checkout]", err instanceof Error ? err.message : err);

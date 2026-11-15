@@ -35,8 +35,8 @@ function HeroVisual() {
       <Image
         src="/images/cutout-dad-boy.png"
         alt="A dad and his son high-fiving in the kitchen, phone in hand"
-        width={465}
-        height={388}
+        width={1100}
+        height={874}
         priority
         sizes="(min-width: 1024px) 530px, 90vw"
         className="absolute bottom-[13%] left-[3%] block h-auto w-[94%]"

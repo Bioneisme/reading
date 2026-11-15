@@ -56,3 +56,5 @@ scripts/probe.ts
 .idea/
 coverage/
 *.log
+
+var/

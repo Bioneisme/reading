@@ -14,7 +14,7 @@ export default function ErrorPage({ reset }: { error: Error & { digest?: string 
     <StatusPage
       art="bulb"
       title="Something went wrong on our side."
-      body={`${name ? `${name}'s` : "Your"} progress is safe — it's saved in this browser. Let's try that again.`}
+      body={`${name ? `${name}'s` : "Your"} progress is safe. Let's try that again.`}
       actions={
         <>
           <button type="button" onClick={reset} className={cta("primary", STATUS_BUTTON)}>

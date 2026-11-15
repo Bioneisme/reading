@@ -36,7 +36,7 @@ export function LearningPanel({ name, facts, spots }: { name: string; facts: Fac
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22A06B" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />
         </svg>
-        Saved only in this browser. No account.
+        Saved in this browser. No account needed.
       </p>
     </aside>
   );

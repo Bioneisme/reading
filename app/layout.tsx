@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./readly-states.css";
+import { AccountSync } from "@/components/AccountSync";
 import { DemoBanner } from "@/components/DemoBanner";
 
 const nunito = localFont({
@@ -24,7 +25,7 @@ const description =
   "A 3-minute reading check for parents of K–2 kids. See which sound patterns trip your child up, then follow a 10-minute plan each night.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "https://reading.13lab.tech"),
+  metadataBase: new URL(process.env.SITE_URL ?? "https://readly.13lab.tech"),
   title: { default: title, template: "%s · Readly" },
   description,
   applicationName: "Readly",
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${nunito.variable} ${andika.variable}`}>
       <body className="min-h-screen bg-paper font-sans text-ink antialiased">
+        <AccountSync />
         <DemoBanner />
         {children}
       </body>

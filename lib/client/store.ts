@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import type { Grade, SessionRecord } from "@/lib/engine";
 import { DEMO_CHILD, DEMO_SESSIONS } from "@/lib/demo";
+import type { SyncedState } from "./merge";
 
 export interface Child {
   name: string;
@@ -284,4 +285,28 @@ export const store = {
   },
 
   newId,
+
+  subscribe,
+
+  synced(): SyncedState {
+    const s = realRepo.load();
+    return { child: s.child, quiz: s.quiz, sessions: s.sessions, reminderTime: s.reminderTime };
+  },
+
+  replaceSynced(next: SyncedState) {
+    realRepo.save({ ...realRepo.load(), ...next });
+    emit();
+  },
+
+  applySubscription(pro: boolean, plan: "week" | "month" | "year" | null, since: string | null) {
+    const s = realRepo.load();
+    realRepo.save({ ...s, pro, plan: pro && plan ? { id: plan, since: since ?? s.plan?.since ?? new Date().toISOString() } : null });
+    emit();
+  },
+
+  signedOut() {
+    realRepo.clear();
+    rawSet(MODE_KEY, "real");
+    emit();
+  },
 };

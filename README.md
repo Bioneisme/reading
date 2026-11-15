@@ -45,11 +45,11 @@ Test payment: card `4242 4242 4242 4242`, any future date, any CVC.
 
 ## Deploy
 
-Production: https://reading.13lab.tech (server `lab`, user `deploy`, `/home/deploy/readly`).
+Production: https://readly.13lab.tech (server `lab`, user `deploy`, `/home/deploy/readly`).
 
 - Every push to `main` runs `.github/workflows/deploy.yml` on a self-hosted GitHub Actions runner on the server (`lab-readly`, label `readly`). It builds the Docker image (lint, typecheck and tests run inside the build), starts it with `docker compose` on `127.0.0.1:3030` and waits for `/api/health`. A failing commit is not deployed.
 - The runner never runs pull requests: the workflow triggers only on `push` to `main` and manual dispatch, and workflows from outside contributors need approval.
-- nginx terminates HTTPS (Let's Encrypt via certbot) and proxies to the container: `deploy/nginx.conf`.
+- nginx terminates HTTPS (Let's Encrypt via certbot) and proxies to the container: `deploy/nginx.conf`. The old domain https://reading.13lab.tech permanently redirects (301) to the same path on readly.13lab.tech.
 - Runtime secrets live only on the server in `/home/deploy/readly/.env` (`STRIPE_SECRET_KEY`, `ANTHROPIC_API_KEY`, `SITE_URL`).
 
 ```bash

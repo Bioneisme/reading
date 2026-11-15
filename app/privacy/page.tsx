@@ -3,7 +3,7 @@ import { LegalPage, LegalSection, Mail } from "@/components/landing/LegalPage";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "Readly's privacy policy, in plain words: your child's first name and grade stay in your browser.",
+  description: "Readly's privacy policy, in plain words: your child's first name and grade, kept in your browser unless you choose to sign in.",
 };
 
 export default function PrivacyPage() {
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       current="/privacy"
       title="Privacy, in plain words"
       tone="mastered"
-      summary="We collect your child's first name and grade. That's it — no photos, no voice, no email, no account."
+      summary="We collect your child's first name and grade. No photos, no voice. An account is optional: sign in with email only if you want your progress on more than one device."
     >
       <LegalSection title="What we collect">
         <p>
@@ -22,8 +22,12 @@ export default function PrivacyPage() {
       </LegalSection>
       <LegalSection title="Where it's kept">
         <p>
-          In this browser, on this device. We don&apos;t keep your child&apos;s profile on our servers. If you clear your
-          browser data, it&apos;s gone.
+          By default, in this browser on this device, and nowhere else. If you clear your browser data, it&apos;s gone.
+        </p>
+        <p>
+          If you sign in with email, we also keep your child&apos;s profile, reading nights and reminder time on our
+          server, so they follow you to your other devices. Your email is used only to send sign-in links and to find
+          your plan in Stripe. We don&apos;t send newsletters.
         </p>
       </LegalSection>
       <LegalSection title="What leaves your browser">
@@ -37,7 +41,10 @@ export default function PrivacyPage() {
         <p>No ads, no ad trackers, no microphone. Nothing listens to your child, and nothing is recorded.</p>
       </LegalSection>
       <LegalSection title="Deleting everything">
-        <p>Open Settings in the journal and tap Reset all data. It&apos;s removed from this browser right away.</p>
+        <p>
+          Open Settings in the journal and tap Reset all data. It&apos;s removed from this browser and, if you&apos;re
+          signed in, from your account right away. To delete your account and email too, write to us at <Mail />.
+        </p>
       </LegalSection>
       <LegalSection title="Questions">
         <p>

@@ -8,8 +8,13 @@ services:
     env_file: .env
     ports:
       - "127.0.0.1:3030:3000"
+    volumes:
+      - readly-data:/app/var
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
+
+volumes:
+  readly-data:

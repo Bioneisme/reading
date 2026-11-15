@@ -21,7 +21,7 @@ jobs:
     runs-on: [self-hosted, readly]
     environment:
       name: production
-      url: https://reading.13lab.tech
+      url: https://readly.13lab.tech
     steps:
       - uses: actions/checkout@v4
 
@@ -37,4 +37,4 @@ jobs:
           SKIP_PULL=1 bash deploy/deploy.sh ${{ github.sha }}
 
       - name: Check production
-        run: curl -fsS https://reading.13lab.tech/api/health
+        run: curl -fsS https://readly.13lab.tech/api/health

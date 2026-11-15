@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Grade } from "@/lib/engine";
 import { store, type AppState } from "@/lib/client/store";
+import { changeSubscription, signOut, useAccount, type Account } from "@/lib/client/account";
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { downloadReminderIcs } from "@/lib/client/ics";
 import { Collapse } from "./motion";
@@ -41,7 +42,16 @@ function planText(id: PlanId, since: string): string {
   return `1 week · then every 4 weeks from ${shortDate(at(7), false)}`;
 }
 
-function planLineFor(state: AppState): string {
+const PLAN_NAME: Record<PlanId, string> = { week: "Weekly start", month: "Every 4 weeks", year: "1 year" };
+
+function planLineFor(state: AppState, account: Account): string {
+  const sub = account.status === "signed" ? account.subscription : null;
+  if (!state.demo && sub) {
+    if (!sub.pro) return "Free plan";
+    const name = sub.plan ? PLAN_NAME[sub.plan] : "Readly plan";
+    if (!sub.renewsAt) return `${name} · active`;
+    return `${name} · ${sub.cancelAtPeriodEnd ? "ends" : "renews"} ${shortDate(new Date(sub.renewsAt), true)}`;
+  }
   if (state.demo) {
     const first = sortSessions(state.sessions)[0]?.date ?? new Date().toISOString();
     return `Example · ${planText("year", first)}`;
@@ -50,13 +60,29 @@ function planLineFor(state: AppState): string {
   return state.plan ? planText(state.plan.id, state.plan.since) : "Readly plan · active";
 }
 
-function Row({ label, value, action, last, children }: { label: string; value: string; action?: ReactNode; last?: boolean; children?: ReactNode }) {
+function Row({
+  label,
+  value,
+  action,
+  last,
+  truncate,
+  children,
+}: {
+  label: string;
+  value: string;
+  action?: ReactNode;
+  last?: boolean;
+  truncate?: boolean;
+  children?: ReactNode;
+}) {
   return (
     <div className={last ? "pt-3.5" : "border-b-2 border-sand py-3.5"}>
-      <div className="flex items-center gap-3">
-        <span className="min-w-0 flex-auto">
+      <div className="flex flex-col items-start gap-2.5 @[300px]:flex-row @[300px]:items-center @[300px]:gap-3">
+        <span className="w-full min-w-0 @[300px]:w-auto @[300px]:flex-1">
           <span className="block text-[13px] font-extrabold text-ink-3">{label}</span>
-          <span className="block text-base font-black">{value}</span>
+          <span title={truncate ? value : undefined} className={`block text-base font-black ${truncate ? "truncate" : "text-balance"}`}>
+            {value}
+          </span>
         </span>
         {action}
       </div>
@@ -67,6 +93,11 @@ function Row({ label, value, action, last, children }: { label: string; value: s
 
 export function SettingsCard({ state, locked }: { state: AppState; locked: boolean }) {
   const router = useRouter();
+  const account = useAccount();
+  const signed = account.status === "signed" && !state.demo;
+  const sub = signed ? account.subscription : null;
+  const [planBusy, setPlanBusy] = useState(false);
+  const [planError, setPlanError] = useState<string | null>(null);
   const child = state.child!;
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(child.name);
@@ -86,15 +117,28 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
     return () => window.clearTimeout(t);
   }, [resetOpen]);
 
-  const planLine = planLineFor(state);
-  const showCancelled = !!cancelled && !state.pro && !state.demo;
+  const planLine = planLineFor(state, account);
+  const showCancelled = signed ? !!sub?.cancelAtPeriodEnd : !!cancelled && !state.pro && !state.demo;
+  const endsOn = sub?.renewsAt ? shortDate(new Date(sub.renewsAt), true) : null;
+
+  const remotePlan = async (action: "cancel" | "resume") => {
+    setPlanBusy(true);
+    setPlanError(null);
+    try {
+      await changeSubscription(action);
+    } catch (err) {
+      setPlanError(err instanceof Error ? err.message : "Could not update your plan.");
+    } finally {
+      setPlanBusy(false);
+    }
+  };
 
   return (
     <section aria-labelledby="set-title" className={`${SECTION} p-6`}>
       <h2 id="set-title" className="text-[22px] font-black">
         Settings
       </h2>
-      <div className="mt-2 flex flex-col">
+      <div className="@container mt-2 flex flex-col">
         <Row
           label="Child"
           value={`${child.name} · ${GRADE_LABEL[child.grade]}`}
@@ -158,7 +202,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
 
         <Row
           label="Reminder"
-          value={`Every night at ${prettyTime(state.reminderTime)}`}
+          value={`Nightly at ${prettyTime(state.reminderTime)}`}
           action={
             <button
               type="button"
@@ -215,31 +259,38 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
               >
                 See plans
               </Link>
-            ) : state.pro && !state.demo ? (
+            ) : state.pro && !state.demo && !showCancelled ? (
               <button
                 type="button"
+                disabled={planBusy}
                 onClick={() => {
+                  if (signed) return void remotePlan("cancel");
                   setCancelled({ plan: state.plan?.id ?? null });
                   store.setPro(false);
                 }}
-                className={SMALL_BTN}
+                className={`${SMALL_BTN} disabled:opacity-60`}
               >
-                Cancel plan
+                {planBusy ? "Cancelling…" : "Cancel plan"}
               </button>
             ) : null
           }
         >
           <div ref={planRef} role="status">
+            {planError && <p className="mt-2.5 text-sm font-extrabold text-needs-ink">{planError}</p>}
             {showCancelled && (
               <div className="mt-3 flex animate-rise flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border-2 border-line bg-paper px-4 py-3">
                 <p className="min-w-0 flex-[1_1_200px] text-sm font-bold leading-normal text-ink-2">
                   <span className="block text-base font-black text-ink">Plan cancelled. No more charges.</span>
-                  {child.name}&apos;s nights stay in this browser.
+                  {signed
+                    ? `Everything stays open until ${endsOn ?? "the end of this period"}. ${child.name}'s nights stay in your account.`
+                    : `${child.name}'s nights stay in this browser.`}
                 </p>
                 <button
                   type="button"
+                  disabled={planBusy}
                   onClick={() => {
-                    store.setPro(true, cancelled.plan ?? undefined);
+                    if (signed) return void remotePlan("resume");
+                    store.setPro(true, cancelled?.plan ?? undefined);
                     setCancelled(null);
                     requestAnimationFrame(() => planRef.current?.scrollIntoView({ block: "center" }));
                   }}
@@ -252,10 +303,38 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
           </div>
         </Row>
 
+        {!state.demo && (
+          <Row
+            label="Account"
+            truncate={signed}
+            value={signed ? account.email ?? "" : "Not signed in"}
+            action={
+              signed ? (
+                <button type="button" onClick={() => void signOut().then(() => router.push("/"))} className={SMALL_BTN}>
+                  Sign out
+                </button>
+              ) : (
+                <Link
+                  href="/signin?next=/journal"
+                  className="tactile inline-flex min-h-11 flex-none items-center rounded-xl bg-indigo px-3.5 text-sm font-extrabold text-white no-underline shadow-[0_3px_0_#3328B0]"
+                >
+                  Save to account
+                </Link>
+              )
+            }
+          >
+            {!signed && (
+              <p className="mt-1 text-sm font-bold leading-normal text-ink-3">
+                Sign in with email to keep {child.name}&apos;s progress and your plan on any device.
+              </p>
+            )}
+          </Row>
+        )}
+
         <Row
           last
           label="Your data"
-          value="Saved only in this browser"
+          value={signed ? "Saved to your account" : "Saved in this browser"}
           action={
             <button
               type="button"
@@ -275,7 +354,9 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
               <p className="mt-1 text-sm font-bold leading-normal text-[#6B3207]">
                 {state.demo
                   ? "This removes the example nights from this browser. Your own child’s data isn’t touched."
-                  : `This removes ${child.name}’s profile, nights and plan from this browser. It can’t be undone.`}
+                  : signed
+                    ? `This removes ${child.name}’s profile and nights from your account and this browser. Your paid plan stays. It can’t be undone.`
+                    : `This removes ${child.name}’s profile, nights and plan from this browser. It can’t be undone.`}
               </p>
               <div className="mt-3 flex flex-wrap gap-2.5">
                 <button

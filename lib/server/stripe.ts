@@ -28,11 +28,18 @@ async function ensureIntroCoupon(stripe: Stripe): Promise<string> {
 const product = { name: "Readly reading plan" };
 const every4Weeks = { unit_amount: 1999, currency: "usd", product_data: product, recurring: { interval: "week" as const, interval_count: 4 } };
 
-export async function createCheckoutSession(stripe: Stripe, plan: PlanId, origin: string): Promise<string> {
+export async function createCheckoutSession(
+  stripe: Stripe,
+  plan: PlanId,
+  origin: string,
+  email?: string | null,
+): Promise<string> {
   const base: Stripe.Checkout.SessionCreateParams = {
     mode: "subscription",
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/plans?canceled=1`,
+    subscription_data: { metadata: { plan } },
+    ...(email ? { customer_email: email } : {}),
   };
   let params: Stripe.Checkout.SessionCreateParams;
   if (plan === "year") {
@@ -53,7 +60,7 @@ export async function createCheckoutSession(stripe: Stripe, plan: PlanId, origin
         { quantity: 1, price_data: every4Weeks },
         { quantity: 1, price_data: { unit_amount: 693, currency: "usd", product_data: { name: "Readly first week" } } },
       ],
-      subscription_data: { trial_period_days: 7 },
+      subscription_data: { trial_period_days: 7, metadata: { plan } },
     };
   }
   const session = await stripe.checkout.sessions.create(params);
@@ -61,7 +68,17 @@ export async function createCheckoutSession(stripe: Stripe, plan: PlanId, origin
   return session.url;
 }
 
-export async function isSessionPaid(stripe: Stripe, sessionId: string): Promise<boolean> {
+export interface CheckoutResult {
+  paid: boolean;
+  email: string | null;
+  createdAt: number;
+}
+
+export async function checkoutResult(stripe: Stripe, sessionId: string): Promise<CheckoutResult> {
   const s = await stripe.checkout.sessions.retrieve(sessionId);
-  return s.status === "complete" && (s.payment_status === "paid" || s.payment_status === "no_payment_required");
+  return {
+    paid: s.status === "complete" && (s.payment_status === "paid" || s.payment_status === "no_payment_required"),
+    email: s.customer_details?.email ?? s.customer_email ?? null,
+    createdAt: s.created * 1000,
+  };
 }

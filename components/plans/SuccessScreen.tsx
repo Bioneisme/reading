@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Button, ButtonLink, Glim, Icon } from "@/components/kit";
 import { ChildHeader } from "@/components/result/ChildHeader";
 import { computeProfile, SKILLS } from "@/lib/engine";
 import { verifyCheckout } from "@/lib/client/api";
+import { startSync, useAccount } from "@/lib/client/account";
 import { store, useStore, type AppState } from "@/lib/client/store";
 import { recallPlan } from "./plans";
 import { Reminder } from "./Reminder";
@@ -45,6 +47,7 @@ export function SuccessScreen() {
   const params = useSearchParams();
   const sessionId = params.get("session_id");
   const snap = useStore();
+  const account = useAccount();
   const [result, setResult] = useState<{ id: string; status: Status } | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [plan] = useState(recallPlan);
@@ -55,7 +58,10 @@ export function SuccessScreen() {
     verifyCheckout(sessionId)
       .then(({ paid }) => {
         if (!alive) return;
-        if (paid) store.setPro(true, plan?.id);
+        if (paid) {
+          store.setPro(true, plan?.id);
+          void startSync();
+        }
         setResult({ id: `${sessionId}:${attempt}`, status: paid ? "paid" : "unpaid" });
       })
       .catch((e: unknown) => {
@@ -142,6 +148,15 @@ export function SuccessScreen() {
             {plan ? `${plan.name} · ${plan.price}` : "28-day plan"}
             <span className="rounded-full bg-lamp-tint px-2 py-px text-[11px] font-black uppercase tracking-[0.06em] text-lamp-ink">Test payment</span>
           </p>
+          {account.status === "signed" && (
+            <p className={`mt-3 flex items-start gap-2 text-[15px] font-bold leading-normal text-ink-2 ${RISE}`} style={delay(180)}>
+              <Icon name="shield" size={18} className="mt-0.5 flex-none text-mastered-ink" />
+              <span>
+                Saved to <b className="text-ink">{account.email}</b>. Sign in with this email on any device to keep {name}&apos;s
+                progress and plan.
+              </span>
+            </p>
+          )}
 
           <h2 className="mt-7 text-xl font-black">What happens next</h2>
           <ol className="mt-3 flex flex-col gap-2.5">
@@ -168,14 +183,20 @@ export function SuccessScreen() {
 
           <Reminder name={state?.child?.name ?? ""} initial={state?.reminderTime ?? "19:30"} />
 
-          <div className="mt-4 flex items-start gap-3 rounded-[18px] bg-indigo-tint px-4 py-3.5">
+          {account.status !== "signed" && (
+            <div className="mt-4 flex items-start gap-3 rounded-[18px] bg-indigo-tint px-4 py-3.5">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4B3FE0" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="mt-px flex-none">
               <path d="M6 3h12v18l-6-4-6 4z" />
             </svg>
             <p className="text-[15px] font-bold leading-normal text-[#2B2290]">
-              No login needed. {Name}&apos;s journal lives in this browser — bookmark it to come back tomorrow.
+              {Name}&apos;s journal lives in this browser.{" "}
+              <Link href="/signin?next=/journal" className="text-link font-black underline underline-offset-2">
+                Sign in with your email
+              </Link>{" "}
+              to keep it on every device.
             </p>
-          </div>
+            </div>
+          )}
         </div>
 
         <div className={`relative min-w-0 flex-[1_1_380px] ${RISE}`} style={delay(120)}>

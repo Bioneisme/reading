@@ -22,6 +22,9 @@ export function LandingFooter() {
         <RealLink href="/start" className={LINK}>
           Start free
         </RealLink>
+        <Link href="/signin" className={LINK}>
+          Sign in
+        </Link>
         <Link href="/privacy" className={LINK}>
           Privacy
         </Link>
