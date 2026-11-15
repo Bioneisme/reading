@@ -12,8 +12,12 @@ export function CheckProgress({ name, step, demo }: { name: string; step: number
           const on = i <= step;
           return (
             <li key={label} aria-current={i === Math.min(step, 2) ? "step" : undefined} className="min-w-0 flex-1">
-              <div aria-hidden="true" className={`h-2 rounded-full ${on ? "bg-indigo" : "bg-[#E6DFD2]"}`} />
-              <div className={`mt-1.5 truncate text-xs font-black ${on ? "text-[#2B2290]" : "text-ink-3"}`}>{label}</div>
+              <div aria-hidden="true" className="h-2 overflow-hidden rounded-full bg-[#E6DFD2]">
+                <div className="bar-fill h-full rounded-full bg-indigo" style={{ width: on ? "100%" : "0%" }} />
+              </div>
+              <div className={`mt-1.5 truncate text-xs font-black transition-colors duration-300 ${on ? "text-[#2B2290]" : "text-ink-3"}`}>
+                {label}
+              </div>
             </li>
           );
         })}

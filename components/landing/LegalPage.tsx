@@ -33,7 +33,7 @@ export function LegalPage({
   return (
     <div className="min-h-screen bg-paper pb-16 text-ink">
       <AppHeader />
-      <main className="mx-auto max-w-[760px] px-6 pt-7">
+      <main className="mx-auto max-w-[760px] animate-rise px-6 pt-7">
         <nav aria-label="Legal pages" className="inline-flex gap-1 rounded-button border-2 border-line bg-card p-1">
           {TABS.map((t) => {
             const on = t.href === current;
@@ -42,7 +42,7 @@ export function LegalPage({
                 key={t.href}
                 href={t.href}
                 aria-current={on ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center rounded-xl px-[18px] text-[15px] font-black transition-colors ${
+                className={`inline-flex min-h-11 items-center rounded-xl px-[18px] text-[15px] font-black transition-colors duration-150 ${
                   on ? "bg-indigo text-white" : "text-ink hover:bg-indigo-tint"
                 }`}
               >

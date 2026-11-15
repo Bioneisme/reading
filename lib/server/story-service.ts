@@ -85,7 +85,7 @@ export async function generateStory(
         const words = draft.text.split(/\s+/).filter(Boolean).length;
         if (v.ok && words >= 50 && words <= 110) {
           const story: Story = { id: `gen-${req.focus}-${Date.now().toString(36)}`, title: draft.title, focus: req.focus, text: draft.text };
-          return { story, source: "llm", tokens: annotateText(draft.text, deps.lex), attempts, rejected };
+          return { story, source: "llm", tokens: annotateText(draft.text, deps.lex, [...req.allowed, req.focus]), attempts, rejected };
         }
         rejected.push(...v.bad.filter((w) => !rejected.includes(w)));
       } catch (err) {
@@ -95,5 +95,5 @@ export async function generateStory(
     }
   }
   const story = storyForSkill(req.focus);
-  return { story, source: "library", tokens: annotateText(story.text, deps.lex), attempts, rejected };
+  return { story, source: "library", tokens: annotateText(story.text, deps.lex, [...req.allowed, req.focus]), attempts, rejected };
 }

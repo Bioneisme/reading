@@ -58,14 +58,14 @@ export function SimulateOverlay({ name, onClose }: { name: string; onClose: () =
   const last = rows[rows.length - 1]?.misses ?? 0;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[rgba(28,26,59,0.6)] px-5 py-[72px] max-sm:px-4 max-sm:py-10">
+    <div className="fixed inset-0 z-50 animate-fade overflow-y-auto bg-[rgba(28,26,59,0.6)] px-5 py-[72px] max-sm:px-4 max-sm:py-10">
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="sim-title"
         tabIndex={-1}
-        className="mx-auto w-full max-w-[560px] rounded-[28px] bg-card p-7 shadow-[0_8px_0_#14124A] max-sm:p-[22px]"
+        className="mx-auto w-full max-w-[560px] animate-sheet rounded-[28px] bg-card p-7 shadow-[0_8px_0_#14124A] max-sm:p-[22px]"
       >
         <span className="inline-block rounded-full border-[1.5px] border-lamp-line bg-lamp-tint px-2.5 py-[3px] text-[11px] font-black uppercase tracking-[0.08em] text-lamp-ink">
           Simulated week
@@ -84,31 +84,37 @@ export function SimulateOverlay({ name, onClose }: { name: string; onClose: () =
             return (
               <li
                 key={i}
-                className={`flex items-center gap-3 rounded-chip bg-paper px-3.5 py-2.5 transition-opacity duration-300 ${shown ? "opacity-100" : "opacity-35"}`}
+                className={`flex items-center gap-3 rounded-chip px-3.5 py-2.5 transition-[opacity,background-color] duration-300 ${
+                  shown ? (step === i + 1 ? "bg-lamp-tint opacity-100" : "bg-paper opacity-100") : "bg-paper opacity-35"
+                }`}
               >
                 <span className="w-[68px] flex-none text-[15px] font-black max-sm:w-[60px]">Night {i + 1}</span>
                 <span className="min-w-0 flex-auto truncate text-sm font-bold text-ink-2">{r.focus}</span>
                 <span
                   aria-hidden="true"
-                  className="h-2.5 w-[calc(var(--bar)*56px)] flex-none rounded-full bg-lamp transition-[width] duration-500 ease-out sm:w-[calc(var(--bar)*104px)]"
+                  className="bar-fill h-2.5 w-[calc(var(--bar)*56px)] flex-none rounded-full bg-lamp sm:w-[calc(var(--bar)*104px)]"
                   style={{ "--bar": shown ? r.misses / peak : 0 } as CSSProperties}
                 />
-                <span className="w-16 flex-none text-right text-[15px] font-black">{shown ? plural(r.misses, "miss", "misses") : "…"}</span>
+                <span key={shown ? "on" : "off"} className={`w-16 flex-none text-right text-[15px] font-black ${shown ? "animate-fade" : ""}`}>
+                  {shown ? plural(r.misses, "miss", "misses") : "…"}
+                </span>
               </li>
             );
           })}
         </ol>
         <div aria-hidden="true" className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#EDE6D8]">
           <div
-            className="h-full rounded-full bg-indigo transition-[width] duration-500 ease-out"
+            className="bar-fill h-full rounded-full bg-indigo"
             style={{ width: `${(Math.min(step, NIGHTS) / NIGHTS) * 100}%` }}
           />
         </div>
         {done && (
-          <ButtonLink href="/journal" block className="mt-5 max-sm:px-4 max-sm:text-base">
-            Open {name}&apos;s journal — Day {day}
-            <Icon name="next" size={18} strokeWidth={2.4} />
-          </ButtonLink>
+          <div className="mt-5 animate-rise">
+            <ButtonLink href="/journal" block className="animate-pop max-sm:px-4 max-sm:text-base motion-safe:[animation-delay:380ms]">
+              Open {name}&apos;s journal — Day {day}
+              <Icon name="next" size={18} strokeWidth={2.4} />
+            </ButtonLink>
+          </div>
         )}
         <button
           type="button"

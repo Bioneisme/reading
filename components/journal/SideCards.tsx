@@ -3,10 +3,25 @@
 import { useState } from "react";
 import type { SessionRecord } from "@/lib/engine";
 import { formatDate } from "@/lib/client/progress";
-import { missLabel, sessionTitle, sortSessions, weekdayShort, dayKey, type WeekSummary } from "./derive";
+import { missLabel, sessionTitle, sortSessions, SUMMARY_AFTER, weekdayShort, dayKey, type WeekSummary } from "./derive";
+import { useInView } from "./motion";
+import { numberWord } from "./skillCopy";
 import { SECTION } from "./TonightCard";
 
-export function WeekCard({ summary }: { summary: WeekSummary | null }) {
+function placeholder(sessions: number): { title: string; sub: string } {
+  const left = Math.max(1, SUMMARY_AFTER - sessions);
+  const more = left === 1 ? "one more session" : `${numberWord(left).toLowerCase()} more sessions`;
+  return {
+    title: sessions === 0 ? "Your first weekly summary comes after three sessions." : `Your first weekly summary comes after ${more}.`,
+    sub:
+      sessions === 0
+        ? "Tonight’s reading check is the first. The summary shows which skill moved, and what comes next."
+        : "The reading check counts as the first. The summary shows which skill moved, and what comes next.",
+  };
+}
+
+export function WeekCard({ summary, sessions }: { summary: WeekSummary | null; sessions: number }) {
+  const empty = placeholder(sessions);
   return (
     <section
       aria-labelledby="week-title"
@@ -18,6 +33,7 @@ export function WeekCard({ summary }: { summary: WeekSummary | null }) {
       {summary ? (
         <>
           <p className="mt-2 text-[21px] font-black leading-[1.35]">{summary.headline}</p>
+          <p className="mt-1 text-sm font-extrabold leading-normal text-lamp-ink">{summary.overall}</p>
           {summary.next && <p className="mt-1.5 text-[17px] font-extrabold leading-[1.45] text-[#4A3500]">{summary.next}</p>}
           <ul className="mt-3.5 flex flex-wrap gap-2">
             {summary.chips.map((c) => (
@@ -29,10 +45,8 @@ export function WeekCard({ summary }: { summary: WeekSummary | null }) {
         </>
       ) : (
         <>
-          <p className="mt-2 text-[19px] font-black leading-[1.35]">Your first weekly summary arrives after three nights.</p>
-          <p className="mt-1.5 text-[15px] font-bold leading-normal text-[#4A3500]">
-            It shows which skill moved, and what comes next.
-          </p>
+          <p className="mt-2 text-[19px] font-black leading-[1.35]">{empty.title}</p>
+          <p className="mt-1.5 text-[15px] font-bold leading-normal text-[#4A3500]">{empty.sub}</p>
         </>
       )}
     </section>
@@ -44,6 +58,7 @@ export function MissesChart({ sessions }: { sessions: SessionRecord[] }) {
   const max = Math.max(1, ...shown.map((s) => s.misses.length));
   const single = shown.length === 1;
   const values = shown.map((s) => s.misses.length);
+  const [ref, seen] = useInView<HTMLDivElement>();
   return (
     <section aria-labelledby="prog-title" className={`${SECTION} p-6`}>
       <h2 id="prog-title" className="text-[22px] font-black">
@@ -54,19 +69,28 @@ export function MissesChart({ sessions }: { sessions: SessionRecord[] }) {
       ) : (
         <>
           <div
+            ref={ref}
             role="img"
             aria-label={`Misses per night: ${values.join(", ")}`}
             className={`mt-[18px] flex h-[172px] items-end gap-3 border-b-2 border-line px-1 ${single ? "justify-center" : ""}`}
           >
-            {shown.map((s) => (
+            {shown.map((s, i) => (
               <div
                 key={s.id}
                 className={`flex h-full flex-col items-center justify-end gap-1.5 ${single ? "w-11" : "flex-1"}`}
               >
-                <span className="text-[15px] font-black">{s.misses.length}</span>
                 <span
-                  className="block w-full max-w-11 rounded-[10px_10px_4px_4px] bg-lamp shadow-[inset_0_-4px_0_#E5A50F]"
-                  style={{ height: `${Math.max(6, (s.misses.length / max) * 120)}px` }}
+                  style={{ transitionDelay: `${i * 70 + 200}ms` }}
+                  className={`text-[15px] font-black transition-opacity duration-300 ${seen ? "opacity-100" : "opacity-0"}`}
+                >
+                  {s.misses.length}
+                </span>
+                <span
+                  className="block w-full max-w-11 rounded-[10px_10px_4px_4px] bg-lamp shadow-[inset_0_-4px_0_#E5A50F] transition-[height] duration-700 ease-(--ease-out-soft)"
+                  style={{
+                    height: seen ? `${Math.max(6, (s.misses.length / max) * 120)}px` : "6px",
+                    transitionDelay: `${i * 70}ms`,
+                  }}
                 />
               </div>
             ))}
@@ -83,11 +107,13 @@ export function MissesChart({ sessions }: { sessions: SessionRecord[] }) {
           </div>
         </>
       )}
-      <p className="mt-3.5 text-sm font-bold leading-normal text-ink-2">
-        {shown.length > 1
-          ? "Fewer misses on the same skill means it is sticking."
-          : "Come back tomorrow — night 2 starts the trend line."}
-      </p>
+      {shown.length > 0 && (
+        <p className="mt-3.5 text-sm font-bold leading-normal text-ink-2">
+          {shown.length > 1
+            ? "Fewer misses on the same skill means it is sticking."
+            : "Come back tomorrow — night 2 starts the trend line."}
+        </p>
+      )}
     </section>
   );
 }
@@ -108,8 +134,12 @@ export function HistoryCard({ sessions, demo }: { sessions: SessionRecord[]; dem
         <p className="mt-3 text-sm font-bold leading-normal text-ink-3">Each night you do the 10 minutes, it shows up here.</p>
       ) : (
         <ol className="mt-3 flex flex-col">
-          {shown.map((s) => (
-            <li key={s.id} className="flex items-center gap-3 border-b-2 border-sand py-3">
+          {shown.map((s, i) => (
+            <li
+              key={s.id}
+              style={i >= LIMIT ? { animationDelay: `${(i - LIMIT) * 40}ms` } : undefined}
+              className={`flex items-center gap-3 border-b-2 border-sand py-3 ${i >= LIMIT ? "animate-rise" : ""}`}
+            >
               <span className="min-w-0 flex-auto">
                 <span className="block text-[15px] font-black">{sessionTitle(sessions, s)}</span>
                 <span className="block text-[13px] font-bold text-ink-3">

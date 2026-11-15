@@ -18,7 +18,7 @@ export function ReadingPhase({
 }) {
   const count = marked.size;
   return (
-    <main className="no-print mx-auto w-full max-w-[980px] flex-[1_0_auto] px-6 pb-7 pt-[22px]">
+    <main className="no-print mx-auto w-full max-w-[980px] flex-[1_0_auto] animate-rise px-6 pb-7 pt-[22px]">
       <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-3.5">
         <div className="flex-[1_1_320px]">
           <h1 className="m-0 text-[26px] font-black leading-[1.15] tracking-[-0.02em] md:text-[36px]">
@@ -40,7 +40,10 @@ export function ReadingPhase({
             aria-live="polite"
             className="flex items-center gap-2.5 rounded-button border-2 border-lamp-line bg-lamp-tint py-1.5 pl-1.5 pr-4"
           >
-            <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-lamp px-1.5 text-[22px] font-black tabular-nums shadow-[0_3px_0_#D99A0B]">
+            <span
+              key={count}
+              className="inline-flex h-10 min-w-10 animate-pop items-center justify-center rounded-xl bg-lamp px-1.5 text-[22px] font-black tabular-nums shadow-[0_3px_0_#D99A0B]"
+            >
               {count}
             </span>
             <span className="text-[15px] font-black text-lamp-ink">{count === 1 ? "word marked" : "words marked"}</span>

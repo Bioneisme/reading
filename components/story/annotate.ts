@@ -1,4 +1,4 @@
-import { annotateText, SKILL_ORDER, wordsOf, type SkillId, type StoryToken } from "@/lib/engine";
+import { annotateText, PHONICS_SKILLS, SKILL_ORDER, wordsOf, type SkillId, type StoryToken } from "@/lib/engine";
 import { SKILL_SHORT, SKILL_TAG } from "@/components/journal/skillCopy";
 
 export type Shape = "square" | "triangle" | "dot";
@@ -14,9 +14,14 @@ export interface WordMark {
 
 export const SHAPE_GLYPH: Record<Shape, string> = { square: "■", triangle: "▲", dot: "●" };
 
-export function storyTokens(text: string, server: StoryToken[] | null): StoryToken[] {
+export function storyTokens(text: string, server: StoryToken[] | null, allowed?: SkillId[]): StoryToken[] {
   if (server && server.filter((t) => t.word).length === wordsOf(text).length) return server;
-  return annotateText(text);
+  return annotateText(text, undefined, allowed);
+}
+
+export function skillsUpTo(focus: SkillId): SkillId[] {
+  const at = SKILL_ORDER.indexOf(focus);
+  return PHONICS_SKILLS.filter((s) => SKILL_ORDER.indexOf(s) <= at);
 }
 
 export function markFor(token: StoryToken, focus: SkillId): WordMark {

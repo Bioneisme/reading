@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Icon } from "@/components/kit";
+import { Icon, Reveal } from "@/components/kit";
 import { BODY, EYEBROW, H2, LEAD, SECTION } from "./styles";
 
 const PLAN = [
@@ -38,34 +38,46 @@ function StatusIcon({ kind }: { kind: "mastered" | "improving" | "needs" | "unch
 }
 
 const MAP: { skill: string; kind: "mastered" | "improving" | "needs" | "unchecked"; label: string; track: string; fill: string; ink: string; pct: string }[] = [
-  { skill: "Short vowels", kind: "mastered", label: "Mastered", track: "bg-mastered-tint", fill: "bg-mastered", ink: "text-mastered-ink", pct: "w-full" },
-  { skill: "Magic e", kind: "improving", label: "Improving", track: "bg-improving-tint", fill: "bg-improving", ink: "text-improving-ink", pct: "w-[62%]" },
-  { skill: "Letter teams", kind: "needs", label: "Needs work", track: "bg-needs-tint", fill: "bg-needs", ink: "text-needs-ink", pct: "w-[14%]" },
-  { skill: "Bossy r", kind: "unchecked", label: "Not checked", track: "border-2 border-dashed border-unchecked-line", fill: "", ink: "text-ink-3", pct: "w-0" },
+  { skill: "Short vowels", kind: "mastered", label: "Mastered", track: "bg-mastered-tint", fill: "bg-mastered", ink: "text-mastered-ink", pct: "in-data-[reveal=shown]:w-full" },
+  { skill: "Magic e", kind: "improving", label: "Improving", track: "bg-improving-tint", fill: "bg-improving", ink: "text-improving-ink", pct: "in-data-[reveal=shown]:w-[62%]" },
+  { skill: "Letter teams", kind: "needs", label: "Needs work", track: "bg-needs-tint", fill: "bg-needs", ink: "text-needs-ink", pct: "in-data-[reveal=shown]:w-[14%]" },
+  { skill: "Bossy r", kind: "unchecked", label: "Not checked", track: "border-2 border-dashed border-unchecked-line", fill: "", ink: "text-ink-3", pct: "" },
 ];
 
-function Feature({ title, body, children }: { title: string; body: string; children: ReactNode }) {
+function Feature({
+  title,
+  body,
+  delay = 0,
+  children,
+}: {
+  title: string;
+  body: string;
+  delay?: number;
+  children: ReactNode;
+}) {
   return (
-    <div className="rounded-[28px] border-2 border-line bg-card p-6 shadow-edge sm:p-7">
+    <Reveal delay={delay} className="rounded-[28px] border-2 border-line bg-card p-6 shadow-edge sm:p-7">
       <h3 className="text-[22px] leading-[1.3] font-black">{title}</h3>
       <p className={`mt-2 ${BODY}`}>{body}</p>
       <div aria-hidden="true" className="mt-5">
         {children}
       </div>
-    </div>
+    </Reveal>
   );
 }
 
 export function WhatYouGet() {
   return (
     <section aria-labelledby="get-title" className={`${SECTION} py-24`}>
-      <p className={EYEBROW}>Every night</p>
-      <h2 id="get-title" className={`mt-2.5 ${H2}`}>
-        What you get every night
-      </h2>
-      <p className={`mt-3 max-w-[640px] ${LEAD}`}>
-        Each plan is built from that night&apos;s misses — not from a fixed curriculum.
-      </p>
+      <Reveal>
+        <p className={EYEBROW}>Every night</p>
+        <h2 id="get-title" className={`mt-2.5 ${H2}`}>
+          What you get every night
+        </h2>
+        <p className={`mt-3 max-w-[640px] ${LEAD}`}>
+          Each plan is built from that night&apos;s misses — not from a fixed curriculum.
+        </p>
+      </Reveal>
       <div className="mt-9 grid gap-5 lg:grid-cols-2">
         <Feature title="Tomorrow's plan, built from tonight's misses" body="Ten minutes, in three short parts.">
           <div className="flex flex-col gap-2.5">
@@ -78,7 +90,7 @@ export function WhatYouGet() {
             ))}
           </div>
         </Feature>
-        <Feature title="“Say this” scripts" body="Read them word for word. No teaching background needed.">
+        <Feature delay={110} title="“Say this” scripts" body="Read them word for word. No teaching background needed.">
           <div className="flex flex-col gap-3">
             <p className="max-w-[92%] self-start rounded-[22px_22px_22px_6px] bg-night px-[18px] py-3.5 text-[17px] leading-[1.45] font-bold text-white">
               “See the e at the end? It&apos;s quiet, but it makes the vowel say its name.”
@@ -101,13 +113,15 @@ export function WhatYouGet() {
             ))}
           </div>
         </Feature>
-        <Feature title="A skills map that shows progress" body="Eleven reading skills, in the order kids learn them.">
+        <Feature delay={110} title="A skills map that shows progress" body="Eleven reading skills, in the order kids learn them.">
           <div className="flex flex-col gap-3 sm:gap-2.5">
             {MAP.map((m) => (
               <div key={m.skill} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 sm:grid-cols-[150px_1fr_118px]">
                 <span className="text-[15px] font-extrabold">{m.skill}</span>
                 <span className={`order-last col-span-2 h-3 overflow-hidden rounded-full sm:order-none sm:col-span-1 ${m.track}`}>
-                  {m.fill && <span className={`block h-full ${m.fill} ${m.pct}`} />}
+                  {m.fill && (
+                    <span style={{ transitionDelay: "380ms" }} className={`bar-fill block h-full w-0 ${m.fill} ${m.pct}`} />
+                  )}
                 </span>
                 <span className={`inline-flex items-center gap-1.5 text-[13px] font-black ${m.ink}`}>
                   <StatusIcon kind={m.kind} />

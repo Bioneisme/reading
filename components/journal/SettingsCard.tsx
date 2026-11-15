@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Grade } from "@/lib/engine";
 import { store, type AppState } from "@/lib/client/store";
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { downloadReminderIcs } from "@/lib/client/ics";
+import { Collapse } from "./motion";
+import { sortSessions } from "./derive";
 import { SECTION } from "./TonightCard";
+
+type PlanId = "week" | "month" | "year";
+const DAY_MS = 86400000;
 
 const SMALL_BTN =
   "tactile inline-flex min-h-11 flex-none cursor-pointer items-center justify-center rounded-xl border-2 border-line-strong bg-card px-3.5 text-sm font-extrabold text-ink";
@@ -21,6 +26,28 @@ function prettyTime(t: string): string {
   const suffix = h >= 12 ? "pm" : "am";
   const hh = h % 12 === 0 ? 12 : h % 12;
   return `${hh}:${String(m).padStart(2, "0")} ${suffix}`;
+}
+
+function shortDate(d: Date, year: boolean): string {
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", ...(year ? { year: "numeric" } : {}) });
+}
+
+function planText(id: PlanId, since: string): string {
+  const start = new Date(since);
+  const base = Number.isNaN(start.getTime()) ? new Date() : start;
+  const at = (days: number) => new Date(base.getTime() + days * DAY_MS);
+  if (id === "year") return `1 year · renews ${shortDate(at(365), true)}`;
+  if (id === "month") return `Every 4 weeks · renews ${shortDate(at(28), false)}`;
+  return `1 week · then every 4 weeks from ${shortDate(at(7), false)}`;
+}
+
+function planLineFor(state: AppState): string {
+  if (state.demo) {
+    const first = sortSessions(state.sessions)[0]?.date ?? new Date().toISOString();
+    return `Example · ${planText("year", first)}`;
+  }
+  if (!state.pro) return "Free plan";
+  return state.plan ? planText(state.plan.id, state.plan.since) : "Readly plan · active";
 }
 
 function Row({ label, value, action, last, children }: { label: string; value: string; action?: ReactNode; last?: boolean; children?: ReactNode }) {
@@ -46,10 +73,21 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
   const [grade, setGrade] = useState<Grade>(child.grade);
   const [timeOpen, setTimeOpen] = useState(false);
   const [calDone, setCalDone] = useState(false);
-  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelled, setCancelled] = useState<{ plan: PlanId | null } | null>(null);
   const [resetOpen, setResetOpen] = useState(false);
+  const keepRef = useRef<HTMLButtonElement>(null);
+  const resetRef = useRef<HTMLDivElement>(null);
+  const planRef = useRef<HTMLDivElement>(null);
 
-  const planLine = state.demo ? "Demo — no subscription" : state.pro ? "Readly plan · active" : "Free plan";
+  useEffect(() => {
+    if (!resetOpen) return;
+    keepRef.current?.focus({ preventScroll: true });
+    const t = window.setTimeout(() => resetRef.current?.scrollIntoView({ block: "nearest" }), 320);
+    return () => window.clearTimeout(t);
+  }, [resetOpen]);
+
+  const planLine = planLineFor(state);
+  const showCancelled = !!cancelled && !state.pro && !state.demo;
 
   return (
     <section aria-labelledby="set-title" className={`${SECTION} p-6`}>
@@ -75,7 +113,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
             </button>
           }
         >
-          {editing && (
+          <Collapse open={editing}>
             <form
               className="mt-3 flex flex-wrap gap-2.5"
               onSubmit={(e) => {
@@ -115,7 +153,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
                 Save
               </button>
             </form>
-          )}
+          </Collapse>
         </Row>
 
         <Row
@@ -135,10 +173,11 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
           }
         >
           {timeOpen ? (
-            <label className="mt-3 block max-w-[220px] text-[13px] font-extrabold text-ink-2">
+            <label className="mt-3 block max-w-[220px] animate-fade text-[13px] font-extrabold text-ink-2">
               Reminder time
               <input
                 type="time"
+                autoFocus
                 value={state.reminderTime}
                 onChange={(e) => {
                   if (e.target.value) {
@@ -159,7 +198,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
             </button>
           )}
           {calDone && (
-            <p role="status" className="mt-2.5 text-sm font-extrabold text-mastered-ink">
+            <p role="status" className="mt-2.5 animate-fade text-sm font-extrabold text-mastered-ink">
               Calendar file downloaded — open readly-reading-reminder.ics to add it.
             </p>
           )}
@@ -177,42 +216,40 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
                 See plans
               </Link>
             ) : state.pro && !state.demo ? (
-              <button type="button" aria-expanded={cancelOpen} onClick={() => setCancelOpen(true)} className={SMALL_BTN}>
+              <button
+                type="button"
+                onClick={() => {
+                  setCancelled({ plan: state.plan?.id ?? null });
+                  store.setPro(false);
+                }}
+                className={SMALL_BTN}
+              >
                 Cancel plan
               </button>
             ) : null
           }
         >
-          {cancelOpen && state.pro && (
-            <div role="alertdialog" aria-labelledby="cancel-q" className="mt-3 rounded-2xl border-2 border-line bg-paper p-4">
-              <p id="cancel-q" className="text-base font-black">
-                Cancel {child.name}&apos;s plan?
-              </p>
-              <p className="mt-1 text-sm font-bold leading-normal text-ink-2">
-                No more charges. Nightly sessions lock, and {child.name}&apos;s nights stay in this browser.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2.5">
-                <button
-                  type="button"
-                  autoFocus
-                  onClick={() => setCancelOpen(false)}
-                  className={`${PANEL_BTN} tactile bg-indigo text-white shadow-[0_3px_0_#3328B0]`}
-                >
-                  Keep plan
-                </button>
+          <div ref={planRef} role="status">
+            {showCancelled && (
+              <div className="mt-3 flex animate-rise flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border-2 border-line bg-paper px-4 py-3">
+                <p className="min-w-0 flex-[1_1_200px] text-sm font-bold leading-normal text-ink-2">
+                  <span className="block text-base font-black text-ink">Plan cancelled. No more charges.</span>
+                  {child.name}&apos;s nights stay in this browser.
+                </p>
                 <button
                   type="button"
                   onClick={() => {
-                    setCancelOpen(false);
-                    store.setPro(false);
+                    store.setPro(true, cancelled.plan ?? undefined);
+                    setCancelled(null);
+                    requestAnimationFrame(() => planRef.current?.scrollIntoView({ block: "center" }));
                   }}
-                  className={`${PANEL_BTN} border-2 border-line-strong bg-card text-ink`}
+                  className={SMALL_BTN}
                 >
-                  Cancel plan
+                  Undo
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </Row>
 
         <Row
@@ -223,15 +260,15 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
             <button
               type="button"
               aria-expanded={resetOpen}
-              onClick={() => setResetOpen(true)}
+              onClick={() => setResetOpen((v) => !v)}
               className={`${SMALL_BTN} !text-needs-ink`}
             >
               Reset all data
             </button>
           }
         >
-          {resetOpen && (
-            <div role="alertdialog" aria-labelledby="reset-q" className="mt-3 rounded-2xl border-2 border-[#F5B98A] bg-needs-tint p-4">
+          <Collapse open={resetOpen}>
+            <div ref={resetRef} role="alertdialog" aria-labelledby="reset-q" className="mt-3 rounded-2xl border-2 border-[#F5B98A] bg-needs-tint p-4">
               <p id="reset-q" className="text-base font-black">
                 Reset everything?
               </p>
@@ -242,8 +279,8 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
               </p>
               <div className="mt-3 flex flex-wrap gap-2.5">
                 <button
+                  ref={keepRef}
                   type="button"
-                  autoFocus
                   onClick={() => setResetOpen(false)}
                   className={`${PANEL_BTN} tactile bg-indigo text-white shadow-[0_3px_0_#3328B0]`}
                 >
@@ -261,7 +298,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
                 </button>
               </div>
             </div>
-          )}
+          </Collapse>
         </Row>
       </div>
     </section>

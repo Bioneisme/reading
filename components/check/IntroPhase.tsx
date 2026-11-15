@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Icon } from "@/components/kit";
+import { LIFT } from "@/components/quiz/PictureCard";
 
 export type ReadMode = "screen" | "paper";
 
@@ -36,15 +37,17 @@ function ModeCard({
       role="radio"
       aria-checked={selected}
       onClick={onSelect}
-      className={`option mt-[30px] cursor-pointer rounded-[22px] border-2 bg-card p-0 text-left text-ink ${
-        selected ? "border-indigo shadow-[0_4px_0_#4B3FE0]" : "border-line shadow-[0_4px_0_#ECE4D6]"
+      className={`option ${LIFT} mt-[30px] cursor-pointer rounded-[22px] border-2 bg-card p-0 text-left text-ink ${
+        selected
+          ? "border-indigo shadow-[0_4px_0_#4B3FE0] hover:shadow-[0_7px_0_#4B3FE0]"
+          : "border-line shadow-[0_4px_0_#ECE4D6] hover:shadow-[0_7px_0_#DCD3C3]"
       }`}
     >
       <span aria-hidden="true" className="flex h-28 justify-center rounded-t-[20px] bg-[#F6F1E7]">
         {art}
       </span>
       <span
-        className={`flex items-center justify-between gap-2.5 rounded-b-[20px] px-4 py-3.5 ${
+        className={`flex items-center justify-between gap-2.5 rounded-b-[20px] px-4 py-3.5 transition-colors duration-200 ${
           selected ? "bg-indigo text-white" : "bg-card text-ink"
         }`}
       >
@@ -76,7 +79,7 @@ export function IntroPhase({
   ownActive: boolean;
 }) {
   return (
-    <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] px-6 pb-10 pt-7">
+    <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] animate-rise px-6 pb-10 pt-7">
       <h1 className="m-0 text-[30px] font-black leading-[1.1] tracking-[-0.02em] md:text-[44px]">Before {name} reads</h1>
       <p className="mt-2.5 text-lg font-semibold leading-[1.55] text-ink-2">{lead}</p>
       <ol className="mt-6 flex flex-col gap-3">

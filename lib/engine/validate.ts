@@ -4,10 +4,13 @@ import type { SkillId } from "./skills";
 import { tokenize } from "./text";
 import type { StoryToken } from "./types";
 
-export function annotateText(text: string, lex: Lexicon = coreLexicon): StoryToken[] {
+export function annotateText(text: string, lex: Lexicon = coreLexicon, allowed?: SkillId[]): StoryToken[] {
+  const allow = allowed ? new Set(allowed) : null;
   return tokenize(text).map((t) => {
     if (!t.word) return { text: t.text, word: null, practices: [], tricky: false };
     const A = analyzeWord(t.word, lex);
+    const sight = !!allow && DOLCH_SET.has(t.word) && !!A && !A.tricky && !A.skills.every((s) => allow.has(s));
+    if (sight) return { text: t.text, word: t.word, practices: ["tricky"], tricky: true };
     return {
       text: t.text,
       word: t.word,

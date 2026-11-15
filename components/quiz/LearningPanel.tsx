@@ -15,7 +15,7 @@ export function LearningPanel({ name, facts, spots }: { name: string; facts: Fac
         {facts.map((f) => (
           <div key={f.k} className="flex items-start justify-between gap-3 border-b-2 border-sand py-2.5">
             <dt className="text-sm font-extrabold text-ink-3">{f.k}</dt>
-            <dd className={`m-0 text-right text-[15px] font-black ${f.v ? "text-ink" : "text-[#B3AC9E]"}`}>
+            <dd key={f.v ? "on" : "off"} className={`m-0 text-right text-[15px] font-black ${f.v ? "animate-fade text-ink" : "text-[#B3AC9E]"}`}>
               {f.v || "—"}
             </dd>
           </div>
@@ -26,7 +26,7 @@ export function LearningPanel({ name, facts, spots }: { name: string; facts: Fac
         {(spots.length ? spots.map((s) => SPOT[s]?.name ?? s) : ["Tonight’s check will tell"]).map((t) => (
           <li
             key={t}
-            className="rounded-full border-[1.5px] border-lamp-line bg-lamp-tint px-3 py-1.5 text-sm font-black text-lamp-ink"
+            className="animate-rise rounded-full border-[1.5px] border-lamp-line bg-lamp-tint px-3 py-1.5 text-sm font-black text-lamp-ink"
           >
             {t}
           </li>

@@ -12,7 +12,7 @@ export interface PlanOption {
 export const PLAN_OPTIONS: PlanOption[] = [
   { id: "week", name: "1 week", price: "$6.93", terms: "then $19.99 every 4 weeks" },
   { id: "month", name: "4 weeks", price: "$14.99", terms: "then $19.99 every 4 weeks" },
-  { id: "year", name: "1 year", price: "$119", terms: "billed once a year, renews yearly", per: "$9.92/month", badge: "Best value" },
+  { id: "year", name: "1 year", price: "$119", terms: "then $119 every year", per: "$9.92/month", badge: "Best value" },
 ];
 
 export const CHOSEN_PLAN_KEY = "readly:chosen-plan";

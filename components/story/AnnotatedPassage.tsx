@@ -10,6 +10,9 @@ const SIZE = {
   session: "text-[clamp(26px,3.2vw,40px)] leading-normal gap-x-[0.16em]",
 } as const;
 
+const LABEL_IN = "grid-template-rows 300ms var(--ease-out-soft), opacity 260ms ease-out 60ms";
+const LABEL_OUT = "grid-template-rows 280ms var(--ease-out-soft), opacity 180ms ease-out, max-width 0ms linear 280ms";
+
 export function AnnotatedPassage({
   text,
   tokens,
@@ -32,21 +35,30 @@ export function AnnotatedPassage({
 
   return (
     <div
-      className={`flex flex-wrap font-read text-ink ${SIZE[size]} ${labels ? "gap-y-[0.6em]" : "gap-y-[0.2em]"}`}
+      className={`flex flex-wrap font-read text-ink transition-[row-gap] duration-300 ease-(--ease-out-soft) ${SIZE[size]} ${labels ? "gap-y-[0.6em]" : "gap-y-[0.2em]"}`}
     >
       {units.map((u) => {
         const token = words[u.index];
         const mark = token ? markFor(token, focus) : null;
         const on = marked?.has(u.index) ?? false;
-        const underline =
-          labels && mark ? { boxShadow: `inset 0 ${mark.thick ? -4 : -3}px 0 ${mark.line}` } : undefined;
-        const label = labels && mark ? `${u.text}, ${mark.tag}` : u.text;
+        const shown = labels && !!mark;
+        const underline = {
+          boxShadow: shown && mark ? `inset 0 ${mark.thick ? -4 : -3}px 0 ${mark.line}` : "inset 0 0 0 transparent",
+        };
+        const label = shown && mark ? `${u.text}, ${mark.tag}` : u.text;
         return (
           <Fragment key={u.index}>
             {u.breakBefore && <span aria-hidden="true" className="h-0 basis-full" />}
             <span className="inline-flex flex-col items-center">
-              <span className="inline-flex items-baseline px-[0.04em]" style={underline}>
-                {u.pre && <span aria-hidden="true">{u.pre}</span>}
+              <span
+                className="inline-flex items-baseline px-[0.04em] transition-[box-shadow] duration-300 ease-out"
+                style={underline}
+              >
+                {u.pre && (
+                  <span aria-hidden="true" className={onToggle ? "-mr-[0.12em]" : undefined}>
+                    {u.pre}
+                  </span>
+                )}
                 {onToggle ? (
                   <button
                     type="button"
@@ -62,15 +74,25 @@ export function AnnotatedPassage({
                 ) : (
                   <span>{u.text}</span>
                 )}
-                {u.post && <span aria-hidden="true">{u.post}</span>}
+                {u.post && (
+                  <span aria-hidden="true" className={onToggle ? "-ml-[0.12em]" : undefined}>
+                    {u.post}
+                  </span>
+                )}
               </span>
-              {labels && mark && (
+              {mark && (
                 <span
                   aria-hidden="true"
-                  className="mt-1 whitespace-nowrap font-sans text-[10px] font-black uppercase leading-none tracking-[0.06em]"
-                  style={{ color: mark.ink }}
+                  className={`grid font-sans text-[10px] font-black uppercase leading-none tracking-[0.06em] ${
+                    shown ? "max-w-[16em] grid-rows-[1fr] opacity-100" : "max-w-0 grid-rows-[0fr] opacity-0"
+                  }`}
+                  style={{ color: mark.ink, transition: shown ? LABEL_IN : LABEL_OUT }}
                 >
-                  {SHAPE_GLYPH[mark.shape]} {mark.tag}
+                  <span className="min-h-0 overflow-hidden">
+                    <span className="block whitespace-nowrap pt-1">
+                      {SHAPE_GLYPH[mark.shape]} {mark.tag}
+                    </span>
+                  </span>
                 </span>
               )}
             </span>
@@ -92,10 +114,10 @@ export function PracticeToggle({ on, onChange }: { on: boolean; onChange: (next:
     >
       <span
         aria-hidden="true"
-        className={`relative h-[26px] w-11 flex-none rounded-full transition-colors ${on ? "bg-indigo" : "bg-unchecked-line"}`}
+        className={`relative h-[26px] w-11 flex-none rounded-full transition-colors duration-200 ${on ? "bg-indigo" : "bg-unchecked-line"}`}
       >
         <span
-          className={`absolute top-[3px] h-5 w-5 rounded-full bg-white transition-[left] ${on ? "left-[21px]" : "left-[3px]"}`}
+          className={`absolute top-[3px] h-5 w-5 rounded-full bg-white shadow-[0_1px_2px_rgba(28,26,59,0.25)] transition-[left] duration-200 ease-(--ease-out-soft) ${on ? "left-[21px]" : "left-[3px]"}`}
         />
       </span>
       Show what each word practices

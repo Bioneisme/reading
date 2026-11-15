@@ -32,7 +32,7 @@ export function TappablePassage({
           <Fragment key={u.index}>
             {u.breakBefore && <span aria-hidden="true" className="h-0 basis-full" />}
             <span className="inline-flex items-baseline">
-              {u.pre && <span aria-hidden="true">{u.pre}</span>}
+              {u.pre && <span aria-hidden="true" className="-mr-[0.12em]">{u.pre}</span>}
               <button
                 type="button"
                 aria-pressed={on}
@@ -44,7 +44,7 @@ export function TappablePassage({
               >
                 {u.text}
               </button>
-              {u.post && <span aria-hidden="true">{u.post}</span>}
+              {u.post && <span aria-hidden="true" className="-ml-[0.12em]">{u.post}</span>}
             </span>
           </Fragment>
         );

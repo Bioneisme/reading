@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/kit";
 import type { Lexicon } from "@/lib/engine";
-import { missLine, optionsFor, type MissGroup, type MissRow } from "./model";
+import { missLine, optionsFor, type MissGroup, type MissRow, type SkillKey } from "./model";
 import { PANEL } from "./PlanCards";
 
 const SKIP = "__skip";
@@ -44,7 +44,7 @@ function Row({
               role="radio"
               aria-checked={current === v}
               onClick={() => current !== v && onPick(row.index, skip ? null : v)}
-              className={`option min-h-11 cursor-pointer rounded-full border-2 border-edge bg-card px-3.5 py-0.5 text-ink aria-checked:border-indigo aria-checked:bg-indigo-tint ${
+              className={`option min-h-11 cursor-pointer rounded-full border-2 border-edge bg-card px-3.5 py-0.5 text-ink aria-checked:animate-pop aria-checked:border-indigo aria-checked:bg-indigo-tint ${
                 skip ? "font-sans text-sm font-extrabold" : "font-read text-[19px]"
               }`}
             >
@@ -64,6 +64,7 @@ export function Evidence({
   initialSaid,
   lex,
   onPick,
+  flash = null,
 }: {
   name: string;
   demo: boolean;
@@ -71,6 +72,7 @@ export function Evidence({
   initialSaid: (string | null)[];
   lex: Lexicon | undefined;
   onPick: (index: number, said: string | null) => void;
+  flash?: SkillKey | null;
 }) {
   const [first] = useState(initialSaid);
   const pending = useRef<string | null>(null);
@@ -101,7 +103,10 @@ export function Evidence({
             : "Each miss points to a skill. Picked the wrong one? Change it here."}
       </p>
       {groups.map((g) => (
-        <div key={g.skill} className="mt-5">
+        <div
+          key={g.skill}
+          className={`-mx-2.5 mt-3 rounded-[22px] px-2.5 py-2 transition-colors duration-500 ${flash === g.skill ? "bg-lamp-tint" : "bg-transparent"}`}
+        >
           <div className="flex flex-wrap items-center gap-2.5">
             <h3 className="text-[17px] font-black">{g.name}</h3>
             <span className="rounded-full bg-lamp-tint px-2.5 py-[3px] text-[13px] font-black text-lamp-ink">{missLine(g.count)}</span>

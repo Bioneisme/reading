@@ -1,9 +1,20 @@
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/kit";
 import { BODY, H2, LEAD, SECTION } from "./styles";
 
 const TILE = "inline-flex h-[52px] items-center justify-center border-2 font-read font-bold";
 
-function Tile({ ch, tone = "plain", narrow = false }: { ch: string; tone?: "plain" | "ghost" | "hot"; narrow?: boolean }) {
+function Tile({
+  ch,
+  at,
+  tone = "plain",
+  narrow = false,
+}: {
+  ch: string;
+  at: number;
+  tone?: "plain" | "ghost" | "hot";
+  narrow?: boolean;
+}) {
   const size = narrow ? "w-10 rounded-xl text-[26px]" : "w-[46px] rounded-[13px] text-[28px]";
   const look =
     tone === "ghost"
@@ -11,7 +22,11 @@ function Tile({ ch, tone = "plain", narrow = false }: { ch: string; tone?: "plai
       : tone === "hot"
         ? "border-[#3F33CF] bg-indigo text-white shadow-[0_5px_0_#3328B0]"
         : "border-edge bg-card shadow-[0_5px_0_#E4DBCB]";
-  return <span className={`${TILE} ${size} ${look}`}>{ch}</span>;
+  return (
+    <span style={{ animationDelay: `${at}ms` }} className={`${TILE} ${size} ${look} in-data-[reveal=shown]:animate-pop`}>
+      {ch}
+    </span>
+  );
 }
 
 function Caption({ children }: { children: ReactNode }) {
@@ -25,10 +40,10 @@ const PAINS: { title: string; body: string; art: ReactNode }[] = [
     art: (
       <>
         <div className="-mt-7 flex gap-[7px]">
-          <Tile ch="t" />
-          <Tile ch="a" />
-          <Tile ch="p" />
-          <Tile ch="e" tone="ghost" />
+          <Tile ch="t" at={420} />
+          <Tile ch="a" at={500} />
+          <Tile ch="p" at={580} />
+          <Tile ch="e" at={660} tone="ghost" />
         </div>
         <Caption>tape → “tap”</Caption>
       </>
@@ -40,11 +55,11 @@ const PAINS: { title: string; body: string; art: ReactNode }[] = [
     art: (
       <>
         <div className="-mt-7 flex gap-[5px]">
-          <Tile ch="h" narrow />
-          <Tile ch="o" narrow />
-          <Tile ch="r" narrow tone="hot" />
-          <Tile ch="s" narrow />
-          <Tile ch="e" narrow />
+          <Tile ch="h" at={500} narrow />
+          <Tile ch="o" at={580} narrow />
+          <Tile ch="r" at={660} narrow tone="hot" />
+          <Tile ch="s" at={740} narrow />
+          <Tile ch="e" at={820} narrow />
         </div>
         <Caption>horse → “house”</Caption>
       </>
@@ -81,23 +96,27 @@ const PAINS: { title: string; body: string; art: ReactNode }[] = [
 export function Pains() {
   return (
     <section aria-labelledby="pain-title" className={`${SECTION} pt-2 pb-24`}>
-      <h2 id="pain-title" className={H2}>
-        Sound familiar?
-      </h2>
-      <p className={`mt-3 max-w-[620px] ${LEAD}`}>
-        You hear the mistakes every night. Knowing what they mean is the hard part.
-      </p>
+      <Reveal>
+        <h2 id="pain-title" className={H2}>
+          Sound familiar?
+        </h2>
+        <p className={`mt-3 max-w-[620px] ${LEAD}`}>
+          You hear the mistakes every night. Knowing what they mean is the hard part.
+        </p>
+      </Reveal>
       <div className="mt-[52px] grid gap-x-5 gap-y-[52px] sm:grid-cols-2 lg:grid-cols-4">
-        {PAINS.map((p) => (
-          <article key={p.title} className="rounded-card border-2 border-line bg-card shadow-edge">
-            <div aria-hidden="true" className="flex h-[116px] flex-col items-center rounded-t-[22px] bg-[#F6F1E7]">
-              {p.art}
-            </div>
-            <div className="px-[22px] pt-[18px] pb-6">
-              <h3 className="text-xl leading-[1.25] font-black">{p.title}</h3>
-              <p className={`mt-2 ${BODY}`}>{p.body}</p>
-            </div>
-          </article>
+        {PAINS.map((p, i) => (
+          <Reveal key={p.title} delay={i * 90} className="flex">
+            <article className="flex-1 rounded-card border-2 border-line bg-card shadow-edge">
+              <div aria-hidden="true" className="flex h-[116px] flex-col items-center rounded-t-[22px] bg-[#F6F1E7]">
+                {p.art}
+              </div>
+              <div className="px-[22px] pt-[18px] pb-6">
+                <h3 className="text-xl leading-[1.25] font-black">{p.title}</h3>
+                <p className={`mt-2 ${BODY}`}>{p.body}</p>
+              </div>
+            </article>
+          </Reveal>
         ))}
       </div>
     </section>

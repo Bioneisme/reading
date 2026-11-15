@@ -20,6 +20,7 @@ export interface AppState {
   quiz: QuizAnswers | null;
   sessions: SessionRecord[];
   pro: boolean;
+  plan: { id: "week" | "month" | "year"; since: string } | null;
   reminderTime: string;
   demo: boolean;
 }
@@ -84,6 +85,7 @@ function defaults(demo: boolean): AppState {
     quiz: null,
     sessions: [],
     pro: false,
+    plan: null,
     reminderTime: "19:30",
     demo,
   };
@@ -104,6 +106,10 @@ function parse(raw: string | null, demo: boolean): AppState {
       quiz: v.quiz && Array.isArray(v.quiz.signs) ? v.quiz : null,
       sessions: Array.isArray(v.sessions) ? v.sessions : [],
       pro: Boolean(v.pro),
+      plan:
+        v.plan && ["week", "month", "year"].includes(v.plan.id) && typeof v.plan.since === "string"
+          ? { id: v.plan.id, since: v.plan.since }
+          : null,
       reminderTime:
         typeof v.reminderTime === "string" && /^\d{2}:\d{2}$/.test(v.reminderTime)
           ? v.reminderTime
@@ -233,8 +239,12 @@ export const store = {
     update((s) => ({ ...s, child }));
   },
 
-  setPro(pro: boolean) {
-    update((s) => ({ ...s, pro }));
+  setPro(pro: boolean, planId?: "week" | "month" | "year") {
+    update((s) => ({
+      ...s,
+      pro,
+      plan: pro ? (planId ? { id: planId, since: new Date().toISOString() } : s.plan) : null,
+    }));
   },
 
   setReminderTime(reminderTime: string) {

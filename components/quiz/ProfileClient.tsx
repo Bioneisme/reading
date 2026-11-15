@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { SKILLS, passageForGrade, quizProfile, wordsOf } from "@/lib/engine";
 import { useStore } from "@/lib/client/store";
 import { buttonClass, Icon } from "@/components/kit";
@@ -80,7 +81,11 @@ export function ProfileClient() {
           const copy = SPOT[s];
           const fromQuiz = picked.includes(s);
           return (
-            <li key={s} className="flex items-start gap-3.5 rounded-[22px] border-2 border-line bg-card p-[18px] shadow-edge">
+            <li
+              key={s}
+              className="flex animate-rise items-start gap-3.5 rounded-[22px] border-2 border-line bg-card p-[18px] shadow-edge motion-safe:[animation-delay:var(--d)]"
+              style={{ "--d": `${80 + i * 110}ms` } as CSSProperties}
+            >
               <span
                 aria-hidden="true"
                 className="inline-flex h-12 w-11 flex-none items-center justify-center rounded-[13px] border-2 border-[#E8AE1C] bg-lamp font-read text-2xl font-bold shadow-edge-lamp"
@@ -102,7 +107,11 @@ export function ProfileClient() {
         })}
       </ol>
 
-      <section aria-labelledby="tonight-check" className="on-dark mt-[18px] rounded-card bg-night p-[22px] text-white shadow-edge-night">
+      <section
+        aria-labelledby="tonight-check"
+        className="on-dark mt-[18px] animate-rise motion-safe:[animation-delay:var(--d)] rounded-card bg-night p-[22px] text-white shadow-edge-night"
+        style={{ "--d": `${80 + skills.length * 110}ms` } as CSSProperties}
+      >
         <div className="text-xs font-black uppercase tracking-[0.1em] text-[#FFD95E]">Tonight</div>
         <h2 id="tonight-check" className="mt-1.5 text-2xl font-black leading-[1.25]">
           A 3-minute reading check to confirm.

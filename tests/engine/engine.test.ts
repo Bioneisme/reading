@@ -144,3 +144,29 @@ describe("demo data (Mia, day 5)", () => {
     expect(p.skills.rControlled.status).toBe("notChecked");
   });
 });
+
+describe("skill progress bars", () => {
+  it("needs-work bars stay low, improving bars sit in the middle", async () => {
+    const { DEMO_SESSIONS } = await import("@/lib/demo");
+    const p = computeProfile(DEMO_SESSIONS);
+    expect(p.skills.digraphs.status).toBe("needsWork");
+    expect(p.skills.digraphs.progress).toBeGreaterThanOrEqual(0.1);
+    expect(p.skills.digraphs.progress).toBeLessThanOrEqual(0.25);
+    expect(p.skills.magicE.progress).toBeGreaterThanOrEqual(0.55);
+    expect(p.skills.magicE.progress).toBeLessThanOrEqual(0.851);
+    expect(p.skills.shortVowels.progress).toBe(1);
+    expect(p.skills.rControlled.progress).toBe(0);
+  });
+});
+
+describe("annotateText with allowed skills", () => {
+  it("labels sight words outside the allowed skills as tricky", async () => {
+    const { annotateText } = await import("@/lib/engine");
+    const tokens = annotateText("Then they see a white kite.", undefined, ["shortVowels", "magicE"]);
+    const by = Object.fromEntries(tokens.filter((t) => t.word).map((t) => [t.word, t.practices]));
+    expect(by.then).toEqual(["tricky"]);
+    expect(by.see).toEqual(["tricky"]);
+    expect(by.white).toEqual(["tricky"]);
+    expect(by.kite).toEqual(["magicE"]);
+  });
+});

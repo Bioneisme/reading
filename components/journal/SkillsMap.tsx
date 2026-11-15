@@ -1,5 +1,8 @@
+"use client";
+
 import { SKILL_ORDER, SKILLS, type Profile, type SessionRecord, type SkillStatus } from "@/lib/engine";
 import { StatusIcon } from "./icons";
+import { useInView } from "./motion";
 import { skillNote } from "./derive";
 import { SKILL_MAP_EXAMPLE, STATUS_LABEL } from "./skillCopy";
 import { SECTION } from "./TonightCard";
@@ -49,6 +52,7 @@ export function SkillsMap({
   sessions: SessionRecord[];
   showTags: boolean;
 }) {
+  const [ref, seen] = useInView<HTMLOListElement>();
   return (
     <section aria-labelledby="skills-title" className={`${SECTION} p-[22px] sm:p-[26px]`}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1.5">
@@ -65,13 +69,13 @@ export function SkillsMap({
           </li>
         ))}
       </ul>
-      <ol className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-2.5">
+      <ol ref={ref} className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-2.5">
         {SKILL_ORDER.map((id, i) => {
           const st = profile.skills[id];
           const look = LOOK[st.status];
           const note = skillNote(id, profile, sessions);
           const tag = !showTags ? null : id === profile.focus ? "Tonight's focus" : id === profile.nextUp ? "Next up" : null;
-          const pct = st.status === "notChecked" ? 0 : Math.round(st.progress * 100);
+          const pct = Math.round(st.progress * 100);
           return (
             <li
               key={id}
@@ -99,7 +103,10 @@ export function SkillsMap({
                 <span className="mt-0.5 block font-read text-base text-ink-2">{SKILL_MAP_EXAMPLE[id]}</span>
                 <span className="mt-2 flex items-center gap-2.5">
                   <span aria-hidden="true" className={`block h-2 flex-auto overflow-hidden rounded-full ${look.track}`}>
-                    <span className={`block h-full ${look.fill}`} style={{ width: `${pct}%` }} />
+                    <span
+                      className={`bar-fill block h-full rounded-full ${look.fill}`}
+                      style={{ width: seen ? `${pct}%` : "0%", transitionDelay: `${i * 45}ms` }}
+                    />
                   </span>
                   <span className={`inline-flex flex-none items-center gap-[5px] text-xs font-black ${look.ink}`}>
                     <StatusIcon status={st.status} size={15} />

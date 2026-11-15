@@ -97,47 +97,61 @@ export function headerLine(profile: Profile, sessions: SessionRecord[], demo: bo
   return profile.nextUp ? `${lead} Next up: ${SKILL_SHORT[profile.nextUp]}.` : lead;
 }
 
+export function skillTrend(skill: SkillId, profile: Profile): { first: number; last: number; total: number } {
+  const hist = profile.skills[skill].history.slice(-7);
+  const total = hist.reduce((a, b) => a + b, 0);
+  const first = hist.find((h) => h > 0) ?? hist[0] ?? 0;
+  const last = hist[hist.length - 1] ?? 0;
+  return { first, last, total };
+}
+
+export function trendText(first: number, last: number): string {
+  return `${missLabel(first)} → ${last === 0 ? "0" : missLabel(last)}`;
+}
+
 export function skillNote(skill: SkillId, profile: Profile, sessions: SessionRecord[]): string {
   const st = profile.skills[skill];
   if (st.status === "mastered" || st.status === "notChecked") return "";
-  const hist = st.history.slice(-7);
-  const total = hist.reduce((a, b) => a + b, 0);
+  const { first, last, total } = skillTrend(skill, profile);
   if (sessions.length <= 1) {
     const all = sessions[0]?.misses.length ?? 0;
     const prefix = skill === profile.focus ? "Focus · " : "";
     if (!total) return "";
     return skill === profile.focus && all ? `${prefix}${total} of ${all} misses in the first check` : `${prefix}${missLabel(total)} in the first check`;
   }
-  if (st.status === "improving") {
-    const first = hist.find((h) => h > 0) ?? hist[0] ?? 0;
-    const last = hist[hist.length - 1] ?? 0;
-    return `${missLabel(first)} → ${last === 0 ? "0" : missLabel(last)} this week`;
-  }
+  if (st.status === "improving") return `${trendText(first, last)} this week`;
   return total ? `${missLabel(total)} this week` : "";
 }
 
 export interface WeekSummary {
   headline: string;
+  overall: string;
   next: string;
   chips: string[];
 }
 
+export const SUMMARY_AFTER = 3;
+
 export function weekSummary(profile: Profile, sessions: SessionRecord[]): WeekSummary | null {
   const ordered = sortSessions(sessions);
-  if (ordered.length < 3) return null;
+  if (ordered.length < SUMMARY_AFTER) return null;
   const week = ordered.slice(-7);
   const counts = new Map<SkillId, number>();
   week.forEach((s) => s.focus && counts.set(s.focus, (counts.get(s.focus) ?? 0) + 1));
   const skill = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? profile.focus;
   const name = SKILL_SHORT[skill];
-  const first = week[0].misses.length;
-  const last = week[week.length - 1].misses.length;
+  const { first, last } = skillTrend(skill, profile);
   const headline =
-    last < first
-      ? `${name} improved from ${missLabel(first)} to ${last}.`
-      : last === first
-        ? `${name} held steady at ${missLabel(last)} a night.`
-        : `${name} went from ${first} to ${missLabel(last)}. That’s normal while a skill is new.`;
+    first === 0 && last === 0
+      ? `${name}: no misses this week.`
+      : last < first
+        ? `${name}: ${trendText(first, last)} this week.`
+        : last === first
+          ? `${name} held steady at ${missLabel(last)} a night.`
+          : `${name}: ${trendText(first, last)} this week. That’s normal while a skill is new.`;
+  const allFirst = week[0].misses.length;
+  const allLast = week[week.length - 1].misses.length;
+  const overall = `All misses per night, every skill: ${allFirst} → ${allLast}.`;
   const upcoming = profile.focus !== skill ? profile.focus : profile.nextUp;
   const next = upcoming ? `Next up: ${SKILL_WITH_EXAMPLES[upcoming]}.` : "";
   const mastered = (Object.keys(profile.skills) as SkillId[]).find(
@@ -146,5 +160,5 @@ export function weekSummary(profile: Profile, sessions: SessionRecord[]): WeekSu
   const chips = [plural(week.length, "night")];
   if (mastered) chips.push(`${SKILL_SHORT[mastered]}: mastered`);
   chips.push(`${name}: ${STATUS_LABEL[profile.skills[skill].status].toLowerCase()}`);
-  return { headline, next, chips };
+  return { headline, overall, next, chips };
 }

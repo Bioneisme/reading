@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { Grade } from "@/lib/engine";
 import { store, type AppState } from "@/lib/client/store";
 import { LearningPanel, type Fact } from "./LearningPanel";
+import type { FooterCta } from "@/components/reading/StepFooter";
 import { QuizShell } from "./QuizShell";
 import { BuildingStep, EveningsStep, GoalStep, GradeStep, HeardStep, MinutesStep, NameStep } from "./steps";
 import { SPOT, displayName, gradeLabel, pickedSkills, possessive } from "./copy";
@@ -106,10 +107,10 @@ export function QuizFlow({ real }: { real: AppState }) {
 
   const hasName = !!draft.name.trim();
   let hint = "Tap an answer to continue.";
-  let cta: { label: string; onClick: () => void } | null = null;
+  let cta: FooterCta | null = null;
   if (step === 0) {
     hint = hasName ? `Nice to meet you, ${name}.` : "Type a first name to continue.";
-    if (hasName) cta = { label: "Continue", onClick: () => go(1) };
+    cta = { label: "Continue", onClick: () => go(1), disabled: !hasName };
   } else if (step === 2) {
     const any = draft.signs.length > 0;
     hint = any
@@ -139,13 +140,15 @@ export function QuizFlow({ real }: { real: AppState }) {
       hint={hint}
       cta={cta}
     >
-      {step === 0 && <NameStep name={draft.name} onName={(v) => patch({ name: v })} onSubmit={() => hasName && go(1)} />}
-      {step === 1 && <GradeStep name={name} grade={draft.grade} onPick={(g) => patch({ grade: g }, 2)} />}
-      {step === 2 && <HeardStep name={name} signs={draft.signs} onToggle={toggleSign} />}
-      {step === 3 && <EveningsStep value={draft.evenings} onPick={(v) => patch({ evenings: v }, 4)} />}
-      {step === 4 && <MinutesStep value={draft.minutes} onPick={(v) => patch({ minutes: v }, 5)} />}
-      {step === 5 && <GoalStep name={name} value={draft.goal} onPick={(v) => patch({ goal: v }, BUILD_STEP)} />}
-      {step === BUILD_STEP && <BuildingStep possessive={poss} letters={letters} steps={buildSteps} t={t} />}
+      <div key={step} className="animate-rise">
+        {step === 0 && <NameStep name={draft.name} onName={(v) => patch({ name: v })} onSubmit={() => hasName && go(1)} />}
+        {step === 1 && <GradeStep name={name} grade={draft.grade} onPick={(g) => patch({ grade: g }, 2)} />}
+        {step === 2 && <HeardStep name={name} signs={draft.signs} onToggle={toggleSign} />}
+        {step === 3 && <EveningsStep value={draft.evenings} onPick={(v) => patch({ evenings: v }, 4)} />}
+        {step === 4 && <MinutesStep value={draft.minutes} onPick={(v) => patch({ minutes: v }, 5)} />}
+        {step === 5 && <GoalStep name={name} value={draft.goal} onPick={(v) => patch({ goal: v }, BUILD_STEP)} />}
+        {step === BUILD_STEP && <BuildingStep possessive={poss} letters={letters} steps={buildSteps} t={t} />}
+      </div>
     </QuizShell>
   );
 }

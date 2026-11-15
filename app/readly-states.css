@@ -16,6 +16,14 @@
   .text-link:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 }
 
+.word[aria-pressed="true"] { animation: pop 140ms ease-out; }
+
+.lift { transition: transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out; }
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #ECE4D6; border-color: #DCD3C3; }
+}
+
 .tactile:active { transform: translateY(3px); box-shadow: none; filter: none; }
 .option:active, .word:active { transform: scale(0.97); }
 

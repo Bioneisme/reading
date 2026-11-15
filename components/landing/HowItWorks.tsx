@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Icon } from "@/components/kit";
+import { Icon, Reveal } from "@/components/kit";
 import { BODY, EYEBROW, H2 } from "./styles";
 
 const SHOW = "mt-auto rounded-button border-2 border-line bg-card px-4 py-3.5";
@@ -39,24 +39,32 @@ export function HowItWorks() {
   return (
     <section id="how" aria-labelledby="how-title" className="scroll-mt-4 border-y-2 border-line-soft bg-card">
       <div className="mx-auto max-w-[1200px] px-6 py-[88px]">
-        <p className={EYEBROW}>How it works</p>
-        <h2 id="how-title" className={`mt-2.5 ${H2}`}>
-          Three steps. About ten minutes.
-        </h2>
+        <Reveal>
+          <p className={EYEBROW}>How it works</p>
+          <h2 id="how-title" className={`mt-2.5 ${H2}`}>
+            Three steps. About ten minutes.
+          </h2>
+        </Reveal>
         <ol className="mt-10 grid gap-5 md:grid-cols-3">
           {STEPS.map((s, i) => (
-            <li key={s.title} className="flex flex-col gap-4 rounded-card border-2 border-line bg-paper p-[26px]">
-              <span
-                aria-hidden="true"
-                className="inline-flex h-[52px] w-12 items-center justify-center rounded-chip bg-indigo font-read text-[28px] font-bold text-white shadow-[0_5px_0_#3328B0]"
+            <li key={s.title} className="flex">
+              <Reveal
+                delay={i * 110}
+                className="flex flex-1 flex-col gap-4 rounded-card border-2 border-line bg-paper p-[26px]"
               >
-                {i + 1}
-              </span>
-              <h3 className="text-[21px] leading-[1.3] font-black">{s.title}</h3>
-              <p className={BODY}>{s.body}</p>
-              <div aria-hidden="true" className="mt-auto flex flex-col">
-                {s.show}
-              </div>
+                <span
+                  aria-hidden="true"
+                  style={{ animationDelay: `${i * 110 + 380}ms` }}
+                  className="inline-flex h-[52px] w-12 items-center justify-center rounded-chip bg-indigo font-read text-[28px] font-bold text-white shadow-[0_5px_0_#3328B0] in-data-[reveal=shown]:animate-pop"
+                >
+                  {i + 1}
+                </span>
+                <h3 className="text-[21px] leading-[1.3] font-black">{s.title}</h3>
+                <p className={BODY}>{s.body}</p>
+                <div aria-hidden="true" className="mt-auto flex flex-col">
+                  {s.show}
+                </div>
+              </Reveal>
             </li>
           ))}
         </ol>

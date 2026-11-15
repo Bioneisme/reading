@@ -56,8 +56,15 @@ export function computeProfile(sessions: SessionRecord[], lex: Lexicon = coreLex
     else if (!hadErrors) status = raw >= MASTERED_ATTEMPTS ? "improving" : "notChecked";
     else if (n >= 2 && last < peak) status = "improving";
     else status = "needsWork";
+    const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
     const progress =
-      status === "mastered" ? 1 : status === "notChecked" ? 0 : Math.max(0.08, Math.min(0.92, 1 - (rate - MASTERED_RATE) / 0.6));
+      status === "mastered"
+        ? 1
+        : status === "notChecked"
+          ? 0
+          : status === "improving"
+            ? 0.55 + 0.3 * clamp01(1 - (rate - MASTERED_RATE) / 0.35)
+            : 0.1 + 0.15 * clamp01(1 - rate / 0.5);
     skills[s] = { skill: s, attempts: a, errors: e, rawAttempts: raw, rate, status, history: hist, progress };
   }
 

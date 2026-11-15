@@ -21,11 +21,11 @@ export function StepFooter({
   narrow = false,
 }: {
   narrow?: boolean;
-  back?: { label: string; onClick: () => void } | null;
+  back?: { label: string; onClick: () => void; desktopOnly?: boolean } | null;
   hint?: ReactNode;
   cta?: FooterCta | null;
 }) {
-  const ctaClass = buttonClass("primary", "lg", false, "flex-[1_1_240px] max-w-[360px] ml-auto");
+  const ctaClass = buttonClass("primary", "lg", false, "flex-[1_1_240px] min-w-fit whitespace-nowrap max-w-[420px] ml-auto");
   return (
     <div className="no-print sticky bottom-0 z-10 mt-auto border-t-2 border-line bg-paper">
       <div className={`mx-auto flex ${narrow ? "max-w-[1088px]" : "max-w-[1120px]"} flex-wrap-reverse items-center gap-x-5 gap-y-3 px-6 py-3.5`}>
@@ -33,7 +33,7 @@ export function StepFooter({
           <button
             type="button"
             onClick={back.onClick}
-            className="tactile inline-flex min-h-14 flex-none items-center justify-center gap-2 rounded-button border-2 border-line-strong bg-card px-[18px] text-base font-extrabold text-ink shadow-edge-strong"
+            className={`tactile ${back.desktopOnly ? "hidden sm:inline-flex" : "inline-flex"} min-h-14 flex-none items-center justify-center gap-2 rounded-button border-2 border-line-strong bg-card px-[18px] text-base font-extrabold text-ink shadow-edge-strong`}
           >
             <ArrowLeft />
             {back.label}

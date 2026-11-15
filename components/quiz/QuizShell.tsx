@@ -36,7 +36,7 @@ export function QuizShell({
     <div className="flex min-h-dvh flex-col bg-paper text-ink">
       <header className="mx-auto w-full max-w-[1088px] px-6 pt-3">
         <div className="grid grid-cols-[48px_1fr_48px] items-center gap-2">
-          <div>
+          <div className="h-11">
             {onBack ? (
               <button type="button" onClick={onBack} aria-label="Previous question" className={backClass}>
                 <Chevron />
@@ -48,7 +48,7 @@ export function QuizShell({
             ) : null}
           </div>
           <Link href="/" aria-label="Readly home" className="flex items-center gap-2 justify-self-center text-ink no-underline">
-            <ReadlyMark size={30} />
+            <ReadlyMark size={38} />
             <span className="text-[19px] font-black tracking-[-0.02em]">Readly</span>
           </Link>
           <span className="justify-self-end whitespace-nowrap text-[13px] font-black text-ink-3">{stepLabel}</span>
@@ -62,7 +62,9 @@ export function QuizShell({
           className="mx-auto mt-3 flex max-w-[720px] gap-1.5"
         >
           {[0, 1, 2, 3, 4, 5].map((i) => (
-            <span key={i} className={`h-2 flex-1 rounded-full ${i < done ? "bg-indigo" : "bg-[#E6DFD2]"}`} />
+            <span key={i} className="h-2 flex-1 overflow-hidden rounded-full bg-[#E6DFD2]">
+              <span className="bar-fill block h-full rounded-full bg-indigo" style={{ width: i < done ? "100%" : "0%" }} />
+            </span>
           ))}
         </div>
       </header>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button, Icon } from "@/components/kit";
 import { createCheckout, type PlanId } from "@/lib/client/api";
+import { LIFT } from "@/components/quiz/PictureCard";
 import { PLAN_OPTIONS, rememberPlan } from "./plans";
 
 function friendly(err: unknown): string {
@@ -45,8 +46,10 @@ export function PlanPicker() {
               role="radio"
               aria-checked={sel}
               onClick={() => setPlan(p.id)}
-              className={`option relative flex w-full cursor-pointer items-center gap-3.5 rounded-[20px] border-2 p-[18px] text-left text-ink max-sm:gap-3 max-sm:p-4 ${
-                sel ? "border-indigo bg-[#F4F2FF] shadow-[0_4px_0_#4B3FE0]" : "border-edge bg-card shadow-[0_4px_0_#E4DBCB]"
+              className={`option ${LIFT} relative flex w-full cursor-pointer items-center gap-3.5 rounded-[20px] border-2 p-[18px] text-left text-ink max-sm:gap-3 max-sm:p-4 ${
+                sel
+                  ? "border-indigo bg-[#F4F2FF] shadow-[0_4px_0_#4B3FE0] hover:shadow-[0_7px_0_#4B3FE0]"
+                  : "border-edge bg-card shadow-[0_4px_0_#E4DBCB] hover:shadow-[0_7px_0_#DCD3C3]"
               }`}
             >
               {p.badge && (
@@ -56,9 +59,11 @@ export function PlanPicker() {
               )}
               <span
                 aria-hidden="true"
-                className={`inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full border-2 ${sel ? "border-indigo" : "border-unchecked-line"}`}
+                className={`inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full border-2 transition-colors duration-200 ${sel ? "border-indigo" : "border-unchecked-line"}`}
               >
-                <span className={`h-3 w-3 rounded-full ${sel ? "bg-indigo" : "bg-transparent"}`} />
+                <span
+                  className={`h-3 w-3 rounded-full bg-indigo transition-[scale,opacity] duration-200 ease-out ${sel ? "scale-100 opacity-100" : "scale-0 opacity-0"}`}
+                />
               </span>
               <span className="min-w-0 flex-auto">
                 <span className="block text-lg font-black">{p.name}</span>
@@ -74,7 +79,17 @@ export function PlanPicker() {
       </div>
       <Button onClick={go} disabled={busy} block className="mt-[22px] min-h-[60px] text-lg font-black max-sm:px-4">
         <Icon name="lock" size={18} strokeWidth={2.4} />
-        {busy ? "Opening secure checkout…" : `Continue — ${chosen.price} today`}
+        {busy ? (
+          "Opening secure checkout…"
+        ) : (
+          <span>
+            Continue —{" "}
+            <span key={chosen.id} className="inline-block animate-pop">
+              <span className="inline-block animate-fade">{chosen.price}</span>
+            </span>{" "}
+            today
+          </span>
+        )}
       </Button>
       {error && (
         <p role="alert" className="mt-3 rounded-2xl border-2 border-lamp-line bg-lamp-tint px-4 py-3 text-[15px] font-bold leading-normal text-lamp-ink">

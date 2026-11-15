@@ -6,9 +6,10 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import { classifyMiss, coreLexicon, extendLexicon, SKILLS, type Lexicon, type SessionRecord } from "@/lib/engine";
 import { fetchLexicon } from "@/lib/client/api";
 import { store, useStore, type AppState } from "@/lib/client/store";
+import { Reveal } from "@/components/kit";
 import { ChildHeader } from "./ChildHeader";
 import { Evidence } from "./Evidence";
-import { buildModel } from "./model";
+import { buildModel, type SkillKey } from "./model";
 import { SayThis, TomorrowPlan } from "./PlanCards";
 import { SideCards } from "./SideCards";
 import { SimulateOverlay } from "./SimulateOverlay";
@@ -33,7 +34,7 @@ function StepNav({ name, demo }: { name: string; demo: boolean }) {
         ))}
       </ol>
       {demo && (
-        <Link href="/start" className="flex-none text-sm font-extrabold text-indigo underline underline-offset-2">
+        <Link href="/start" className="text-link flex-none text-sm font-extrabold text-indigo underline underline-offset-2">
           Start with my child
         </Link>
       )}
@@ -81,6 +82,7 @@ export function ResultScreen() {
 function Result({ state, name, check }: { state: AppState; name: string; check: SessionRecord }) {
   const [lex, setLex] = useState<Lexicon | undefined>(undefined);
   const [sim, setSim] = useState(false);
+  const [flash, setFlash] = useState<{ skill: SkillKey; n: number } | null>(null);
   const model = useMemo(() => buildModel(check, state.sessions, name), [check, state.sessions, name]);
   const wordsKey = check.misses.map((m) => m.word).join(" ");
 
@@ -96,11 +98,19 @@ function Result({ state, name, check }: { state: AppState; name: string; check: 
     };
   }, [wordsKey]);
 
+  useEffect(() => {
+    if (!flash) return;
+    const id = window.setTimeout(() => setFlash(null), 650);
+    return () => window.clearTimeout(id);
+  }, [flash]);
+
   const pick = (index: number, said: string | null) => {
     const misses = check.misses.slice();
     const word = misses[index].word;
-    misses[index] = { word, said, skill: classifyMiss(word, said, lex) };
+    const skill = classifyMiss(word, said, lex);
+    misses[index] = { word, said, skill };
     store.putSession({ ...check, misses });
+    setFlash((f) => ({ skill, n: (f?.n ?? 0) + 1 }));
   };
 
   const closeSim = useCallback(() => setSim(false), []);
@@ -124,27 +134,37 @@ function Result({ state, name, check }: { state: AppState; name: string; check: 
             total={summary.totalMisses}
             examples={model.examples}
             second={model.second}
+            flash={!!flash}
           />
         ) : (
-          <NoPatternHero name={name} totalWords={summary.totalWords} totalMisses={summary.totalMisses} />
+          <NoPatternHero name={name} totalWords={summary.totalWords} totalMisses={summary.totalMisses} flash={!!flash} />
         )}
 
         <div className={`mt-5 ${GRID2}`}>
-          <SayThis scripts={scripts} />
-          <TomorrowPlan plan={plan} pro={state.pro} />
+          <Reveal className="grid">
+            <SayThis scripts={scripts} />
+          </Reveal>
+          <Reveal delay={90} className="grid">
+            <TomorrowPlan plan={plan} pro={state.pro} />
+          </Reveal>
         </div>
 
         <div className={`mt-5 items-start ${GRID2}`}>
-          <Evidence
-            key={check.id}
-            name={name}
-            demo={state.demo}
-            groups={model.groups}
-            initialSaid={check.misses.map((m) => m.said)}
-            lex={lex}
-            onPick={pick}
-          />
-          <SideCards name={name} pro={state.pro} demo={state.demo} onSimulate={openSim} />
+          <Reveal>
+            <Evidence
+              key={check.id}
+              name={name}
+              demo={state.demo}
+              groups={model.groups}
+              initialSaid={check.misses.map((m) => m.said)}
+              lex={lex}
+              onPick={pick}
+              flash={flash?.skill ?? null}
+            />
+          </Reveal>
+          <Reveal delay={90}>
+            <SideCards name={name} pro={state.pro} demo={state.demo} onSimulate={openSim} />
+          </Reveal>
         </div>
 
         <p className="mt-7 text-[13px] font-bold leading-[1.6] text-ink-3">

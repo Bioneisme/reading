@@ -38,7 +38,7 @@ export function JournalHeader({
                 store.exitDemo();
                 router.push("/start");
               }}
-              className="shrink-0 cursor-pointer text-sm font-extrabold text-[#FFD95E] underline underline-offset-2"
+              className="text-link shrink-0 cursor-pointer text-sm font-extrabold text-[#FFD95E] underline underline-offset-2"
             >
               Start with my child
             </button>
@@ -60,14 +60,24 @@ export function JournalHeader({
           </div>
           <p className="mt-2 text-lg font-bold leading-normal text-indigo-soft">{line}</p>
         </div>
-        <div className="flex-[0_1_auto] rounded-[22px] bg-night-2 px-[18px] py-3.5 shadow-[0_5px_0_#14124A]">
+        <div className="flex-[0_1_auto] animate-fade rounded-[22px] bg-night-2 px-[18px] py-3.5 shadow-[0_5px_0_#14124A]">
           <div className="text-[17px] font-black text-[#FFD95E]">{streak}</div>
           <ol aria-label="This week" className="mt-2.5 flex gap-2">
             {week.map((d, i) => {
               const m = MOON[d.state];
               return (
-                <li key={i} aria-label={m.aria} className="flex w-[30px] flex-col items-center gap-1">
-                  <Moon fill={m.fill} stroke={m.stroke} />
+                <li
+                  key={i}
+                  aria-label={m.aria}
+                  style={{ animationDelay: `${120 + i * 70}ms` }}
+                  className="flex w-[30px] animate-rise flex-col items-center gap-1"
+                >
+                  <span
+                    style={{ animationDelay: `${380 + i * 70}ms` }}
+                    className={`inline-flex ${d.state === "read" ? "animate-pop" : ""}`}
+                  >
+                    <Moon fill={m.fill} stroke={m.stroke} />
+                  </span>
                   <span aria-hidden="true" className={`text-[11px] font-black ${m.label}`}>
                     {d.letter}
                   </span>

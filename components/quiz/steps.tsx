@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Grade } from "@/lib/engine";
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { EVENING_ART, GOAL_ART, GRADE_ART } from "./art";
@@ -118,12 +118,17 @@ export function HeardStep({ name, signs, onToggle }: { name: string; signs: stri
               </span>
               <span
                 aria-hidden="true"
-                className={`inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-lg border-2 text-white ${
-                  on ? "border-indigo bg-indigo" : "border-unchecked-line bg-card"
+                className={`inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-lg border-2 text-white transition-colors duration-150 ${
+                  on ? "animate-pop border-indigo bg-indigo" : "border-unchecked-line bg-card"
                 }`}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  <path
+                    d="M5 12.5l4.5 4.5L19 7.5"
+                    pathLength={1}
+                    strokeDasharray="1 2"
+                    style={{ strokeDashoffset: on ? 0 : 1.1, transition: "stroke-dashoffset 220ms ease-out 40ms" }}
+                  />
                 </svg>
               </span>
             </button>
@@ -171,6 +176,7 @@ export function MinutesStep({ value, onPick }: { value: number | null; onPick: (
                 </span>
               }
               title="minutes"
+              label={`${n} minutes${rec ? ", recommended" : ""}`}
               extra={
                 rec ? (
                   <span className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-white bg-lamp px-2.5 py-[3px] text-[11px] font-black text-ink">
@@ -225,23 +231,29 @@ export function BuildingStep({ possessive, letters, steps, t }: { possessive: st
           return (
             <li
               key={s}
-              className={`flex items-center gap-3 rounded-button border-2 border-line bg-card px-4 py-3.5 transition-opacity ${
-                done || cur ? "opacity-100" : "opacity-45"
-              }`}
+              className="animate-rise motion-safe:[animation-delay:var(--d)]"
+              style={{ "--d": `${120 + i * 110}ms` } as CSSProperties}
             >
               <span
-                aria-hidden="true"
-                className={`inline-flex h-7 w-7 flex-none items-center justify-center rounded-full text-white ${
-                  done ? "bg-mastered" : cur ? "bg-indigo-line" : "bg-edge"
+                className={`flex items-center gap-3 rounded-button border-2 border-line bg-card px-4 py-3.5 transition-opacity duration-300 ${
+                  done || cur ? "opacity-100" : "opacity-45"
                 }`}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12.5l4.5 4.5L19 7.5" />
-                </svg>
-              </span>
-              <span className="text-base font-extrabold">
-                {s}
-                {done && <span className="sr-only"> — done</span>}
+                <span
+                  key={done ? "done" : "wait"}
+                  aria-hidden="true"
+                  className={`inline-flex h-7 w-7 flex-none items-center justify-center rounded-full text-white transition-colors duration-200 ${
+                    done ? "animate-pop bg-mastered" : cur ? "bg-indigo-line" : "bg-edge"
+                  }`}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                </span>
+                <span className="text-base font-extrabold">
+                  {s}
+                  {done && <span className="sr-only"> — done</span>}
+                </span>
               </span>
             </li>
           );

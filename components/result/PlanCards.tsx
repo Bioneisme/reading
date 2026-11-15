@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ButtonLink, Icon } from "@/components/kit";
+import { ButtonLink, Icon, Reveal } from "@/components/kit";
 import type { Plan } from "@/lib/engine";
 
 export const PANEL = "rounded-[28px] border-2 border-line bg-card p-[26px] shadow-edge";
@@ -14,16 +14,18 @@ export function SayThis({ scripts }: { scripts: string[] }) {
       <p className="mt-1.5 text-base font-semibold text-ink-2">Read these out loud, word for word.</p>
       <ol className="mt-[18px] flex flex-col gap-3">
         {scripts.map((t, i) => (
-          <li key={i} className="flex items-start gap-3">
-            <span
-              aria-hidden="true"
-              className="inline-flex h-9 w-[34px] flex-none items-center justify-center rounded-[10px] bg-indigo font-read text-lg font-bold text-white shadow-[0_3px_0_#3328B0]"
-            >
-              {i + 1}
-            </span>
-            <span className="rounded-[20px_20px_20px_6px] bg-indigo-tint px-[18px] py-3.5 text-[17px] font-bold leading-normal">
-              “{t}”
-            </span>
+          <li key={i}>
+            <Reveal delay={160 + i * 120} className="flex items-start gap-3">
+              <span
+                aria-hidden="true"
+                className="inline-flex h-9 w-[34px] flex-none items-center justify-center rounded-[10px] bg-indigo font-read text-lg font-bold text-white shadow-[0_3px_0_#3328B0]"
+              >
+                {i + 1}
+              </span>
+              <span className="rounded-[20px_20px_20px_6px] bg-indigo-tint px-[18px] py-3.5 text-[17px] font-bold leading-normal">
+                “{t}”
+              </span>
+            </Reveal>
           </li>
         ))}
       </ol>

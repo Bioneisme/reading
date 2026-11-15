@@ -41,7 +41,7 @@ function initialAnswer(item: SaidItem, options: string[]): Answer | undefined {
 
 function toMiss(word: string, a: Answer, lex: Lexicon | undefined): Miss {
   const said = a.kind === "skip" ? null : a.kind === "option" ? a.said : a.text.trim().toLowerCase() || null;
-  return { word, said, skill: classifyMiss(word, said, lex) };
+  return { word: normalizeWord(word) || word, said, skill: classifyMiss(word, said, lex) };
 }
 
 function answered(a: Answer | undefined): boolean {
@@ -51,7 +51,7 @@ function answered(a: Answer | undefined): boolean {
 }
 
 const choice =
-  "option cursor-pointer rounded-[18px] border-2 border-edge bg-card text-ink shadow-[0_4px_0_#E4DBCB] aria-checked:border-indigo aria-checked:bg-indigo-tint aria-checked:shadow-[0_4px_0_#4B3FE0]";
+  "option cursor-pointer rounded-[18px] border-2 border-edge bg-card text-ink shadow-[0_4px_0_#E4DBCB] aria-checked:animate-pop aria-checked:border-indigo aria-checked:bg-indigo-tint aria-checked:shadow-[0_4px_0_#4B3FE0]";
 
 function Context({ context, word }: { context: string; word: string }) {
   const target = normalizeWord(word);
@@ -126,7 +126,7 @@ export function SaidPicker({
 
   return (
     <>
-      <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] px-6 pb-7 pt-6">
+      <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] animate-fade px-6 pb-7 pt-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-[26px] font-black leading-[1.15] tracking-[-0.02em] md:text-[36px]">
             What did {childName} say?
@@ -137,16 +137,21 @@ export function SaidPicker({
             </span>
             <span aria-hidden="true" className="flex gap-1.5">
               {items.map((_, k) => (
-                <span
-                  key={k}
-                  className={`h-2 w-[22px] rounded-full ${k < pos ? "bg-indigo" : k === pos ? "bg-lamp" : "bg-[#E6DFD2]"}`}
-                />
+                <span key={k} className="h-2 w-[22px] overflow-hidden rounded-full bg-[#E6DFD2]">
+                  <span
+                    className={`block h-full rounded-full ${k < pos ? "bg-indigo" : "bg-lamp"}`}
+                    style={{
+                      width: k <= pos ? "100%" : "0%",
+                      transition: "width 360ms var(--ease-out-soft), background-color 240ms ease-out",
+                    }}
+                  />
+                </span>
               ))}
             </span>
           </div>
         </div>
 
-        <div className="mt-[18px] rounded-card border-2 border-line bg-card px-[22px] py-5 shadow-edge">
+        <div key={`card-${pos}`} className="mt-[18px] animate-rise rounded-card border-2 border-line bg-card px-[22px] py-5 shadow-edge">
           {item.context && (
             <>
               <div className="text-xs font-black uppercase tracking-[0.1em] text-ink-3">In the text</div>
@@ -163,7 +168,12 @@ export function SaidPicker({
           </div>
         </div>
 
-        <div role="radiogroup" aria-label={`What ${childName} said`} className="mt-4">
+        <div
+          key={`opts-${pos}`}
+          role="radiogroup"
+          aria-label={`What ${childName} said`}
+          className="mt-4 animate-rise motion-safe:[animation-delay:70ms]"
+        >
           {opts.length > 0 && (
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(150px,100%),1fr))] gap-3">
               {opts.map((o) => {
@@ -206,7 +216,7 @@ export function SaidPicker({
         </div>
 
         {otherSel && (
-          <label className="mt-4 block text-base font-extrabold">
+          <label className="mt-4 block animate-rise text-base font-extrabold">
             Type what {childName} said
             <input
               type="text"

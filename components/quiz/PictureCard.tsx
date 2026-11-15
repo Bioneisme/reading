@@ -1,10 +1,13 @@
 import type { ReactNode } from "react";
 
+export const LIFT =
+  "[transition-property:transform,translate,box-shadow,border-color,background-color]! motion-safe:hover:-translate-y-[3px]";
+
 export function CheckBadge() {
   return (
     <span
       aria-hidden="true"
-      className="absolute -right-2 -top-2.5 inline-flex h-[30px] w-[30px] items-center justify-center rounded-full border-2 border-white bg-lamp text-ink"
+      className="absolute -right-2 -top-2.5 inline-flex animate-pop h-[30px] w-[30px] items-center justify-center rounded-full border-2 border-white bg-lamp text-ink"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M5 12.5l4.5 4.5L19 7.5" />
@@ -31,6 +34,7 @@ export function PictureCard({
   className = "mt-10",
   extra,
   compact = false,
+  label,
 }: {
   selected: boolean;
   onSelect: () => void;
@@ -41,15 +45,19 @@ export function PictureCard({
   className?: string;
   extra?: ReactNode;
   compact?: boolean;
+  label?: string;
 }) {
   return (
     <button
       type="button"
       role="radio"
       aria-checked={selected}
+      aria-label={label}
       onClick={onSelect}
-      className={`option relative ${className} flex cursor-pointer flex-col rounded-[22px] border-2 bg-card p-0 text-left text-ink ${
-        selected ? "border-indigo shadow-[0_4px_0_#4B3FE0]" : "border-line shadow-[0_4px_0_#ECE4D6]"
+      className={`option ${LIFT} relative ${className} flex cursor-pointer flex-col rounded-[22px] border-2 bg-card p-0 text-left text-ink ${
+        selected
+          ? "border-indigo shadow-[0_4px_0_#4B3FE0] hover:shadow-[0_7px_0_#4B3FE0]"
+          : "border-line shadow-[0_4px_0_#ECE4D6] hover:shadow-[0_7px_0_#DCD3C3]"
       }`}
     >
       <span aria-hidden="true" className={`flex justify-center rounded-t-[20px] ${artClass}`}>

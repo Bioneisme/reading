@@ -61,7 +61,7 @@ export function OwnTextPhase({
   const status = ownStatus(count);
 
   return (
-    <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] px-6 pb-8 pt-6">
+    <main className="mx-auto w-full max-w-[780px] flex-[1_0_auto] animate-rise px-6 pb-8 pt-6">
       <button
         type="button"
         onClick={onBack}
@@ -93,7 +93,7 @@ export function OwnTextPhase({
             {count} {count === 1 ? "word" : "words"}
           </span>
           <span
-            className={`rounded-full px-2.5 py-[3px] text-[13px] font-black ${
+            className={`rounded-full px-2.5 py-[3px] text-[13px] font-black transition-colors duration-200 ${
               status.ok ? "bg-mastered-tint text-mastered-ink" : "bg-needs-tint text-needs-ink"
             }`}
           >
@@ -106,7 +106,7 @@ export function OwnTextPhase({
             {skills.map(({ s, n }) => (
               <li
                 key={s}
-                className="rounded-full border-[1.5px] border-[#CFC9FF] bg-indigo-tint px-3 py-1.5 text-sm font-extrabold text-[#2B2290]"
+                className="animate-fade rounded-full border-[1.5px] border-[#CFC9FF] bg-indigo-tint px-3 py-1.5 text-sm font-extrabold text-[#2B2290]"
               >
                 {SHORT[s]} · {n}
               </li>

@@ -1,5 +1,7 @@
-import type { ReactNode } from "react";
-import { Icon } from "@/components/kit";
+"use client";
+
+import { useState, type CSSProperties, type ReactNode } from "react";
+import { Icon, useCountUp } from "@/components/kit";
 import { SKILLS, type SkillId } from "@/lib/engine";
 import { missLine } from "./model";
 import { changedLetters, SKILL_TILES } from "./tiles";
@@ -7,7 +9,10 @@ import { changedLetters, SKILL_TILES } from "./tiles";
 const TILE =
   "inline-flex h-[clamp(46px,4.8cqi,60px)] w-[clamp(40px,4.2cqi,54px)] items-center justify-center rounded-[13px] border-2 font-read text-[clamp(24px,2.6cqi,32px)] font-bold";
 
-function TileRow({ word, hi, tone }: { word: string; hi: Set<number>; tone: "lamp" | "indigo" }) {
+const STAGGER = "motion-safe:[animation-delay:var(--d)]";
+
+function TileRow({ word, hi, tone, start }: { word: string; hi: Set<number>; tone: "lamp" | "indigo"; start: number }) {
+  const settle = start + word.length * 70 + 420;
   return (
     <div className="flex gap-1.5">
       {[...word].map((l, i) => {
@@ -18,8 +23,13 @@ function TileRow({ word, hi, tone }: { word: string; hi: Set<number>; tone: "lam
             ? "border-[#E8AE1C] bg-lamp text-ink shadow-[0_5px_0_#D99A0B]"
             : "border-[#3F33CF] bg-indigo text-white shadow-[0_5px_0_#14124A]";
         return (
-          <span key={i} className={`${TILE} ${cls}`}>
-            {l}
+          <span key={i} className={`flex animate-rise ${STAGGER}`} style={{ "--d": `${start + i * 70}ms` } as CSSProperties}>
+            <span
+              className={`${TILE} ${cls} ${on ? `animate-pop ${STAGGER}` : ""}`}
+              style={on ? ({ "--d": `${settle}ms` } as CSSProperties) : undefined}
+            >
+              {l}
+            </span>
           </span>
         );
       })}
@@ -41,14 +51,14 @@ function Meter({ filled, total }: { filled: number; total: number }) {
   return (
     <span aria-hidden="true" className="flex gap-1.5">
       {Array.from({ length: n }, (_, i) => (
-        <span key={i} className={`h-2.5 w-[30px] rounded-full ${i < on ? "bg-lamp" : "bg-[#4A4597]"}`} />
+        <span key={i} className={`h-2.5 w-[30px] rounded-full transition-colors duration-200 ${i < on ? "bg-lamp" : "bg-[#4A4597]"}`} />
       ))}
     </span>
   );
 }
 
 const SHELL =
-  "on-dark grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] items-center gap-x-10 gap-y-7 rounded-hero bg-night p-[clamp(24px,3.4cqi,44px)] text-white shadow-edge-night";
+  "on-dark grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),1fr))] items-center gap-x-10 gap-y-7 rounded-hero bg-night p-[clamp(24px,3.4cqi,44px)] text-white shadow-edge-night transition-shadow duration-300";
 
 export function WeakSpotHero({
   name,
@@ -57,6 +67,7 @@ export function WeakSpotHero({
   total,
   examples,
   second,
+  flash = false,
 }: {
   name: string;
   weak: SkillId;
@@ -64,20 +75,29 @@ export function WeakSpotHero({
   total: number;
   examples: string[];
   second: { name: string; count: number } | null;
+  flash?: boolean;
 }) {
   const tiles = SKILL_TILES[weak];
+  const [first] = useState(weakCount);
+  const counted = useCountUp(first, 600);
+  const shown = counted === first ? weakCount : counted;
   return (
-    <section aria-labelledby="ws-title" className={SHELL}>
+    <section aria-labelledby="ws-title" className={`${SHELL} ${flash ? "ring-4 ring-lamp" : "ring-0 ring-lamp/0"}`}>
       <div>
         <p className="text-[13px] font-black uppercase tracking-[0.1em] text-[#FFD95E]">{name}&apos;s weak spot</p>
-        <h1 id="ws-title" className="mt-1.5 text-[clamp(38px,4.6cqi,64px)] font-black leading-[1.02] tracking-[-0.03em]">
+        <h1 key={weak} id="ws-title" className="mt-1.5 animate-fade text-[clamp(38px,4.6cqi,64px)] font-black leading-[1.02] tracking-[-0.03em]">
           {SKILLS[weak].name}
         </h1>
         <div className="mt-3 flex flex-wrap items-center gap-x-3.5 gap-y-2.5">
           <span className="text-xl font-extrabold text-indigo-soft">
-            {weakCount} of {missLine(total)}
+            <span aria-hidden="true" className="tabular-nums">
+              {shown} of {missLine(total)}
+            </span>
+            <span className="sr-only">
+              {weakCount} of {missLine(total)}
+            </span>
           </span>
-          <Meter filled={weakCount} total={total} />
+          <Meter filled={shown} total={total} />
         </div>
         <p className="mt-4 max-w-[560px] text-lg font-semibold leading-[1.6] text-[#E7E5FB]">
           {SKILLS[weak].explain(name, examples)}
@@ -89,11 +109,22 @@ export function WeakSpotHero({
         )}
       </div>
       <Panel>
-        <TileRow word={tiles.from} hi={new Set()} tone={tiles.tone} />
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFD95E" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+        <TileRow word={tiles.from} hi={new Set()} tone={tiles.tone} start={120} />
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FFD95E"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`animate-rise ${STAGGER}`}
+          style={{ "--d": `${180 + tiles.from.length * 70}ms` } as CSSProperties}
+        >
           <path d="M12 5v14M6 13l6 6 6-6" />
         </svg>
-        <TileRow word={tiles.to} hi={changedLetters(tiles.from, tiles.to)} tone={tiles.tone} />
+        <TileRow word={tiles.to} hi={changedLetters(tiles.from, tiles.to)} tone={tiles.tone} start={260 + tiles.from.length * 70} />
         <p className="text-center text-[15px] font-extrabold text-indigo-soft">{tiles.caption}</p>
       </Panel>
     </section>
@@ -104,14 +135,16 @@ export function NoPatternHero({
   name,
   totalWords,
   totalMisses,
+  flash = false,
 }: {
   name: string;
   totalWords: number;
   totalMisses: number;
+  flash?: boolean;
 }) {
   const clean = totalMisses === 0;
   return (
-    <section aria-labelledby="ws-title" className={SHELL}>
+    <section aria-labelledby="ws-title" className={`${SHELL} ${flash ? "ring-4 ring-lamp" : "ring-0 ring-lamp/0"}`}>
       <div>
         <p className="text-[13px] font-black uppercase tracking-[0.1em] text-[#FFD95E]">
           {clean ? `${name}'s check` : `${name}'s results`}
@@ -129,7 +162,7 @@ export function NoPatternHero({
         </p>
       </div>
       <Panel>
-        <span className="inline-flex h-[76px] w-[72px] items-center justify-center rounded-[22px] border-2 border-[#E8AE1C] bg-lamp text-ink shadow-[0_6px_0_#D99A0B]">
+        <span className="inline-flex h-[76px] w-[72px] animate-rise items-center justify-center rounded-[22px] border-2 border-[#E8AE1C] bg-lamp text-ink shadow-[0_6px_0_#D99A0B] motion-safe:[animation-delay:120ms]">
           {clean ? <Icon name="check" size={40} strokeWidth={3} /> : <span className="font-read text-[34px] font-bold">?</span>}
         </span>
         <p className="text-center text-[15px] font-extrabold text-indigo-soft">

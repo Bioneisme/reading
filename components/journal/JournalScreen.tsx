@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
-import { buildPlan, computeProfile, getStory, wordsOf } from "@/lib/engine";
+import { buildPlan, computeProfile, getStory } from "@/lib/engine";
 import { useStore, type AppState } from "@/lib/client/store";
 import { doneToday, GRADE_LABEL } from "@/lib/client/progress";
+import { Reveal } from "@/components/kit";
 import {
   headerLine,
   journalDay,
@@ -20,7 +21,7 @@ import { HistoryCard, MissesChart, WeekCard } from "./SideCards";
 import { SettingsCard } from "./SettingsCard";
 import { SkillsMap } from "./SkillsMap";
 import { SKILL_SHORT } from "./skillCopy";
-import { TonightCard, type TonightCopy } from "./TonightCard";
+import { TonightCard, type TonightCopy, type TonightStory } from "./TonightCard";
 
 export function JournalScreen() {
   const snap = useStore();
@@ -55,10 +56,18 @@ function Journal({ state }: { state: AppState }) {
   const hasSessions = sessions.length > 0;
   const hasNightly = sessions.some((s) => s.kind === "nightly");
 
-  const story = useMemo(() => {
+  const sample = useMemo(() => {
     const s = getStory(plan.story.id);
-    return s ? { id: s.id, title: s.title, words: wordsOf(s.text).length } : null;
+    return s ? { id: s.id, title: s.title } : null;
   }, [plan.story.id]);
+
+  const focusName = SKILL_SHORT[profile.focus];
+  const storyFor = (when: "tonight" | "tomorrow"): TonightStory => ({
+    when: when === "tonight" ? "Tonight’s new story" : "Tomorrow’s new story",
+    title: `Made for ${child.name}`,
+    sub: `${focusName} · every word checked`,
+    sample,
+  });
 
   const focusTitle = `${SKILL_SHORT[profile.focus]} — round ${profile.round}`;
   const tonight: TonightCopy = !hasSessions
@@ -77,7 +86,7 @@ function Journal({ state }: { state: AppState }) {
           sub: "Tonight’s 10 minutes are done. See you tomorrow evening.",
           cta: { label: "Do one more round", href: "/session", secondary: true },
           steps: true,
-          story,
+          story: storyFor("tomorrow"),
         }
       : !hasNightly
         ? {
@@ -88,7 +97,7 @@ function Journal({ state }: { state: AppState }) {
               : "About 10 minutes: word pairs, a word list and a new story.",
             cta: { label: `Start round ${profile.round}`, href: "/session" },
             steps: true,
-            story,
+            story: storyFor(doneToday(sessions) ? "tomorrow" : "tonight"),
           }
         : {
             label: "Tonight",
@@ -96,7 +105,7 @@ function Journal({ state }: { state: AppState }) {
             sub: "About 10 minutes: word pairs, a word list and a new story.",
             cta: { label: "Start tonight’s 10 minutes", href: "/session" },
             steps: true,
-            story,
+            story: storyFor("tonight"),
           };
 
   const day = journalDay(sessions, demo);
@@ -118,24 +127,36 @@ function Journal({ state }: { state: AppState }) {
           {locked ? (
             <>
               {hasSessions ? <FreePlanCard plan={plan} /> : <TonightCard copy={tonight} />}
-              <LockedTeaser name={child.name} />
+              <Reveal delay={80}>
+                <LockedTeaser name={child.name} />
+              </Reveal>
             </>
           ) : (
             <>
               <TonightCard copy={tonight} />
-              <SkillsMap profile={profile} sessions={sessions} showTags={hasSessions} />
+              <Reveal delay={80}>
+                <SkillsMap profile={profile} sessions={sessions} showTags={hasSessions} />
+              </Reveal>
             </>
           )}
         </div>
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
           {!locked && (
             <>
-              <WeekCard summary={weekSummary(profile, sessions)} />
-              <MissesChart sessions={sessions} />
-              <HistoryCard sessions={sessions} demo={demo} />
+              <Reveal delay={120}>
+                <WeekCard summary={weekSummary(profile, sessions)} sessions={sessions.length} />
+              </Reveal>
+              <Reveal delay={180}>
+                <MissesChart sessions={sessions} />
+              </Reveal>
+              <Reveal delay={60}>
+                <HistoryCard sessions={sessions} demo={demo} />
+              </Reveal>
             </>
           )}
-          <SettingsCard state={state} locked={locked} />
+          <Reveal delay={60}>
+            <SettingsCard state={state} locked={locked} />
+          </Reveal>
         </div>
       </div>
     </div>

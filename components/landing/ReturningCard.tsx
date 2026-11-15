@@ -26,7 +26,7 @@ export function ReturningCard() {
   const day = currentDay(sessions);
 
   return (
-    <div className="mx-auto mt-1 max-w-[1200px] px-6">
+    <div className="mx-auto mt-1 max-w-[1200px] animate-sheet px-6">
       <div className="flex flex-col items-start gap-4 rounded-[22px] border-2 border-line bg-card px-[18px] py-4 shadow-edge sm:flex-row sm:flex-wrap sm:items-center">
         <span aria-hidden="true" className="inline-flex size-[52px] shrink-0 items-center justify-center rounded-button bg-night text-lamp">
           <Icon name="moon" size={26} className="[&>path]:fill-current [&>path]:stroke-none" />

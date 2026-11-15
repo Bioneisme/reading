@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ReadlyLogo } from "@/components/ReadlyLogo";
 import { DemoLink, RealLink } from "./LandingLinks";
 
-const LINK = "text-[15px] font-extrabold text-ink underline underline-offset-4 decoration-2";
+const LINK =
+  "text-[15px] font-extrabold text-ink underline underline-offset-4 decoration-2 transition-colors duration-150 hover:text-indigo hover:decoration-indigo";
 
 export function LandingFooter() {
   return (

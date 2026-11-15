@@ -13,11 +13,12 @@ import {
   type Profile,
   type Story,
 } from "@/lib/engine";
+import { STORY_NAMES } from "@/data/wordbank";
 import { useStore, type AppState } from "@/lib/client/store";
-import { ButtonLink, ExampleChip, Icon } from "@/components/kit";
+import { ButtonLink, ExampleChip, Glim, Icon } from "@/components/kit";
 import { SKILL_SHORT } from "@/components/journal/skillCopy";
 import { AnnotatedPassage, PracticeToggle } from "./AnnotatedPassage";
-import { legendFor, SHAPE_GLYPH, storyTokens } from "./annotate";
+import { legendFor, SHAPE_GLYPH, skillsUpTo, storyTokens } from "./annotate";
 
 const CHIP = "rounded-full border-2 border-line bg-card px-3 py-1.5 text-sm font-extrabold";
 
@@ -50,22 +51,23 @@ function Reader({ story, state }: { story: Story; state: AppState | null }) {
   const child = state?.child ?? null;
   const name = child?.name ?? null;
   const demo = !!state?.demo;
-  const sessions = state?.sessions ?? [];
+  const sessions = useMemo(() => state?.sessions ?? [], [state]);
   const unlocked = !!state && (state.demo || state.pro);
 
   const profile = useMemo(() => (sessions.length ? computeProfile(sessions) : null), [sessions]);
   const plan = useMemo(() => (profile && name ? buildPlan(profile, name) : null), [profile, name]);
-  const tokens = useMemo(() => storyTokens(story.text, null), [story.text]);
+  const allowed = useMemo(() => (profile ? allowedSkills(profile) : skillsUpTo(story.focus)), [profile, story.focus]);
+  const tokens = useMemo(() => storyTokens(story.text, null, allowed), [story.text, allowed]);
   const legend = useMemo(() => legendFor(tokens, story.focus), [tokens, story.focus]);
   const count = wordsOf(story.text).length;
-  const checked = useMemo(() => {
-    if (!profile || !name) return false;
-    return validateStory(story.text, allowedSkills(profile), { names: [name] }).ok;
-  }, [profile, name, story.text]);
+  const checked = useMemo(
+    () => validateStory(story.text, allowed, { names: STORY_NAMES }).ok,
+    [story.text, allowed],
+  );
 
-  const tonight = plan?.story.id === story.id;
-  const eyebrow = tonight
-    ? `Tonight's story · ${SKILL_SHORT[plan.focus]}, round ${plan.round}`
+  const sample = plan?.story.id === story.id;
+  const eyebrow = sample
+    ? `Sample story · ${SKILL_SHORT[plan.focus]}, round ${plan.round}`
     : `Practice story · ${SKILL_SHORT[story.focus]}`;
 
   const cta = !child
@@ -82,7 +84,7 @@ function Reader({ story, state }: { story: Story; state: AppState | null }) {
         <div className="mx-auto flex max-w-[1120px] items-center gap-3 px-6 py-3">
           <Link
             href={child ? "/journal" : "/"}
-            className="inline-flex min-h-11 flex-none items-center gap-1.5 text-[15px] font-extrabold text-indigo no-underline"
+            className="text-link inline-flex min-h-11 min-w-0 items-center gap-1.5 text-[15px] font-extrabold text-indigo no-underline"
           >
             <Icon name="back" size={18} strokeWidth={2.6} />
             {child ? `${child.name}'s journal` : "Readly"}
@@ -92,44 +94,50 @@ function Reader({ story, state }: { story: Story; state: AppState | null }) {
           <button
             type="button"
             onClick={() => window.print()}
-            className="tactile inline-flex min-h-11 flex-none cursor-pointer items-center gap-2 rounded-[14px] border-2 border-line-strong bg-card px-3.5 text-[15px] font-extrabold text-ink shadow-[0_3px_0_#DCD3C3]"
+            aria-label="Print"
+            className="tactile inline-flex min-h-11 min-w-11 flex-none cursor-pointer items-center justify-center gap-2 rounded-[14px] border-2 border-line-strong bg-card px-3 text-[15px] font-extrabold text-ink shadow-[0_3px_0_#DCD3C3] min-[400px]:px-3.5"
           >
             <Icon name="print" size={18} />
-            Print
+            <span className="max-[399px]:hidden">Print</span>
           </button>
         </div>
       </header>
 
       <main className="mx-auto max-w-[1000px] px-6 pt-7 print:max-w-none print:p-0">
+        <Glim pose="reading" size={132} className="no-print float-right -mt-2 ml-4 max-sm:hidden" />
         <div className="no-print text-[13px] font-black uppercase tracking-[0.1em] text-indigo">{eyebrow}</div>
         <h1 className="mt-1.5 font-read text-[clamp(40px,4.4vw,60px)] font-bold leading-[1.05]">{story.title}</h1>
         <ul className="no-print mt-3.5 flex flex-wrap gap-2">
           <li className={CHIP}>{count} words</li>
           <li className={CHIP}>Built for {SKILL_SHORT[story.focus]}</li>
-          {checked && name && (
+          {checked && (
             <li className="inline-flex items-center gap-1.5 rounded-full bg-mastered-tint px-3 py-1.5 text-sm font-black text-mastered-ink">
               <Icon name="check" size={16} strokeWidth={2.6} />
-              Every word checked for {name}
+              {name ? `Every word checked for ${name}` : "Every word checked"}
             </li>
           )}
         </ul>
 
-        <div className="no-print mt-[22px] flex flex-wrap items-center gap-x-5 gap-y-3">
+        <div className="no-print mt-[22px] flex flex-wrap items-center gap-x-5 gap-y-3 lg:flex-nowrap">
           <PracticeToggle on={labels} onChange={setLabels} />
-          {labels && (
-            <ul aria-label="Legend" className="flex flex-wrap gap-x-4 gap-y-2">
-              {legend.map((l) => (
-                <li
-                  key={l.key}
-                  className="inline-flex items-center gap-1.5 text-sm font-black"
-                  style={{ color: l.ink }}
-                >
-                  <span aria-hidden="true">{SHAPE_GLYPH[l.shape]}</span>
-                  {l.label} · {l.count}
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul
+            aria-label="Legend"
+            aria-hidden={!labels}
+            className={`flex min-w-0 flex-wrap gap-x-3.5 gap-y-2 transition-[opacity,translate] duration-300 ease-(--ease-out-soft) ${
+              labels ? "translate-x-0 opacity-100" : "pointer-events-none -translate-x-2 opacity-0"
+            }`}
+          >
+            {legend.map((l) => (
+              <li
+                key={l.key}
+                className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-black"
+                style={{ color: l.ink }}
+              >
+                <span aria-hidden="true">{SHAPE_GLYPH[l.shape]}</span>
+                {l.label} · {l.count}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <article
@@ -162,7 +170,7 @@ function NotFound({ name }: { name: string | null }) {
         </span>
         <h1 className="mt-4 text-[32px] font-black leading-tight tracking-[-0.02em]">We couldn&apos;t find that story</h1>
         <p className="mt-2 text-[17px] font-semibold leading-normal text-ink-2">
-          It may have been replaced by a newer one. Tonight&apos;s story is always in the journal.
+          It may have been replaced by a newer one. Tonight&apos;s session, with a new story, is always in the journal.
         </p>
         <ButtonLink href={name ? "/journal" : "/"} className="mt-6">
           {name ? `Back to ${name}'s journal` : "Back to Readly"}
