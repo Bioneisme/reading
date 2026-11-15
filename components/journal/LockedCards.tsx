@@ -30,28 +30,28 @@ export function FreePlanCard({ plan }: { plan: Plan }) {
       <p className="mt-1.5 text-base font-semibold text-ink-2">Built from tonight&apos;s check: {SKILL_SHORT[plan.focus]}.</p>
       <ol className="mt-4 flex flex-col gap-2.5">
         {rows.map((r) => (
-          <li key={r.label} className="flex items-center gap-3.5 rounded-2xl bg-paper px-3.5 py-3">
+          <li key={r.label} className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 rounded-2xl bg-paper px-3.5 py-3">
             <span className="w-[62px] flex-none rounded-[10px] bg-indigo py-1.5 text-center text-sm font-black text-white">
               {r.min}
             </span>
             <span className="font-extrabold">{r.label}</span>
-            <span className="ml-auto text-right font-read text-[19px] text-ink-2">{r.words}</span>
+            <span className="ml-auto whitespace-nowrap text-right font-read text-[19px] text-ink-2">{r.words}</span>
           </li>
         ))}
-        <li className="flex items-center gap-3.5 rounded-2xl border-2 border-dashed border-line-strong bg-[#F6F1E7] px-3.5 py-3">
+        <li className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 rounded-2xl border-2 border-dashed border-line-strong bg-[#F6F1E7] px-3.5 py-3">
           <span className="w-[62px] flex-none rounded-[10px] bg-ink-3 py-1.5 text-center text-sm font-black text-white">5 min</span>
           <span className="font-extrabold">Practice story</span>
-          <span className="ml-auto inline-flex items-center gap-1.5 text-right text-sm font-extrabold text-ink-2">
+          <span className="ml-auto inline-flex items-center gap-1.5 whitespace-nowrap text-right text-sm font-extrabold text-ink-2">
             <LockGlyph />
             In the plan
           </span>
         </li>
       </ol>
       <div className="mt-[18px] flex flex-wrap gap-3">
-        <Link href="/plans" className={buttonClass("primary", "lg", false, "flex-[1_1_220px]")}>
+        <Link href="/plans" className={buttonClass("primary", "lg", false, "flex-[1_1_220px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
           Unlock nightly sessions
         </Link>
-        <Link href="/result" className={buttonClass("secondary", "lg", false, "flex-[1_1_200px]")}>
+        <Link href="/result" className={buttonClass("secondary", "lg", false, "flex-[1_1_200px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
           Review tonight&apos;s results
         </Link>
       </div>

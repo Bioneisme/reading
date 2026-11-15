@@ -17,7 +17,7 @@ export function PairsGrid({
   onToggle: (key: string) => void;
 }) {
   return (
-    <ul className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-3.5">
+    <ul className="mt-5 grid grid-cols-1 gap-3.5 md:grid-cols-3">
       {pairs.map((pair, i) => (
         <li
           key={pair.join("-")}

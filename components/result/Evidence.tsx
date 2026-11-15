@@ -31,15 +31,17 @@ function Row({
   const values = [...options, SKIP];
   return (
     <li className="rounded-[18px] border-2 border-line bg-paper px-3.5 py-3">
-      <div className="flex flex-wrap items-center gap-2.5 font-read text-2xl">
-        <span>{row.word}</span>
-        <Icon name="next" size={18} strokeWidth={2.4} className="text-ink-3" />
-        <span className="text-[#2B2290]">{row.said === null ? "(skipped)" : `“${row.said}”`}</span>
+      <div className="flex flex-nowrap items-center gap-2.5 font-read text-2xl">
+        <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2.5 break-words">
+          <span className="min-w-0">{row.word}</span>
+          <Icon name="next" size={18} strokeWidth={2.4} className="flex-none text-ink-3" />
+          <span className="min-w-0 text-[#2B2290]">{row.said === null ? "(skipped)" : `“${row.said}”`}</span>
+        </span>
         <button
           type="button"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="tactile ml-auto inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full bg-night px-3.5 font-sans text-[13px] font-black text-white shadow-[0_3px_0_#14124A]"
+          className="tactile inline-flex min-h-10 flex-none cursor-pointer items-center gap-1.5 rounded-full bg-night px-3.5 font-sans text-[13px] font-black whitespace-nowrap text-white shadow-[0_3px_0_#14124A]"
         >
           {open ? "Hide x-ray" : "X-ray"}
         </button>

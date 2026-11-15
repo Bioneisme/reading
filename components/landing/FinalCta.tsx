@@ -16,9 +16,9 @@ export function FinalCta() {
             Your child reads. You tap. We tell you what to say tomorrow.
           </p>
           <div className="mt-[30px] flex flex-wrap gap-3.5">
-            <DemoLink className={cta("lamp", "min-h-[58px] max-w-[320px] flex-[1_1_250px] px-[26px] text-[17px]")}>
+            <DemoLink className={cta("lamp", "min-h-[58px] max-w-[320px] flex-[1_1_250px] px-[26px] text-[17px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
               <Icon name="play" size={18} />
-              Try a 60-second example
+              Try a 60‑second example
             </DemoLink>
             <RealLink href="/start" className={cta("outlineDark", "min-h-[58px] max-w-[280px] flex-[1_1_220px] px-6 text-[17px]")}>
               Start with my child

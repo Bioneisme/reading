@@ -11,7 +11,7 @@ export function Method() {
             id="method-title"
             className="mt-3 text-[clamp(28px,3vw,42px)] leading-[1.15] font-black tracking-[-0.02em] text-balance"
           >
-            Reading specialists sort misses by sound pattern. We made it a 10-minute habit any parent can do.
+            Reading specialists sort misses by sound pattern. We made it a 10‑minute habit any parent can do.
           </h2>
           <p className="mt-[18px] max-w-[560px] text-lg leading-[1.6] font-semibold text-indigo-soft">
             You listen and mark what you hear. The pattern in the misses shows which skill to practice next. Readly does

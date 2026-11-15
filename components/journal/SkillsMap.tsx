@@ -88,8 +88,8 @@ export function SkillsMap({
                 {i + 1}
               </span>
               <span className="min-w-0 flex-auto">
-                <span className="flex items-start justify-between gap-2">
-                  <span className="text-[15px] font-black leading-[1.3]">{SKILLS[id].name}</span>
+                <span className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
+                  <span className="min-w-0 text-[15px] font-black leading-[1.3]">{SKILLS[id].name.replace(/-/g, "\u2011")}</span>
                   {tag && (
                     <span
                       className={`flex-none rounded-full px-2 py-0.5 text-[11px] font-black ${
@@ -108,7 +108,7 @@ export function SkillsMap({
                       style={{ width: seen ? `${pct}%` : "0%", transitionDelay: `${i * 45}ms` }}
                     />
                   </span>
-                  <span className={`inline-flex flex-none items-center gap-[5px] text-xs font-black ${look.ink}`}>
+                  <span className={`inline-flex w-[118px] flex-none items-center justify-end gap-[5px] whitespace-nowrap text-xs font-black ${look.ink}`}>
                     <StatusIcon status={st.status} size={15} />
                     {STATUS_LABEL[st.status]}
                   </span>

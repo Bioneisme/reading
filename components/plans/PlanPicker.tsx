@@ -67,17 +67,24 @@ export function PlanPicker() {
               </span>
               <span className="min-w-0 flex-auto">
                 <span className="block text-lg font-black">{p.name}</span>
-                <span className="mt-0.5 block text-sm font-bold text-ink-2">{p.terms}</span>
+                <span className="mt-0.5 block text-sm font-bold text-ink-2 max-[400px]:text-[13px]">
+                  {p.terms.split(/ (?=every )/).map((part, i) => (
+                    <span key={part}>
+                      {i > 0 && " "}
+                      <span className="whitespace-nowrap">{part}</span>
+                    </span>
+                  ))}
+                </span>
               </span>
               <span className="flex-none text-right">
-                <span className="block text-2xl font-black tracking-[-0.02em]">{p.price}</span>
+                <span className="block text-2xl font-black tracking-[-0.02em] max-[400px]:text-xl">{p.price}</span>
                 {p.per && <span className="block text-sm font-extrabold text-[#2B2290]">{p.per}</span>}
               </span>
             </button>
           );
         })}
       </div>
-      <Button onClick={go} disabled={busy} block className="mt-[22px] min-h-[60px] text-lg font-black max-sm:px-4">
+      <Button onClick={go} disabled={busy} block className="mt-[22px] min-h-[60px] text-lg font-black whitespace-nowrap max-sm:px-4 max-[400px]:text-base">
         <Icon name="lock" size={18} strokeWidth={2.4} />
         {busy ? (
           "Opening secure checkout..."
@@ -112,7 +119,7 @@ export function PlanPicker() {
           <span className="text-sm font-extrabold">No real money is charged.</span>
         </div>
         <p className="mt-1.5 text-[15px] font-bold leading-normal text-[#4A3500]">
-          Use card <span className="font-black tracking-[0.04em] text-ink tabular-nums">4242 4242 4242 4242</span>, any future
+          Use card <span className="font-black tracking-[0.04em] whitespace-nowrap text-ink tabular-nums">4242 4242 4242 4242</span>, any future
           date, any CVC.
         </p>
       </div>

@@ -2,8 +2,8 @@ import { Button, ButtonLink, Icon } from "@/components/kit";
 
 const PERKS = [
   "A new practice story every night, every word checked",
-  "The 28-day plan, updated after every night",
-  "Nightly 10-minute checks after the first one",
+  "The 28‑day plan, updated after every night",
+  "Nightly 10‑minute checks after the first one",
   "Skills map, progress and a weekly summary",
 ];
 
@@ -17,7 +17,7 @@ export function UnlockCard({ name, pro }: { name: string; pro: boolean }) {
         <Icon name={pro ? "check" : "lock"} size={24} strokeWidth={pro ? 2.6 : 2.2} />
       </span>
       <h2 id="un-title" className="mt-3.5 text-2xl font-black tracking-[-0.01em]">
-        {pro ? `${name}'s 28-day plan is unlocked` : `Unlock ${name}'s 28-day plan`}
+        {pro ? `${name}'s 28‑day plan is unlocked` : `Unlock ${name}'s 28‑day plan`}
       </h2>
       <ul className="mt-3.5 flex flex-col gap-2.5">
         {PERKS.map((p) => (
@@ -34,8 +34,9 @@ export function UnlockCard({ name, pro }: { name: string; pro: boolean }) {
         </ButtonLink>
       ) : (
         <>
-          <ButtonLink href="/plans" block className="mt-5 text-center max-sm:px-3 max-sm:text-base">
-            See plans from $9.92/month
+          <ButtonLink href="/plans" block className="mt-5 text-center whitespace-nowrap max-sm:px-3 max-sm:text-base">
+            <span className="max-[400px]:hidden">See plans from $9.92/month</span>
+            <span className="min-[401px]:hidden">Plans from $9.92/month</span>
           </ButtonLink>
           <p className="mt-2.5 text-center text-sm font-bold text-ink-3">Cancel anytime in one click</p>
         </>

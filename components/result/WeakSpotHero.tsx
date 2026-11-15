@@ -125,7 +125,7 @@ export function WeakSpotHero({
           <path d="M12 5v14M6 13l6 6 6-6" />
         </svg>
         <TileRow word={tiles.to} hi={changedLetters(tiles.from, tiles.to)} tone={tiles.tone} start={260 + tiles.from.length * 70} />
-        <p className="text-center text-[15px] font-extrabold text-indigo-soft">{tiles.caption}</p>
+        <p className="text-center text-[15px] font-extrabold text-balance text-indigo-soft">{tiles.caption}</p>
       </Panel>
     </section>
   );

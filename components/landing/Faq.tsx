@@ -24,7 +24,7 @@ export function Faq() {
   return (
     <section id="faq" aria-labelledby="faq-title" className={`${SECTION} scroll-mt-4 py-24`}>
       <Reveal>
-        <h2 id="faq-title" className={H2}>
+        <h2 id="faq-title" className={`text-balance ${H2}`}>
           Questions parents ask
         </h2>
       </Reveal>

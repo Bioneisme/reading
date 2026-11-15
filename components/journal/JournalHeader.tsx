@@ -43,9 +43,9 @@ export function JournalHeader({
           </div>
           <p className="mt-2 text-lg font-bold leading-normal text-indigo-soft">{line}</p>
         </div>
-        <div className="flex-[0_1_auto] animate-fade rounded-[22px] bg-night-2 px-[18px] py-3.5 shadow-[0_5px_0_#14124A]">
+        <div className="flex-[0_1_auto] animate-fade rounded-[22px] bg-night-2 px-[18px] py-3.5 shadow-[0_5px_0_#14124A] max-sm:w-full max-sm:flex-auto max-[400px]:px-3.5">
           <div className="text-[17px] font-black text-[#FFD95E]">{streak}</div>
-          <ol aria-label="This week" className="mt-2.5 flex gap-2">
+          <ol aria-label="This week" className="mt-2.5 flex gap-2 max-sm:justify-between max-[400px]:gap-1">
             {week.map((d, i) => {
               const m = MOON[d.state];
               return (
@@ -53,7 +53,7 @@ export function JournalHeader({
                   key={i}
                   aria-label={m.aria}
                   style={{ animationDelay: `${120 + i * 70}ms` }}
-                  className="flex w-[30px] animate-rise flex-col items-center gap-1"
+                  className="flex w-[30px] animate-rise flex-col items-center gap-1 max-[400px]:w-[26px]"
                 >
                   <span
                     style={{ animationDelay: `${380 + i * 70}ms` }}

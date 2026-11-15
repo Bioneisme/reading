@@ -18,7 +18,7 @@ function Marked({ children }: { children: string }) {
 function HeroVisual() {
   return (
     <DemoLink
-      aria-label="Open the 60-second example"
+      aria-label="Open the 60‑second example"
       className="group relative mx-auto mb-10 block aspect-[560/600] w-full max-w-[560px] animate-rise rounded-hero text-ink [animation-delay:180ms]"
     >
       <div
@@ -50,13 +50,15 @@ function HeroVisual() {
         </span>
         <span className="flex min-w-0 flex-col">
           <span className="text-[11px] font-black tracking-[0.1em] text-[#FFD95E] uppercase">Mia&apos;s weak spot</span>
-          <span className="text-[17px] font-black sm:text-[19px]">Magic e · 3 of 4 misses</span>
+          <span className="text-[17px] font-black text-balance max-[400px]:text-[15px] sm:text-[19px]">
+            Magic e&nbsp;· <span className="whitespace-nowrap">3 of 4 misses</span>
+          </span>
         </span>
       </div>
-      <div className="absolute -bottom-10 left-1/2 z-[2] w-[min(380px,92%)] -translate-x-1/2 -rotate-1 animate-float rounded-[22px] border-2 border-line bg-card px-[18px] pt-3.5 pb-4 shadow-edge-sand transition-[translate,box-shadow,border-color] duration-200 ease-out [animation-delay:-3s] group-hover:-translate-y-[3px] group-hover:border-line-strong group-hover:shadow-[0_7px_0_#E4DBCB]">
+      <div className="absolute -bottom-10 left-1/2 z-[2] w-[min(380px,92%)] -translate-x-1/2 -rotate-1 animate-float rounded-[22px] border-2 border-line bg-card px-[18px] pt-3.5 pb-4 shadow-edge-sand max-[400px]:px-3 transition-[translate,box-shadow,border-color] duration-200 ease-out [animation-delay:-3s] group-hover:-translate-y-[3px] group-hover:border-line-strong group-hover:shadow-[0_7px_0_#E4DBCB]">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[13px] font-extrabold text-ink-2">Tonight&apos;s check · 1st grade</span>
-          <span className="rounded-full bg-lamp-tint px-2.5 py-[3px] text-xs font-black text-lamp-ink">2 marked</span>
+          <span className="min-w-0 text-[13px] font-extrabold whitespace-nowrap text-ink-2 max-[400px]:text-[11px]">Tonight&apos;s check · 1st grade</span>
+          <span className="flex-none rounded-full bg-lamp-tint px-2.5 py-[3px] text-xs font-black whitespace-nowrap text-lamp-ink max-[400px]:px-2 max-[400px]:text-[11px]">2 marked</span>
         </div>
         <p className="mt-1.5 font-read text-[21px] leading-[1.9] sm:text-2xl">
           Jake has a red <Marked>bike</Marked>. He <Marked>rides</Marked> to the lake.
@@ -91,9 +93,9 @@ export function Hero() {
           what to say tomorrow.
         </p>
         <div className="mt-8 flex animate-rise flex-wrap gap-3.5 [animation-delay:180ms]">
-          <DemoLink className={cta("primary", "min-h-[58px] max-w-[320px] flex-[1_1_260px] px-[26px] text-[17px]")}>
+          <DemoLink className={cta("primary", "min-h-[58px] max-w-[320px] flex-[1_1_260px] px-[26px] text-[17px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
             <Icon name="play" size={18} />
-            Try a 60-second example
+            Try a 60‑second example
           </DemoLink>
           <RealLink
             href="/start"

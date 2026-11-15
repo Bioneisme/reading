@@ -29,8 +29,8 @@ function Item({ n, name }: { n: Notice; name: string }) {
   const tone = TONE[n.kind];
   return (
     <li className="rounded-[20px] border-2 border-line bg-paper px-4 py-4">
-      <div className="flex items-start gap-3">
-        <div className="min-w-0 flex-1">
+      <div className="flex flex-wrap items-start gap-x-3 gap-y-2">
+        <div className="min-w-0 flex-[1_1_200px]">
           <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-black uppercase tracking-[0.08em] ${tone.chip}`}>
             {tone.label}
           </span>
@@ -69,7 +69,7 @@ export function NoticedCard({ sessions, name }: { sessions: SessionRecord[]; nam
         <h2 id="noticed-title" className="text-[22px] font-black">
           What we noticed
         </h2>
-        <span className="text-xs font-black uppercase tracking-[0.08em] text-ink-3">From the words you marked</span>
+        <span className="text-xs font-black uppercase tracking-[0.08em] text-ink-3 max-[400px]:hidden">From the words you marked</span>
       </div>
       {notices.length === 0 ? (
         <p className="mt-2 text-[15px] font-semibold leading-normal text-ink-2">

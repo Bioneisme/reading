@@ -9,7 +9,7 @@ export interface TileSpec {
 
 export const SKILL_TILES: Record<SkillId, TileSpec> = {
   shortVowels: { from: "bad", to: "bed", caption: "bad or bed? Listen to the middle", tone: "lamp" },
-  magicE: { from: "tap", to: "tape", caption: "tap → tape: the quiet e changes the a", tone: "lamp" },
+  magicE: { from: "tap", to: "tape", caption: "tap → tape: the quiet e makes the a say its name", tone: "lamp" },
   digraphs: { from: "sip", to: "ship", caption: "s and h team up to make one sound", tone: "lamp" },
   initialBlends: { from: "top", to: "stop", caption: "top → stop: say both sounds at the start", tone: "lamp" },
   finalBlends: { from: "had", to: "hand", caption: "had → hand: say both sounds at the end", tone: "lamp" },

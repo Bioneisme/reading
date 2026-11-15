@@ -47,11 +47,11 @@ export function Pricing() {
             {OTHER.map((o) => (
               <div key={o.name} className="flex flex-col gap-x-3 sm:flex-row sm:justify-between">
                 <dt className="text-ink sm:text-ink-2">{o.name}</dt>
-                <dd>{o.price}</dd>
+                <dd className="text-balance">{o.price}</dd>
               </div>
             ))}
           </dl>
-          <RealLink href="/start" className={cta("primary", "mt-[22px] min-h-14 w-full px-6 text-[17px]")}>
+          <RealLink href="/start" className={cta("primary", "mt-[22px] min-h-14 w-full px-6 text-[17px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
             Start free with my child
           </RealLink>
         </Reveal>

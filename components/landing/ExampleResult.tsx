@@ -8,14 +8,15 @@ export function ExampleResult() {
       <Reveal>
         <p className={EYEBROW}>Example result</p>
         <h2 id="ex-title" className={`mt-2.5 text-balance ${H2}`}>
-          One 3-minute check. One clear thing to fix.
+          One 3‑minute check. One clear thing to fix.
         </h2>
         <p className={`mt-4 max-w-[520px] ${LEAD}`}>
           Mia, 6, read 36 words and missed 4. Three of the misses share one pattern, so that&apos;s tomorrow&apos;s
           focus, with the exact words to say.
         </p>
-        <DemoLink className={cta("primary", "mt-7 min-h-14 px-6 text-[17px]")}>
-          Try it yourself in 60 seconds
+        <DemoLink className={cta("primary", "mt-7 min-h-14 px-6 text-[17px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
+          <span className="max-sm:hidden">Try it yourself in 60 seconds</span>
+          <span className="sm:hidden">Try it in 60 seconds</span>
           <Icon name="next" size={18} strokeWidth={2.4} />
         </DemoLink>
       </Reveal>

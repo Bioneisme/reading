@@ -27,7 +27,8 @@ export function DemoBanner() {
           <span className="max-sm:hidden">
             You&apos;re exploring a sample reader, {name}. Nothing here is about your child.
           </span>
-          <span className="text-[13px] leading-tight sm:hidden">Sample reader, not your child.</span>
+          <span className="text-[13px] leading-tight max-[400px]:hidden sm:hidden">Sample reader, not your child.</span>
+          <span className="text-[13px] leading-tight whitespace-nowrap min-[401px]:hidden">Sample reader</span>
         </p>
         <RealLink
           href="/start"
@@ -35,7 +36,7 @@ export function DemoBanner() {
         >
           <span className="max-[480px]:hidden">Start with my child</span>
           <span className="min-[481px]:hidden">Start mine</span>
-          <Icon name="next" size={16} strokeWidth={2.6} />
+          <Icon name="next" size={16} strokeWidth={2.6} className="max-[400px]:hidden" />
         </RealLink>
       </div>
     </div>

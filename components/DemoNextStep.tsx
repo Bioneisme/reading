@@ -18,7 +18,7 @@ export function DemoNextStep({ name = "Mia", title, className = "" }: { name?: s
             {title ?? `You saw ${name}'s weak spot. Now find your child's.`}
           </h2>
           <p className="mt-2 text-base font-semibold leading-normal text-white/80">
-            Six quick questions, then tonight&apos;s 10-minute check. No sign-up, nothing to install.
+            Six quick questions, then tonight&apos;s 10‑minute check. No sign-up, nothing to install.
           </p>
         </div>
         <RealLink

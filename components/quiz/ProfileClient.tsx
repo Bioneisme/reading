@@ -114,7 +114,7 @@ export function ProfileClient() {
       >
         <div className="text-xs font-black uppercase tracking-[0.1em] text-[#FFD95E]">Tonight</div>
         <h2 id="tonight-check" className="mt-1.5 text-2xl font-black leading-[1.25]">
-          A 3-minute reading check to confirm.
+          A 3‑minute reading check to confirm.
         </h2>
         <p className="mt-1.5 text-base font-semibold leading-normal text-indigo-soft">
           {grade} text · {words} words · read from the screen or print it.

@@ -64,7 +64,11 @@ export function TonightCard({ copy }: { copy: TonightCopy }) {
           </ul>
         )}
         <div className="mt-5 flex flex-wrap items-center gap-x-[18px] gap-y-3">
-          <ButtonLink href={copy.cta.href} variant={copy.cta.secondary ? "secondary" : "primary"}>
+          <ButtonLink
+            href={copy.cta.href}
+            variant={copy.cta.secondary ? "secondary" : "primary"}
+            className="whitespace-nowrap max-[400px]:gap-2 max-[400px]:px-4 max-[400px]:text-[15px]"
+          >
             {!copy.cta.secondary && <Icon name="play" size={18} />}
             {copy.cta.label}
           </ButtonLink>

@@ -74,7 +74,7 @@ function Journal({ state }: { state: AppState }) {
   const tonight: TonightCopy = !hasSessions
     ? {
         label: "Tonight",
-        title: "A 3-minute reading check",
+        title: "A 3‑minute reading check",
         sub: `${child.name} reads a short text out loud. You tap the words ${child.name} misses, and we find the weak spot.`,
         cta: { label: "Start tonight's check", href: "/check" },
         steps: false,

@@ -86,7 +86,7 @@ export function missLabel(n: number): string {
 }
 
 export function headerLine(profile: Profile, sessions: SessionRecord[], demo: boolean, locked: boolean): string {
-  if (!sessions.length) return "Tonight starts with a 3-minute reading check.";
+  if (!sessions.length) return "Tonight starts with a 3‑minute reading check.";
   const checkedToday = doneTonight(sessions, demo);
   if (locked) return checkedToday ? "Tonight’s check is done. Tomorrow’s plan is free." : "Tomorrow’s plan is free.";
   const focus = SKILL_SHORT[profile.focus];

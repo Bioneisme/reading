@@ -56,7 +56,7 @@ export function TomorrowPlan({ plan, pro }: { plan: Plan; pro: boolean }) {
     <section aria-labelledby="plan-title" className={`${PANEL} flex flex-col`}>
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <h2 id="plan-title" className="text-2xl font-black tracking-[-0.01em]">
-          Tomorrow&apos;s 10-minute plan
+          Tomorrow&apos;s 10‑minute plan
         </h2>
         <span className="rounded-full bg-mastered-tint px-3 py-1 text-[13px] font-black text-mastered-ink">
           {pro ? "Unlocked" : "Free"}

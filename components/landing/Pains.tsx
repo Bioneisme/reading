@@ -112,7 +112,7 @@ export function Pains() {
                 {p.art}
               </div>
               <div className="px-[22px] pt-[18px] pb-6">
-                <h3 className="text-xl leading-[1.25] font-black">{p.title}</h3>
+                <h3 className="text-xl leading-[1.25] font-black text-balance">{p.title}</h3>
                 <p className={`mt-2 ${BODY}`}>{p.body}</p>
               </div>
             </article>

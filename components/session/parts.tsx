@@ -90,7 +90,7 @@ export function SayThis({ name, script }: { name: string; script: string }) {
     <div className="mt-5 flex max-w-[640px] items-start gap-3">
       <Glim pose="hello" size={56} float={false} className="-mt-1 flex-none" />
       <div className="rounded-[20px_20px_20px_6px] bg-indigo-tint px-[18px] py-3.5 text-base font-bold leading-normal">
-        <span className="block text-[11px] font-black uppercase tracking-[0.1em] text-indigo">
+        <span className="block text-[11px] font-black uppercase tracking-[0.1em] text-balance text-indigo">
           If {name} is stuck, say this
         </span>
         “{script}”

@@ -82,8 +82,8 @@ export function SuccessScreen() {
   const sessions = state?.sessions;
   const profile = useMemo(() => (sessions && sessions.length ? computeProfile(sessions) : null), [sessions]);
   const tonight = profile
-    ? `A 10-minute session on ${SKILLS[profile.focus].name}, round ${profile.round}, with a new story.`
-    : "A 10-minute session built from the first check, with a new story.";
+    ? `A 10‑minute session on ${SKILLS[profile.focus].name}, round ${profile.round}, with a new story.`
+    : "A 10‑minute session built from the first check, with a new story.";
 
   if (!snap || status === "checking") {
     return (
@@ -108,7 +108,7 @@ export function SuccessScreen() {
       status === "error"
         ? "Nothing is lost. Check your connection and try again."
         : status === "missing"
-          ? "Pick a plan to unlock the full 28-day plan. Tomorrow's free plan works either way."
+          ? "Pick a plan to unlock the full 28‑day plan. Tomorrow's free plan works either way."
           : "If you just paid, give it a few seconds and try again. If you closed the checkout, no charge was made.";
     return (
       <Shell state={state}>
@@ -145,7 +145,7 @@ export function SuccessScreen() {
             className={`mt-3.5 inline-flex flex-wrap items-center gap-2 rounded-full border-2 border-line bg-card px-3 py-1.5 text-sm font-extrabold text-ink-2 ${RISE}`}
             style={delay(140)}
           >
-            {plan ? `${plan.name} · ${plan.price}` : "28-day plan"}
+            {plan ? `${plan.name} · ${plan.price}` : "28‑day plan"}
             <span className="rounded-full bg-lamp-tint px-2 py-px text-[11px] font-black uppercase tracking-[0.06em] text-lamp-ink">Test payment</span>
           </p>
           {account.status === "signed" && (
@@ -214,7 +214,7 @@ export function SuccessScreen() {
             <span aria-hidden="true" className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-lamp text-ink">
               <Icon name="check" size={20} strokeWidth={3} />
             </span>
-            <span className="text-base font-black">28-day plan unlocked</span>
+            <span className="text-base font-black">28‑day plan unlocked</span>
           </div>
         </div>
       </div>

@@ -7,8 +7,8 @@ function short(name: string) {
 export function PlanIncluded({ name, focus, next }: { name: string; focus: string; next: string | null }) {
   const items = [
     `A new practice story every night, every word checked for ${name}`,
-    `The 28-day plan, updated from what ${name} reads each night`,
-    "Nightly 10-minute checks after the first one",
+    `The 28‑day plan, updated from what ${name} reads each night`,
+    "Nightly 10‑minute checks after the first one",
     "Skills map and progress across all 11 skills",
     "A weekly summary: what moved, what's next",
   ];

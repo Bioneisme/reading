@@ -54,11 +54,13 @@ export function KiteArt() {
       <circle cx="40" cy="40" r="2.5" fill="#FFE07A" />
       <circle cx="96" cy="22" r="2" fill="#FFE07A" />
       <circle cx="200" cy="120" r="2" fill="#FFE07A" />
+      <g transform="translate(222 14) scale(0.62) translate(-168 -30)">
       <g className="animate-float">
         <path d="M168 30l40 34-40 44-40-44z" fill="#FFC93C" />
         <path d="M168 30v78M128 64h80" stroke="#D99A0B" strokeWidth="3" />
         <path d="M168 108c-6 18 8 26 0 42s6 24-2 40" fill="none" stroke="#FFE07A" strokeWidth="3" strokeLinecap="round" />
         <path d="M160 132l-10 4M170 158l10 2M162 182l-10 4" stroke="#FF8A5B" strokeWidth="5" strokeLinecap="round" />
+      </g>
       </g>
     </svg>
   );

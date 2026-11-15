@@ -65,7 +65,7 @@ export function PlansScreen() {
           </Notice>
         )}
         <h1 className="max-w-[760px] text-[clamp(32px,3.8cqi,50px)] font-black leading-[1.06] tracking-[-0.03em] text-balance">
-          {who}&apos;s 28-day reading plan is ready.
+          {who}&apos;s 28‑day reading plan is ready.
         </h1>
         <p className="mt-3 max-w-[640px] text-lg font-semibold leading-[1.55] text-ink-2">
           {profile
