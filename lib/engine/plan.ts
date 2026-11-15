@@ -8,7 +8,7 @@ import type { Plan, Profile } from "./types";
 
 const rotate = <T,>(xs: T[], by: number) => (xs.length ? [...xs.slice(by % xs.length), ...xs.slice(0, by % xs.length)] : xs);
 
-export function wordListFor(focus: SkillId, allowed: SkillId[], round = 1, n = 5, lex: Lexicon = coreLexicon): string[] {
+function wordListFor(focus: SkillId, allowed: SkillId[], round = 1, n = 5, lex: Lexicon = coreLexicon): string[] {
   const allow = new Set<SkillId>([...allowed, focus]);
   let pool: string[];
   if (focus === "tricky") {

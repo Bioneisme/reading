@@ -1,17 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, Glim, Icon } from "@/components/kit";
+import { Button, ButtonLink, Glim, Icon } from "@/components/kit";
 import { requestSignIn, signOut, startSync, useAccount } from "@/lib/client/account";
+import { safeNext } from "@/lib/safe-next";
 
 const FIELD =
   "mt-1.5 block min-h-14 w-full rounded-button border-2 border-line-strong bg-card px-4 text-lg font-bold text-ink placeholder:text-ink-3";
 
 export function SignInForm() {
   const params = useSearchParams();
-  const next = params.get("next") ?? "/journal";
+  const next = safeNext(params.get("next"));
   const expired = params.get("error") === "expired";
   const justSigned = params.get("signed") === "1";
   const router = useRouter();
@@ -53,10 +53,10 @@ export function SignInForm() {
           As <b className="text-ink">{account.email}</b>. Progress and your plan follow you to any device.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link href={next} className="tactile inline-flex min-h-14 items-center gap-2.5 rounded-button bg-indigo px-6 text-[17px] font-extrabold text-white shadow-edge-indigo">
+          <ButtonLink href={next}>
             Continue
             <Icon name="next" size={18} strokeWidth={2.4} />
-          </Link>
+          </ButtonLink>
           <Button variant="secondary" onClick={() => void signOut()}>
             Sign out
           </Button>

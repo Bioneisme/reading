@@ -6,17 +6,19 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Grade } from "@/lib/engine";
 import { store, type AppState } from "@/lib/client/store";
 import { changeSubscription, signOut, useAccount, type Account } from "@/lib/client/account";
+import type { PlanId } from "@/lib/client/api";
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { downloadReminderIcs } from "@/lib/client/ics";
 import { Collapse } from "./motion";
 import { sortSessions } from "./derive";
 import { SECTION } from "./TonightCard";
 
-type PlanId = "week" | "month" | "year";
 const DAY_MS = 86400000;
 
 const SMALL_BTN =
   "tactile inline-flex min-h-11 flex-none cursor-pointer items-center justify-center rounded-xl border-2 border-line-strong bg-card px-3.5 text-sm font-extrabold text-ink shadow-[0_3px_0_#DCD3C3]";
+const SMALL_PRIMARY =
+  "tactile inline-flex min-h-11 flex-none items-center rounded-xl bg-indigo px-3.5 text-sm font-extrabold text-white no-underline shadow-[0_3px_0_#3328B0]";
 const FIELD =
   "mt-1 block min-h-[46px] w-full rounded-xl border-2 border-line-strong bg-card px-3 text-base font-bold text-ink";
 const PANEL_BTN = "inline-flex min-h-[46px] flex-[1_1_120px] cursor-pointer items-center justify-center rounded-xl text-sm font-extrabold";
@@ -255,7 +257,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
             locked ? (
               <Link
                 href="/plans"
-                className="tactile inline-flex min-h-11 flex-none items-center rounded-xl bg-indigo px-3.5 text-sm font-extrabold text-white no-underline shadow-[0_3px_0_#3328B0]"
+                className={SMALL_PRIMARY}
               >
                 See plans
               </Link>
@@ -316,7 +318,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
               ) : (
                 <Link
                   href="/signin?next=/journal"
-                  className="tactile inline-flex min-h-11 flex-none items-center rounded-xl bg-indigo px-3.5 text-sm font-extrabold text-white no-underline shadow-[0_3px_0_#3328B0]"
+                  className={SMALL_PRIMARY}
                 >
                   Save to account
                 </Link>

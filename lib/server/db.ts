@@ -48,7 +48,7 @@ export function getDb(): DatabaseSync {
   return db;
 }
 
-export function resetDbForTests() {
+export function resetDbForTests(): void {
   db?.close();
   db = null;
 }

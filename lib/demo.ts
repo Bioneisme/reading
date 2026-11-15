@@ -29,7 +29,7 @@ const PLAN: [string[], string[], [string, string | null][]][] = [
   [["cut", "cute", "pin", "pine", "tap", "tape"], ["hike", "note", "same", "pile", "joke"], [["shop", "sop"]]],
 ];
 
-export function demoSessions(): SessionRecord[] {
+function demoSessions(): SessionRecord[] {
   const day1: SessionRecord = {
     id: "demo-1",
     date: nightOf(4),

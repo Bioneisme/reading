@@ -22,7 +22,7 @@ export const SECTION = "rounded-[28px] border-2 border-line bg-card shadow-edge"
 
 const STEPS = ["2 min · Word pairs", "3 min · Word list", "5 min · Story"];
 
-export function StoryTile({ story }: { story: TonightStory }) {
+function StoryTile({ story }: { story: TonightStory }) {
   return (
     <div className="relative min-h-[220px] overflow-hidden rounded-card bg-night text-white shadow-[0_5px_0_#14124A]">
       <KiteArt />

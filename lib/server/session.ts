@@ -1,6 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
-import type { NextResponse } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE, SESSION_TTL_MS, userFromSession, type User } from "./auth";
 
 export async function currentUser(): Promise<User | null> {
@@ -12,9 +12,13 @@ export async function sessionToken(): Promise<string | undefined> {
   return (await cookies()).get(SESSION_COOKIE)?.value;
 }
 
+export function siteOrigin(req: NextRequest): string {
+  return process.env.SITE_URL || req.nextUrl.origin;
+}
+
 const secure = () => (process.env.SITE_URL ?? "").startsWith("https://");
 
-export function setSessionCookie(res: NextResponse, token: string) {
+export function setSessionCookie(res: NextResponse, token: string): void {
   res.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: secure(),
@@ -24,6 +28,6 @@ export function setSessionCookie(res: NextResponse, token: string) {
   });
 }
 
-export function clearSessionCookie(res: NextResponse) {
+export function clearSessionCookie(res: NextResponse): void {
   res.cookies.set(SESSION_COOKIE, "", { httpOnly: true, secure: secure(), sameSite: "lax", path: "/", maxAge: 0 });
 }

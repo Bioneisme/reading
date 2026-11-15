@@ -15,9 +15,9 @@ export const PLAN_OPTIONS: PlanOption[] = [
   { id: "year", name: "1 year", price: "$119", terms: "then $119 every year", per: "$9.92/month", badge: "Best value" },
 ];
 
-export const CHOSEN_PLAN_KEY = "readly:chosen-plan";
+const CHOSEN_PLAN_KEY = "readly:chosen-plan";
 
-export function planById(id: string | null | undefined): PlanOption | undefined {
+function planById(id: string | null | undefined): PlanOption | undefined {
   return PLAN_OPTIONS.find((p) => p.id === id);
 }
 

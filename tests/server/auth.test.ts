@@ -6,14 +6,15 @@ import {
   consumeLoginToken,
   createLoginToken,
   createSession,
+  createUserIfNew,
   deleteSession,
   getState,
   putState,
-  safeNext,
   upsertUser,
   userFromSession,
 } from "@/lib/server/auth";
 import { resetDbForTests } from "@/lib/server/db";
+import { safeNext } from "@/lib/safe-next";
 
 beforeEach(() => resetDbForTests());
 
@@ -43,9 +44,25 @@ describe("magic link tokens", () => {
 
   it("only redirects to local paths", () => {
     expect(safeNext("/plans")).toBe("/plans");
+    expect(safeNext("/plans?canceled=1#top")).toBe("/plans?canceled=1#top");
     expect(safeNext("//evil.com")).toBe("/journal");
     expect(safeNext("https://evil.com")).toBe("/journal");
+    expect(safeNext("javascript:alert(1)")).toBe("/journal");
+    expect(safeNext("/\\evil.com")).toBe("/journal");
     expect(safeNext(null)).toBe("/journal");
+    expect(safeNext("")).toBe("/journal");
+  });
+
+  it("rejects paths that browsers turn into another origin", () => {
+    expect(safeNext("/\t/evil.com")).toBe("/journal");
+    expect(safeNext("/\n/evil.com")).toBe("/journal");
+    expect(safeNext("/\r\n/evil.com")).toBe("/journal");
+    expect(safeNext("/%2F/evil.com")).toBe("/%2F/evil.com");
+  });
+
+  it("stores only a safe next path with the token", () => {
+    const t = createLoginToken("a@b.co", "/\t/evil.com")!;
+    expect(consumeLoginToken(t)?.next).toBe("/journal");
   });
 });
 
@@ -65,6 +82,13 @@ describe("sessions and users", () => {
     deleteSession(t);
     expect(userFromSession(t, now)).toBeNull();
     expect(userFromSession(undefined)).toBeNull();
+  });
+
+  it("creates a user only when the email is new", () => {
+    const first = createUserIfNew("New@Example.com");
+    expect(first?.email).toBe("new@example.com");
+    expect(createUserIfNew("new@example.com")).toBeNull();
+    expect(upsertUser("new@example.com").id).toBe(first?.id);
   });
 
   it("lets a checkout sign someone in only once", () => {

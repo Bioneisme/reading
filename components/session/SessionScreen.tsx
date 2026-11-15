@@ -106,7 +106,7 @@ function Session({ state }: { state: AppState }) {
   useEffect(() => {
     let alive = true;
     if (!request.current) {
-      request.current = generateStory({ focus: plan.focus, allowed, childName: name }, { timeoutMs: 45000 })
+      request.current = generateStory({ focus: plan.focus, allowed }, { timeoutMs: 45000 })
         .then(({ story, tokens }) => (story.text.trim() ? prepare(story, tokens) : fallback))
         .catch(() => fallback);
     }
@@ -116,7 +116,7 @@ function Session({ state }: { state: AppState }) {
     return () => {
       alive = false;
     };
-  }, [plan, allowed, name, fallback, prepare]);
+  }, [plan, allowed, fallback, prepare]);
 
   const units = useMemo(() => (ready ? passageUnits(ready.story.text) : []), [ready]);
   const storyWords = useMemo(() => units.map((u) => u.word), [units]);

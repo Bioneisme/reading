@@ -18,6 +18,7 @@ import {
 import { JournalHeader } from "./JournalHeader";
 import { FreePlanCard, LockedTeaser } from "./LockedCards";
 import { HistoryCard, MissesChart, WeekCard } from "./SideCards";
+import { NoticedCard } from "./NoticedCard";
 import { SettingsCard } from "./SettingsCard";
 import { SkillsMap } from "./SkillsMap";
 import { SKILL_SHORT } from "./skillCopy";
@@ -134,6 +135,9 @@ function Journal({ state }: { state: AppState }) {
           ) : (
             <>
               <TonightCard copy={tonight} />
+              <Reveal delay={60}>
+                <NoticedCard sessions={sessions} name={child.name} />
+              </Reveal>
               <Reveal delay={80}>
                 <SkillsMap profile={profile} sessions={sessions} showTags={hasSessions} />
               </Reveal>

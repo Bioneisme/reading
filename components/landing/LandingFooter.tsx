@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ReadlyLogo } from "@/components/ReadlyLogo";
+import { ReadlyLogo } from "@/components/kit";
 import { DemoLink, RealLink } from "./LandingLinks";
 
 const LINK =

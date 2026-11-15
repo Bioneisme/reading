@@ -28,9 +28,9 @@ export interface StoryResult {
   rejected: string[];
 }
 
-export const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 3;
 
-export function vocabularyFor(req: StoryRequest, lex: Lexicon): { focusWords: string[]; otherWords: string[] } {
+function vocabularyFor(req: StoryRequest, lex: Lexicon): { focusWords: string[]; otherWords: string[] } {
   const allow = new Set<SkillId>([...req.allowed, req.focus]);
   const ok = WORDBANK.filter((w) => {
     const A = analyzeWord(w, lex);

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ReadlyMark } from "@/components/ReadlyLogo";
+import { ReadlyMark } from "@/components/kit";
 import { StepFooter, type FooterCta } from "@/components/reading/StepFooter";
 
 function Chevron() {

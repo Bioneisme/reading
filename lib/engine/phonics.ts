@@ -16,7 +16,7 @@ export const SHORT: Record<string, string[]> = {
   u: ["AH"],
   y: ["IH"],
 };
-export const LONG: Record<string, string[]> = {
+const LONG: Record<string, string[]> = {
   a: ["EY"],
   e: ["IY"],
   i: ["AY"],
@@ -76,7 +76,7 @@ add("ur", o("ER", "RC"));
 
 const GRAPHEMES = Object.keys(TABLE).sort((a, b) => b.length - a.length);
 
-export function align(letters: string, pron: string[]): Segment[] | null {
+function align(letters: string, pron: string[]): Segment[] | null {
   const bare = pron.map(stripStress);
   const memo = new Map<string, { cost: number; segs: Segment[] } | null>();
   const go = (i: number, j: number): { cost: number; segs: Segment[] } | null => {
@@ -267,7 +267,7 @@ const NAIVE: [string, string[]][] = [
   ["x", ["K", "S"]], ["c", ["K"]], ["y", ["Y"]],
 ];
 
-export function naivePron(input: string): string[] {
+function naivePron(input: string): string[] {
   const w = normalizeWord(input).replace(/'/g, "");
   let b = w;
   let suf: string[] = [];

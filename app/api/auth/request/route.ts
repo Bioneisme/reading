@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { createLoginToken } from "@/lib/server/auth";
 import { sendLoginEmail } from "@/lib/server/mailer";
+import { siteOrigin } from "@/lib/server/session";
 
 export const runtime = "nodejs";
 
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Enter a valid email address" }, { status: 400 });
   const token = createLoginToken(parsed.data.email, parsed.data.next);
   if (!token) return NextResponse.json({ error: "Too many links requested. Try again in 15 minutes." }, { status: 429 });
-  const origin = process.env.SITE_URL || req.nextUrl.origin;
+  const origin = siteOrigin(req);
   const link = `${origin}/auth/verify?token=${encodeURIComponent(token)}`;
   try {
     const result = await sendLoginEmail(parsed.data.email, link);

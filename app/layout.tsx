@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./readly-states.css";
-import { AccountSync } from "@/components/AccountSync";
+import { AccountSync } from "@/components/account/AccountSync";
 import { DemoBanner } from "@/components/DemoBanner";
 
 const nunito = localFont({

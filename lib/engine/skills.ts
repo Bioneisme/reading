@@ -205,9 +205,7 @@ export const QUIZ_SIGNS: { id: string; label: string; skill: SkillId | null }[] 
 ];
 
 export function quizProfile(signIds: string[]): SkillId[] {
-  const picked = new Set(
-    QUIZ_SIGNS.filter((s) => signIds.includes(s.id) && s.skill).map((s) => s.skill as SkillId),
-  );
+  const picked = new Set(QUIZ_SIGNS.flatMap((s) => (s.skill && signIds.includes(s.id) ? [s.skill] : [])));
   const ordered = SKILL_ORDER.filter((s) => picked.has(s)).slice(0, 3);
   return ordered.length ? ordered : ["shortVowels", "magicE"];
 }

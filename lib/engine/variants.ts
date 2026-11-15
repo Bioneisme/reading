@@ -1,4 +1,4 @@
-import { LONG, SHORT, VOWELS } from "./phonics";
+import { SHORT, VOWELS } from "./phonics";
 import type { SkillId } from "./skills";
 import type { Segment, WordAnalysis } from "./types";
 
@@ -140,4 +140,3 @@ export function trickyVariants(word: string): string[] {
   return SHORT_LETTERS.map((v) => word.slice(0, i) + v + word.slice(i + m[0].length)).filter((s) => s !== word);
 }
 
-export { LONG };

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ReadlyMark } from "@/components/ReadlyLogo";
+import { ReadlyMark } from "./ReadlyLogo";
 
 export function AppHeader({ right, dark = false }: { right?: ReactNode; dark?: boolean }) {
   return (

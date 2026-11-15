@@ -24,7 +24,7 @@ export function journalDay(sessions: SessionRecord[], demo: boolean): number {
   return demo ? nextDay(sessions) : currentDay(sessions, false);
 }
 
-export function doneTonight(sessions: SessionRecord[], demo: boolean): boolean {
+function doneTonight(sessions: SessionRecord[], demo: boolean): boolean {
   if (demo) return false;
   const today = dayKey(new Date());
   return sessions.some((s) => dayKey(s.date) === today);
@@ -97,7 +97,7 @@ export function headerLine(profile: Profile, sessions: SessionRecord[], demo: bo
   return profile.nextUp ? `${lead} Next up: ${SKILL_SHORT[profile.nextUp]}.` : lead;
 }
 
-export function skillTrend(skill: SkillId, profile: Profile): { first: number; last: number; total: number } {
+function skillTrend(skill: SkillId, profile: Profile): { first: number; last: number; total: number } {
   const hist = profile.skills[skill].history.slice(-7);
   const total = hist.reduce((a, b) => a + b, 0);
   const first = hist.find((h) => h > 0) ?? hist[0] ?? 0;
@@ -105,7 +105,7 @@ export function skillTrend(skill: SkillId, profile: Profile): { first: number; l
   return { first, last, total };
 }
 
-export function trendText(first: number, last: number): string {
+function trendText(first: number, last: number): string {
   return `${missLabel(first)} → ${last === 0 ? "0" : missLabel(last)}`;
 }
 

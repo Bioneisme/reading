@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { AppHeader } from "@/components/kit";
 
-export const CONTACT_EMAIL = "readly@13lab.tech";
+const CONTACT_EMAIL = "readly@13lab.tech";
 
 export function Mail() {
   return (

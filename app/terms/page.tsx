@@ -40,7 +40,10 @@ export default function TermsPage() {
         </p>
       </LegalSection>
       <LegalSection title="Your data">
-        <p>It lives in your browser. If you clear it or switch devices, your progress doesn&apos;t come along.</p>
+        <p>
+          It lives in your browser. If you clear it or switch devices, your progress doesn&apos;t come along, unless you
+          sign in with email, which keeps it in your account.
+        </p>
       </LegalSection>
       <LegalSection title="Fair use">
         <p>Readly is for your own family. Please don&apos;t resell the stories or copy the app.</p>

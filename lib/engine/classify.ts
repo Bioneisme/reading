@@ -1,10 +1,10 @@
 import { coreLexicon, type Lexicon } from "./lexicon";
 import { analyzeWord, pronounce } from "./phonics";
-import { SKILL_ORDER, type SkillId } from "./skills";
+import type { SkillId } from "./skills";
 import { normalizeWord } from "./text";
 import { isBdSwap, variantsFor } from "./variants";
 
-export const RULE_ORDER: SkillId[] = [
+const RULE_ORDER: SkillId[] = [
   "endings",
   "magicE",
   "digraphs",
@@ -48,4 +48,3 @@ export function classifyMiss(target: string, said: string | null, lex: Lexicon =
   return "other";
 }
 
-export { SKILL_ORDER };

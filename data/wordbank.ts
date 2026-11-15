@@ -1,6 +1,6 @@
 const w = (s: string) => s.trim().split(/\s+/);
 
-export const WORDBANK_GROUPS: Record<string, string[]> = {
+const WORDBANK_GROUPS: Record<string, string[]> = {
   shortVowels: w(`
     cat bat hat mat sat rat pat fat cap map tap nap lap gap van can man pan fan ran tan
     bag tag rag wag bad dad had mad sad pad jam ham ram yam am an at as

@@ -1,13 +1,9 @@
 import "server-only";
 import Stripe from "stripe";
 
-export type PlanId = "week" | "month" | "year";
+export const PLAN_IDS = ["week", "month", "year"] as const;
 
-export const PLANS: Record<PlanId, { label: string }> = {
-  week: { label: "1 week $6.93, then $19.99 every 4 weeks" },
-  month: { label: "4 weeks $14.99, then $19.99 every 4 weeks" },
-  year: { label: "1 year $119" },
-};
+export type PlanId = (typeof PLAN_IDS)[number];
 
 const INTRO_COUPON = "readly-intro-4w-500";
 

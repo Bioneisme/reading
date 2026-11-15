@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 export const LIFT =
   "[transition-property:transform,translate,box-shadow,border-color,background-color]! motion-safe:hover:-translate-y-[3px]";
 
-export function CheckBadge() {
+function CheckBadge() {
   return (
     <span
       aria-hidden="true"

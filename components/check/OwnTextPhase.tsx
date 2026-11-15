@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { annotateText, type Lexicon, type SkillId } from "@/lib/engine";
 import { ArrowLeft } from "@/components/reading/StepFooter";
 
-export const OWN_MIN = 20;
-export const OWN_MAX = 80;
+const OWN_MIN = 20;
+const OWN_MAX = 80;
 
 const SHORT: Partial<Record<SkillId, string>> = {
   shortVowels: "Short vowels",

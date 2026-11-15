@@ -10,3 +10,5 @@ export { annotateText, validateStory } from "./validate";
 export { PASSAGES, passageForGrade, STORIES, getStory, storyForSkill } from "./content";
 export { coreLexicon, extendLexicon, type Lexicon } from "./lexicon";
 export { wordsOf } from "./text";
+export { buildXray, friendlySound, type Xray, type XrayTile } from "./xray";
+export { detectPatterns, type Notice } from "./patterns";

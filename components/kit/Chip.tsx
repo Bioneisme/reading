@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 export function ExampleChip({ label = "Example", onDark = false }: { label?: string; onDark?: boolean }) {
   return (
     <span
@@ -21,14 +19,6 @@ export function ChildChip({ name, grade, demo }: { name: string; grade?: string;
         {grade ? ` · ${grade}` : ""}
       </span>
       {demo && <ExampleChip />}
-    </span>
-  );
-}
-
-export function Pill({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <span className={`inline-flex items-center gap-2 rounded-full border-2 border-line bg-card px-3.5 py-2 text-sm font-extrabold ${className}`}>
-      {children}
     </span>
   );
 }

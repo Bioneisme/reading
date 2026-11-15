@@ -39,11 +39,7 @@ export function passageUnits(text: string): WordUnit[] {
   return units;
 }
 
-export function wordCount(text: string): number {
-  return passageUnits(text).length;
-}
-
-export function sentenceRange(units: WordUnit[], index: number): [number, number] {
+function sentenceRange(units: WordUnit[], index: number): [number, number] {
   let start = index;
   let end = index;
   while (start > 0 && !/[.!?]/.test(units[start - 1].post)) start--;

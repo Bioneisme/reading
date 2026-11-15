@@ -1,7 +1,7 @@
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { QUIZ_SIGNS, type Grade, type SkillId } from "@/lib/engine";
 
-export const SIGN_VIEW: Record<string, { visual: string; label: string; skill: string; tint: string }> = {
+const SIGN_VIEW: Record<string, { visual: string; label: string; skill: string; tint: string }> = {
   tape: { visual: "tape → tap", label: "Reads “tap” for “tape”", skill: "Magic e", tint: "bg-lamp-tint" },
   ship: { visual: "ship → s-hip", label: "Reads “ship” as “s-hip”", skill: "Letter teams (sh, ch, th)", tint: "bg-indigo-tint" },
   guess: { visual: "horse → house", label: "Guesses from the first letter", skill: "Guessing from the first letter", tint: "bg-needs-tint" },
@@ -62,7 +62,7 @@ export const SPOT: Partial<Record<SkillId, SpotCopy>> = {
 
 export function pickedSkills(signs: string[]): SkillId[] {
   const order: SkillId[] = ["magicE", "digraphs", "endings", "bd", "tricky", "guessing"];
-  const set = new Set(QUIZ_SIGNS.filter((s) => signs.includes(s.id) && s.skill).map((s) => s.skill as SkillId));
+  const set = new Set(QUIZ_SIGNS.flatMap((s) => (s.skill && signs.includes(s.id) ? [s.skill] : [])));
   return order.filter((s) => set.has(s));
 }
 

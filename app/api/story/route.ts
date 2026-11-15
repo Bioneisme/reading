@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { SKILL_ORDER, type SkillId } from "@/lib/engine";
+import { SKILL_ORDER } from "@/lib/engine";
 import { createClaudeWriter } from "@/lib/server/claude";
 import { fullLexicon } from "@/lib/server/lexicon-full";
 import { generateStory } from "@/lib/server/story-service";
@@ -8,7 +8,7 @@ import { generateStory } from "@/lib/server/story-service";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const Skill = z.enum(SKILL_ORDER as [SkillId, ...SkillId[]]);
+const Skill = z.enum(SKILL_ORDER);
 const Body = z.object({
   focus: Skill,
   allowed: z.array(Skill).max(11),

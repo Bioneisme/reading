@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/kit";
+import { XrayPanel } from "@/components/xray/XrayPanel";
 import type { Lexicon } from "@/lib/engine";
 import { missLine, optionsFor, type MissGroup, type MissRow, type SkillKey } from "./model";
 import { PANEL } from "./PlanCards";
@@ -16,13 +17,16 @@ function Row({
   row,
   name,
   options,
+  lex,
   onPick,
 }: {
   row: MissRow;
   name: string;
   options: string[];
+  lex: Lexicon | undefined;
   onPick: (index: number, said: string | null) => void;
 }) {
+  const [open, setOpen] = useState(false);
   const current = row.said ?? SKIP;
   const values = [...options, SKIP];
   return (
@@ -31,7 +35,16 @@ function Row({
         <span>{row.word}</span>
         <Icon name="next" size={18} strokeWidth={2.4} className="text-ink-3" />
         <span className="text-[#2B2290]">{row.said === null ? "(skipped)" : `“${row.said}”`}</span>
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="tactile ml-auto inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full bg-night px-3.5 font-sans text-[13px] font-black text-white shadow-[0_3px_0_#14124A]"
+        >
+          {open ? "Hide x-ray" : "X-ray"}
+        </button>
       </div>
+      {open && <XrayPanel word={row.word} said={row.said} name={name} lex={lex} />}
       <div role="radiogroup" aria-label={`What ${name} said for ${row.word}`} className="mt-2 flex flex-wrap items-center gap-1.5">
         <span className="mr-0.5 text-xs font-black text-ink-3">{name} said:</span>
         {values.map((v) => {
@@ -118,6 +131,7 @@ export function Evidence({
                 row={r}
                 name={name}
                 options={optionsFor(r.word, first[r.index] ?? null, lex)}
+                lex={lex}
                 onPick={pick}
               />
             ))}

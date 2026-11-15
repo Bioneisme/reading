@@ -37,7 +37,7 @@ export function buildReminderIcs(time: string, childName: string): string {
   ].join("\r\n");
 }
 
-export function downloadReminderIcs(time: string, childName: string) {
+export function downloadReminderIcs(time: string, childName: string): void {
   try {
     const blob = new Blob([buildReminderIcs(time, childName)], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);

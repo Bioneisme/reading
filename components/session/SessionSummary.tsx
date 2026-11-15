@@ -31,7 +31,7 @@ export interface SummaryData {
   beforeProfile: Profile;
 }
 
-export function summaryFacts({ before, rec, demo }: SummaryData) {
+function summaryFacts({ before, rec, demo }: SummaryData) {
   const after = [...before, rec];
   const run = nightsInARow(after, demo);
   const profile = computeProfile(after);

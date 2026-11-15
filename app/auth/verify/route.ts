@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { consumeLoginToken, createSession, upsertUser } from "@/lib/server/auth";
-import { setSessionCookie } from "@/lib/server/session";
+import { setSessionCookie, siteOrigin } from "@/lib/server/session";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-  const origin = process.env.SITE_URL || req.nextUrl.origin;
+  const origin = siteOrigin(req);
   const t = req.nextUrl.searchParams.get("token");
   const login = t ? consumeLoginToken(t) : null;
   if (!login) return NextResponse.redirect(new URL("/signin?error=expired", origin));

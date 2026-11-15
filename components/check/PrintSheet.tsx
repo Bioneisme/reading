@@ -1,4 +1,4 @@
-import { ReadlyMark } from "@/components/ReadlyLogo";
+import { ReadlyMark } from "@/components/kit";
 
 export function PrintSheet({
   name,

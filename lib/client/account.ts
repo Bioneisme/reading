@@ -1,8 +1,7 @@
 import { useSyncExternalStore } from "react";
+import { readJson, type PlanId } from "./api";
 import { mergeStates, syncSignature, type SyncedState } from "./merge";
 import { store } from "./store";
-
-export type PlanId = "week" | "month" | "year";
 
 export interface Subscription {
   pro: boolean;
@@ -22,6 +21,8 @@ const LOADING: Account = { status: "loading", email: null, subscription: null };
 let current: Account = LOADING;
 const listeners = new Set<() => void>();
 
+let epoch = 0;
+
 function set(next: Account) {
   current = next;
   listeners.forEach((l) => l());
@@ -36,14 +37,16 @@ export function useAccount(): Account {
   return useSyncExternalStore(subscribe, () => current, () => LOADING);
 }
 
-function applySubscription(sub: Subscription | null) {
+function applySubscription(sub: Subscription | null): void {
   if (sub) store.applySubscription(sub.pro, sub.plan, sub.since);
 }
 
-export async function refreshAccount(): Promise<Account> {
+async function refreshAccount(): Promise<Account> {
+  const at = epoch;
   try {
     const res = await fetch("/api/auth/me", { cache: "no-store" });
-    const data = (await res.json()) as { user: { email: string } | null; subscription: Subscription | null };
+    const data = await readJson<{ user: { email: string } | null; subscription: Subscription | null }>(res);
+    if (at !== epoch) return current;
     const next: Account = data.user
       ? { status: "signed", email: data.user.email, subscription: data.subscription }
       : { status: "anon", email: null, subscription: null };
@@ -61,7 +64,7 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 let unsubscribeStore: (() => void) | null = null;
 let syncing: Promise<void> | null = null;
 
-async function push(state: SyncedState) {
+async function push(state: SyncedState): Promise<void> {
   const sig = syncSignature(state);
   if (sig === lastSynced) return;
   const res = await fetch("/api/state", {
@@ -74,7 +77,7 @@ async function push(state: SyncedState) {
   if (res.status === 401) stopSync();
 }
 
-function schedulePush() {
+function schedulePush(): void {
   if (timer) clearTimeout(timer);
   timer = setTimeout(() => {
     timer = null;
@@ -82,7 +85,8 @@ function schedulePush() {
   }, 1200);
 }
 
-function stopSync() {
+function stopSync(): void {
+  epoch++;
   unsubscribeStore?.();
   unsubscribeStore = null;
   if (timer) clearTimeout(timer);
@@ -90,10 +94,11 @@ function stopSync() {
   lastSynced = "";
 }
 
-async function pullAndMerge() {
+async function pullAndMerge(at: number): Promise<void> {
   const res = await fetch("/api/state", { cache: "no-store" });
   if (!res.ok) return;
   const data = (await res.json()) as { state: SyncedState | null };
+  if (at !== epoch) return;
   const local = store.synced();
   const merged = mergeStates(local, data.state);
   if (syncSignature(merged) !== syncSignature(local)) store.replaceSynced(merged);
@@ -103,11 +108,12 @@ async function pullAndMerge() {
 
 export function startSync(): Promise<void> {
   if (syncing) return syncing;
+  const at = epoch;
   syncing = (async () => {
     const acc = await refreshAccount();
-    if (acc.status !== "signed") return;
-    await pullAndMerge().catch(() => {});
-    if (!unsubscribeStore) unsubscribeStore = store.subscribe(schedulePush);
+    if (acc.status !== "signed" || at !== epoch) return;
+    await pullAndMerge(at).catch(() => {});
+    if (at === epoch && !unsubscribeStore) unsubscribeStore = store.subscribe(schedulePush);
   })().finally(() => {
     syncing = null;
   });
@@ -120,12 +126,11 @@ export async function requestSignIn(email: string, next?: string): Promise<{ dev
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, next }),
   });
-  const data = (await res.json().catch(() => ({}))) as { error?: string; devLink?: string };
-  if (!res.ok) throw new Error(data.error ?? "Something went wrong. Try again.");
+  const data = await readJson<{ devLink?: string }>(res, "Something went wrong. Try again.");
   return { devLink: data.devLink };
 }
 
-export async function signOut() {
+export async function signOut(): Promise<void> {
   stopSync();
   await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
   store.signedOut();
@@ -138,8 +143,8 @@ export async function changeSubscription(action: "cancel" | "resume"): Promise<S
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action }),
   });
-  const data = (await res.json().catch(() => ({}))) as { error?: string; subscription?: Subscription };
-  if (!res.ok || !data.subscription) throw new Error(data.error ?? "Could not update your plan.");
+  const data = await readJson<{ subscription?: Subscription }>(res, "Could not update your plan.");
+  if (!data.subscription) throw new Error("Could not update your plan.");
   set({ ...current, subscription: data.subscription });
   applySubscription(data.subscription);
   return data.subscription;

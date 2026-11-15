@@ -3,10 +3,10 @@ import { analyzeWord } from "./phonics";
 import { PHONICS_SKILLS, SKILL_ORDER, type SkillId } from "./skills";
 import type { CheckSummary, Miss, Profile, SessionRecord, SkillState, SkillStatus } from "./types";
 
-export const DECAY = 0.7;
-export const MIN_ATTEMPTS = 3;
-export const MASTERED_RATE = 0.15;
-export const MASTERED_ATTEMPTS = 8;
+const DECAY = 0.7;
+const MIN_ATTEMPTS = 3;
+const MASTERED_RATE = 0.15;
+const MASTERED_ATTEMPTS = 8;
 
 const order = (s: SkillId | "other") => (s === "other" ? 99 : SKILL_ORDER.indexOf(s));
 
@@ -17,7 +17,7 @@ export function summarizeCheck(words: string[], misses: Miss[]): CheckSummary {
     .map(([skill, ms]) => ({ skill, count: ms.length, misses: ms }))
     .sort((a, b) => b.count - a.count || order(a.skill) - order(b.skill));
   const top = bySkill.find((b) => b.skill !== "other");
-  return { totalWords: words.length, totalMisses: misses.length, bySkill, weakSpot: (top?.skill as SkillId) ?? null };
+  return { totalWords: words.length, totalMisses: misses.length, bySkill, weakSpot: top && top.skill !== "other" ? top.skill : null };
 }
 
 export function computeProfile(sessions: SessionRecord[], lex: Lexicon = coreLexicon): Profile {

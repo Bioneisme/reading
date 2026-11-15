@@ -1,5 +1,6 @@
 import "server-only";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { safeNext } from "@/lib/safe-next";
 import { getDb } from "./db";
 
 export const SESSION_COOKIE = "readly_session";
@@ -18,11 +19,6 @@ const token = () => randomBytes(32).toString("base64url");
 
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
-}
-
-export function safeNext(next: string | null | undefined): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//") || next.includes("\\")) return "/journal";
-  return next;
 }
 
 export function createLoginToken(email: string, next?: string | null, now = Date.now()): string | null {
@@ -54,11 +50,22 @@ export function consumeLoginToken(t: string, now = Date.now()): { email: string;
   return { email: row.email, next: safeNext(row.next) };
 }
 
-export function upsertUser(email: string, now = Date.now()): User {
+function insertUser(email: string, now: number): { user: User; created: boolean } {
   const db = getDb();
   const e = normalizeEmail(email);
-  db.prepare("INSERT OR IGNORE INTO users (id, email, created_at) VALUES (?, ?, ?)").run(randomUUID(), e, now);
-  return db.prepare("SELECT id, email FROM users WHERE email = ?").get(e) as unknown as User;
+  const res = db.prepare("INSERT OR IGNORE INTO users (id, email, created_at) VALUES (?, ?, ?)").run(randomUUID(), e, now);
+  const user = db.prepare("SELECT id, email FROM users WHERE email = ?").get(e) as User | undefined;
+  if (!user) throw new Error("User row missing after insert");
+  return { user, created: Number(res.changes) === 1 };
+}
+
+export function upsertUser(email: string, now = Date.now()): User {
+  return insertUser(email, now).user;
+}
+
+export function createUserIfNew(email: string, now = Date.now()): User | null {
+  const { user, created } = insertUser(email, now);
+  return created ? user : null;
 }
 
 export function createSession(userId: string, now = Date.now()): string {
@@ -76,7 +83,7 @@ export function userFromSession(t: string | undefined | null, now = Date.now()):
   return { id: row.id, email: row.email };
 }
 
-export function deleteSession(t: string | undefined | null) {
+export function deleteSession(t: string | undefined | null): void {
   if (t) getDb().prepare("DELETE FROM sessions WHERE hash = ?").run(hash(t));
 }
 
@@ -99,7 +106,7 @@ export function getState(userId: string): { data: unknown; updatedAt: number } |
   }
 }
 
-export function putState(userId: string, data: unknown, now = Date.now()) {
+export function putState(userId: string, data: unknown, now = Date.now()): void {
   getDb()
     .prepare(
       "INSERT INTO states (user_id, data, updated_at) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at",

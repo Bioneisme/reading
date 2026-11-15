@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export function Tile({ children, className }: { children: ReactNode; className: string }) {
+function Tile({ children, className }: { children: ReactNode; className: string }) {
   return (
     <span className={`inline-flex items-center justify-center border-2 font-read font-bold ${className}`}>{children}</span>
   );

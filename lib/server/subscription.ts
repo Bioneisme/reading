@@ -1,7 +1,7 @@
 import "server-only";
 import type Stripe from "stripe";
 import { normalizeEmail } from "./auth";
-import type { PlanId } from "./stripe";
+import { PLAN_IDS, type PlanId } from "./stripe";
 
 export interface SubscriptionInfo {
   pro: boolean;
@@ -17,18 +17,19 @@ const LIVE = new Set<Stripe.Subscription.Status>(["active", "trialing", "past_du
 const cache = new Map<string, { at: number; value: SubscriptionInfo }>();
 const TTL = 60_000;
 
-function planOf(sub: Stripe.Subscription): PlanId {
+const isPlanId = (v: unknown): v is PlanId => PLAN_IDS.some((p) => p === v);
+
+export function planOf(sub: Pick<Stripe.Subscription, "metadata" | "items" | "trial_end">): PlanId {
   const meta = sub.metadata?.plan;
-  if (meta === "week" || meta === "month" || meta === "year") return meta;
+  if (isPlanId(meta)) return meta;
   const interval = sub.items.data[0]?.price?.recurring?.interval;
   if (interval === "year") return "year";
   return sub.trial_end ? "week" : "month";
 }
 
 function periodEnd(sub: Stripe.Subscription): number | null {
-  const item = sub.items.data[0] as (Stripe.SubscriptionItem & { current_period_end?: number }) | undefined;
   const legacy = (sub as Stripe.Subscription & { current_period_end?: number }).current_period_end;
-  return item?.current_period_end ?? legacy ?? null;
+  return sub.items.data[0]?.current_period_end ?? legacy ?? null;
 }
 
 async function liveSubscriptions(stripe: Stripe, email: string): Promise<Stripe.Subscription[]> {

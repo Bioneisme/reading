@@ -43,7 +43,9 @@ export function Stepper({ title, step }: { title: string; step: StepId }) {
   const at = STEP_INDEX[step];
   const [shown, setShown] = useState(false);
   useEffect(() => {
-    const r = requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)));
+    let r = requestAnimationFrame(() => {
+      r = requestAnimationFrame(() => setShown(true));
+    });
     return () => cancelAnimationFrame(r);
   }, []);
   return (

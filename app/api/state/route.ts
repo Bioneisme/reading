@@ -28,7 +28,7 @@ export async function PUT(req: NextRequest) {
   const user = await currentUser();
   if (!user) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
   const text = await req.text();
-  if (text.length > MAX_BYTES) return NextResponse.json({ error: "State is too large" }, { status: 413 });
+  if (Buffer.byteLength(text) > MAX_BYTES) return NextResponse.json({ error: "State is too large" }, { status: 413 });
   let body: unknown;
   try {
     body = JSON.parse(text);

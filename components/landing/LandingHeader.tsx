@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AccountLink } from "@/components/account/AccountLink";
-import { ReadlyLogo } from "@/components/ReadlyLogo";
+import { ReadlyLogo } from "@/components/kit";
 import { RealLink } from "./LandingLinks";
 import { cta } from "./styles";
 

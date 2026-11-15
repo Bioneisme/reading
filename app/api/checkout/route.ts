@@ -1,18 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { currentUser } from "@/lib/server/session";
-import { createCheckoutSession, stripeClient } from "@/lib/server/stripe";
+import { currentUser, siteOrigin } from "@/lib/server/session";
+import { createCheckoutSession, PLAN_IDS, stripeClient } from "@/lib/server/stripe";
 
 export const runtime = "nodejs";
 
-const Body = z.object({ plan: z.enum(["week", "month", "year"]) });
+const Body = z.object({ plan: z.enum(PLAN_IDS) });
 
 export async function POST(req: NextRequest) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   const stripe = stripeClient();
   if (!stripe) return NextResponse.json({ error: "Payments are not configured" }, { status: 503 });
-  const origin = process.env.SITE_URL || req.nextUrl.origin;
+  const origin = siteOrigin(req);
   try {
     const user = await currentUser();
     const url = await createCheckoutSession(stripe, parsed.data.plan, origin, user?.email);

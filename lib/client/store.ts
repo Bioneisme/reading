@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import type { Grade, SessionRecord } from "@/lib/engine";
 import { DEMO_CHILD, DEMO_SESSIONS } from "@/lib/demo";
+import type { PlanId } from "./api";
 import type { SyncedState } from "./merge";
 
 export interface Child {
@@ -21,7 +22,7 @@ export interface AppState {
   quiz: QuizAnswers | null;
   sessions: SessionRecord[];
   pro: boolean;
-  plan: { id: "week" | "month" | "year"; since: string } | null;
+  plan: { id: PlanId; since: string } | null;
   reminderTime: string;
   demo: boolean;
 }
@@ -76,7 +77,7 @@ function defaultAnonId() {
 const GRADES: Grade[] = ["K", "1", "2", "3"];
 
 function demoChild(): Child {
-  return { name: String(DEMO_CHILD.name), grade: DEMO_CHILD.grade as Grade };
+  return { ...DEMO_CHILD };
 }
 
 function defaults(demo: boolean): AppState {
@@ -240,7 +241,7 @@ export const store = {
     update((s) => ({ ...s, child }));
   },
 
-  setPro(pro: boolean, planId?: "week" | "month" | "year") {
+  setPro(pro: boolean, planId?: PlanId) {
     update((s) => ({
       ...s,
       pro,
@@ -298,7 +299,7 @@ export const store = {
     emit();
   },
 
-  applySubscription(pro: boolean, plan: "week" | "month" | "year" | null, since: string | null) {
+  applySubscription(pro: boolean, plan: PlanId | null, since: string | null) {
     const s = realRepo.load();
     realRepo.save({ ...s, pro, plan: pro && plan ? { id: plan, since: since ?? s.plan?.since ?? new Date().toISOString() } : null });
     emit();

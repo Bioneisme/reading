@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { z } from "zod";
 import type { StoryDraft, StoryWriter } from "./story-service";
+import type { CoachWriter } from "./xray-service";
 
 const Draft = z.object({ title: z.string(), text: z.string() });
 
@@ -34,6 +35,24 @@ export function createClaudeWriter(): StoryWriter | null {
         if (err instanceof Anthropic.BadRequestError || err instanceof Anthropic.AuthenticationError) throw err;
         return call(FAST, prompt);
       }
+    },
+  };
+}
+
+export function createCoachWriter(): CoachWriter | null {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  const client = new Anthropic({ timeout: 8_000, maxRetries: 0 });
+  return {
+    async write(prompt) {
+      const res = await client.messages.create({
+        model: FAST,
+        max_tokens: 200,
+        system: "You are a calm reading coach who explains a child's misread to a parent in one plain sentence.",
+        messages: [{ role: "user", content: prompt }],
+      });
+      const block = res.content.find((b) => b.type === "text");
+      if (!block || block.type !== "text") throw new Error("no text");
+      return block.text;
     },
   };
 }

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { claimCheckout, createSession, upsertUser } from "@/lib/server/auth";
+import { claimCheckout, createSession, createUserIfNew } from "@/lib/server/auth";
 import { currentUser, setSessionCookie } from "@/lib/server/session";
 import { checkoutResult, stripeClient } from "@/lib/server/stripe";
 import { subscriptionFor } from "@/lib/server/subscription";
@@ -23,10 +23,13 @@ export async function GET(req: NextRequest) {
   if (result.email) await subscriptionFor(stripe, result.email, true).catch(() => null);
   const user = await currentUser();
   if (user && user.email !== result.email) await subscriptionFor(stripe, user.email, true).catch(() => null);
-  if (user) return NextResponse.json({ paid: true, email: user.email });
+  if (user) {
+    claimCheckout(id, user.id);
+    return NextResponse.json({ paid: true, email: user.email });
+  }
   if (!result.email || Date.now() - result.createdAt > CLAIM_WINDOW_MS) return NextResponse.json({ paid: true, email: null });
-  const owner = upsertUser(result.email);
-  if (!claimCheckout(id, owner.id)) return NextResponse.json({ paid: true, email: null });
+  const owner = createUserIfNew(result.email);
+  if (!owner || !claimCheckout(id, owner.id)) return NextResponse.json({ paid: true, email: null });
   const res = NextResponse.json({ paid: true, email: owner.email });
   setSessionCookie(res, createSession(owner.id));
   return res;
