@@ -84,7 +84,7 @@ export function SignInForm() {
         <button
           type="button"
           onClick={() => setSent(null)}
-          className="text-link mt-6 cursor-pointer text-base font-extrabold text-indigo underline underline-offset-4"
+          className="text-link inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-extrabold text-indigo mt-5 text-base"
         >
           Use a different email
         </button>

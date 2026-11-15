@@ -241,7 +241,7 @@ function Session({ state }: { state: AppState }) {
             <button
               type="button"
               onClick={() => save(null)}
-              className="text-link min-h-11 cursor-pointer font-extrabold text-indigo underline"
+              className="text-link inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-extrabold text-indigo"
             >
               Skip and finish
             </button>

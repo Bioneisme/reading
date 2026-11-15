@@ -161,7 +161,7 @@ export function HistoryCard({ sessions, demo }: { sessions: SessionRecord[]; dem
         <button
           type="button"
           onClick={() => setAll((v) => !v)}
-          className="text-link mt-3 min-h-11 cursor-pointer text-[15px] font-extrabold text-indigo underline"
+          className="text-link inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-extrabold text-indigo mt-2 text-[15px]"
         >
           {all ? "Show fewer nights" : `Show all ${list.length} nights`}
         </button>

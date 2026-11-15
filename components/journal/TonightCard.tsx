@@ -72,9 +72,10 @@ export function TonightCard({ copy }: { copy: TonightCopy }) {
             <Link
               href={`/story/${copy.story.sample.id}`}
               aria-label={`Read a sample story, ${copy.story.sample.title}`}
-              className="text-link text-[15px] font-extrabold text-indigo underline"
+              className="text-link inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-extrabold text-indigo text-[15px]"
             >
               Read a sample story
+              <Icon name="next" size={16} strokeWidth={2.6} />
             </Link>
           )}
         </div>
