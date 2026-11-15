@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./readly-states.css";
+import { DemoBanner } from "@/components/DemoBanner";
 
 const nunito = localFont({
   variable: "--font-nunito",
@@ -40,7 +41,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${nunito.variable} ${andika.variable}`}>
-      <body className="min-h-screen bg-paper font-sans text-ink antialiased">{children}</body>
+      <body className="min-h-screen bg-paper font-sans text-ink antialiased">
+        <DemoBanner />
+        {children}
+      </body>
     </html>
   );
 }

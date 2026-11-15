@@ -1,8 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { AppHeader } from "@/components/kit";
-import { store } from "@/lib/client/store";
 import { Moon } from "./icons";
 import type { MoonState } from "./derive";
 
@@ -25,25 +23,10 @@ export function JournalHeader({
   streak: string;
   week: { letter: string; state: MoonState }[];
 }) {
-  const router = useRouter();
   return (
     <div className="on-dark bg-night text-white">
       <AppHeader
         dark
-        right={
-          demo ? (
-            <button
-              type="button"
-              onClick={() => {
-                store.exitDemo();
-                router.push("/start");
-              }}
-              className="text-link shrink-0 cursor-pointer text-sm font-extrabold text-[#FFD95E] underline underline-offset-2"
-            >
-              Start with my child
-            </button>
-          ) : null
-        }
       />
       <div className="mx-auto flex max-w-[1120px] flex-wrap items-end justify-between gap-5 px-6 pb-[30px] pt-[22px]">
         <div className="min-w-0 flex-[1_1_320px]">

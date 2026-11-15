@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-export function CheckProgress({ name, step, demo }: { name: string; step: number; demo: boolean }) {
+export function CheckProgress({ name, step }: { name: string; step: number }) {
   const labels = ["Read", `What ${name} said`, "Results"];
   return (
     <nav
@@ -22,11 +20,6 @@ export function CheckProgress({ name, step, demo }: { name: string; step: number
           );
         })}
       </ol>
-      {demo && (
-        <Link href="/start" className="text-link flex-none text-sm font-extrabold text-indigo underline underline-offset-2">
-          Start with my child
-        </Link>
-      )}
     </nav>
   );
 }

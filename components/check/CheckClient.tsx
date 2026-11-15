@@ -296,7 +296,7 @@ function Check({ child, demo }: { child: Child; demo: boolean }) {
         <AppHeader
           right={<ChildChip name={name} grade={GRADE_LABEL[child.grade]} demo={demo} />}
         />
-        <CheckProgress name={name} step={step} demo={demo} />
+        <CheckProgress name={name} step={step} />
 
         {phase === "intro" && (
           <IntroPhase

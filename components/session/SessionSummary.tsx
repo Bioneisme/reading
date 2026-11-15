@@ -6,6 +6,7 @@ import { Glim, useCountUp } from "@/components/kit";
 import { Moon } from "@/components/journal/icons";
 import { missLabel, nightsInARow } from "@/components/journal/derive";
 import { numberWord, SKILL_SHORT, SKILL_WITH_EXAMPLES, STATUS_LABEL } from "@/components/journal/skillCopy";
+import { DemoNextStep } from "@/components/DemoNextStep";
 import { StepMain } from "./parts";
 
 function ReadWord({ children }: { children: ReactNode }) {
@@ -158,6 +159,10 @@ export function SessionSummary(data: SummaryData) {
         </p>
         <p className="mt-1 text-base font-bold leading-normal text-[#4A3500]">{next}</p>
       </section>
+
+      {data.demo && (
+        <DemoNextStep name={name} title={`That was ${name}\'s night. Your child\'s plan starts with one check.`} className="mt-6" />
+      )}
     </StepMain>
   );
 }

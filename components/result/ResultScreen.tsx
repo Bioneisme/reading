@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { classifyMiss, coreLexicon, extendLexicon, SKILLS, type Lexicon, type SessionRecord } from "@/lib/engine";
 import { fetchLexicon } from "@/lib/client/api";
 import { store, useStore, type AppState } from "@/lib/client/store";
 import { Reveal } from "@/components/kit";
+import { DemoNextStep } from "@/components/DemoNextStep";
 import { ChildHeader } from "./ChildHeader";
 import { Evidence } from "./Evidence";
 import { buildModel, type SkillKey } from "./model";
@@ -21,7 +21,7 @@ function latestCheck(sessions: SessionRecord[]): SessionRecord | undefined {
   return [...sessions].reverse().find((s) => s.kind === "check");
 }
 
-function StepNav({ name, demo }: { name: string; demo: boolean }) {
+function StepNav({ name }: { name: string }) {
   const steps = ["Read", `What ${name} said`, "Results"];
   return (
     <nav aria-label="Check progress" className="mx-auto flex w-full max-w-[1120px] flex-wrap items-center gap-x-5 gap-y-2.5 px-6 pt-4">
@@ -33,11 +33,6 @@ function StepNav({ name, demo }: { name: string; demo: boolean }) {
           </li>
         ))}
       </ol>
-      {demo && (
-        <Link href="/start" className="text-link flex-none text-sm font-extrabold text-indigo underline underline-offset-2">
-          Start with my child
-        </Link>
-      )}
     </nav>
   );
 }
@@ -124,7 +119,7 @@ function Result({ state, name, check }: { state: AppState; name: string; check: 
 
   return (
     <>
-      <StepNav name={name} demo={state.demo} />
+      <StepNav name={name} />
       <main className="mx-auto max-w-[1120px] px-6 pt-5">
         {weak ? (
           <WeakSpotHero
@@ -139,6 +134,8 @@ function Result({ state, name, check }: { state: AppState; name: string; check: 
         ) : (
           <NoPatternHero name={name} totalWords={summary.totalWords} totalMisses={summary.totalMisses} flash={!!flash} />
         )}
+
+        {state.demo && <DemoNextStep name={name} className="mt-5" />}
 
         <div className={`mt-5 ${GRID2}`}>
           <Reveal className="grid">
