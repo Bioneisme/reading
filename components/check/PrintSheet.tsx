@@ -35,7 +35,7 @@ export function PrintSheet({
             <div className="text-base font-black">For the grown-up</div>
             <ol className="mt-2 list-decimal pl-[22px] text-base font-semibold leading-[1.6] text-[#3A3756]">
               <li>Sit side by side, so you can both see the words.</li>
-              <li>Don&apos;t correct while {name} reads — just listen.</li>
+              <li>Don&apos;t correct while {name} reads. Just listen.</li>
               <li>On your phone, tap the words {name} misses in tonight&apos;s check.</li>
             </ol>
           </div>

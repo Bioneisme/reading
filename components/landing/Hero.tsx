@@ -77,17 +77,17 @@ export function Hero() {
           >
             a
           </span>
-          A reading coach for parents of K–2 kids
+          A reading coach for parents of K-2 kids
         </p>
         <h1 className="mt-[22px] animate-rise text-[clamp(40px,4.8vw,66px)] [animation-delay:60ms] leading-[1.04] font-black tracking-[-0.03em] text-balance">
           Your child guesses words.{" "}
           <span className="box-decoration-clone bg-[linear-gradient(180deg,transparent_58%,#FFD95E_58%,#FFD95E_90%,transparent_90%)]">
             Find out exactly why
           </span>{" "}
-          — in 10 minutes a night.
+          in 10 minutes a night.
         </h1>
         <p className="mt-[22px] max-w-[540px] animate-rise [animation-delay:120ms] text-[clamp(17px,1.45vw,20px)] leading-[1.6] font-semibold text-pretty text-ink-2">
-          Your child reads from paper or the screen. You tap the words they miss. We tell you what to fix — and exactly
+          Your child reads from paper or the screen. You tap the words they miss. We tell you what to fix and exactly
           what to say tomorrow.
         </p>
         <div className="mt-8 flex animate-rise flex-wrap gap-3.5 [animation-delay:180ms]">
@@ -102,7 +102,7 @@ export function Hero() {
             Start with my child
           </RealLink>
         </div>
-        <p className="mt-3.5 animate-rise text-sm font-bold text-ink-3 [animation-delay:220ms]">The example follows Mia, 6 — a sample reader. Nothing to fill in.</p>
+        <p className="mt-3.5 animate-rise text-sm font-bold text-ink-3 [animation-delay:220ms]">The example follows Mia, 6, a sample reader. Nothing to fill in.</p>
         <ul aria-label="What you don't need" className="mt-[26px] flex flex-wrap gap-2.5">
           {NO.map((n, i) => (
             <li

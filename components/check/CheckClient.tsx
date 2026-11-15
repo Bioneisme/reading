@@ -236,10 +236,10 @@ function Check({ child, demo }: { child: Child; demo: boolean }) {
         : { label: "Show the text", onClick: () => goto("reading") };
   } else if (phase === "own") {
     hint = ownOk
-      ? `${name} reads it, you tap — same as always.`
-      : "Aim for 20–80 words.";
+      ? `${name} reads it, you tap, same as always.`
+      : "Aim for 20-80 words.";
     cta = {
-      label: busy ? "Checking words…" : "Use this text",
+      label: busy ? "Checking words..." : "Use this text",
       onClick: useOwn,
       disabled: !ownOk || busy,
     };
@@ -248,7 +248,7 @@ function Check({ child, demo }: { child: Child; demo: boolean }) {
     hint =
       marked.size > 0
         ? `Next: pick what ${name} said for each marked word.`
-        : "No misses? That is great — tap Done reading.";
+        : "No misses? That is great. Tap Done reading.";
     cta = {
       label: "Done reading",
       onClick: () => {

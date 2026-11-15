@@ -117,7 +117,7 @@ export function QuizFlow({ real }: { real: AppState }) {
       ? picked.length
         ? `${picked.length} ${picked.length === 1 ? "skill" : "skills"} to check tonight.`
         : "Tonight’s check will show where to start."
-      : "Pick at least one — or “Not sure yet”.";
+      : "Pick at least one, or “Not sure yet”.";
     if (any) cta = { label: "Continue", onClick: () => go(3) };
   } else if (step === BUILD_STEP) {
     hint = t >= 3 ? "Done." : "Takes a couple of seconds.";

@@ -14,7 +14,7 @@ export function Method() {
             Reading specialists sort misses by sound pattern. We made it a 10-minute habit any parent can do.
           </h2>
           <p className="mt-[18px] max-w-[560px] text-lg leading-[1.6] font-semibold text-indigo-soft">
-            You listen and mark what you hear. The pattern in the misses shows which skill to practice next — Readly does
+            You listen and mark what you hear. The pattern in the misses shows which skill to practice next. Readly does
             the pattern part for you. Practice is always sounding words out, never guessing from the first letter.
           </p>
         </Reveal>

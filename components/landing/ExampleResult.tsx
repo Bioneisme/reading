@@ -11,11 +11,11 @@ export function ExampleResult() {
           One 3-minute check. One clear thing to fix.
         </h2>
         <p className={`mt-4 max-w-[520px] ${LEAD}`}>
-          Mia, 6, read 36 words and missed 4. Three of the misses share one pattern — so that&apos;s tomorrow&apos;s
+          Mia, 6, read 36 words and missed 4. Three of the misses share one pattern, so that&apos;s tomorrow&apos;s
           focus, with the exact words to say.
         </p>
         <DemoLink className={cta("primary", "mt-7 min-h-14 px-6 text-[17px]")}>
-          Try it yourself — 60 seconds
+          Try it yourself in 60 seconds
           <Icon name="next" size={18} strokeWidth={2.4} />
         </DemoLink>
       </Reveal>
@@ -46,7 +46,7 @@ export function ExampleResult() {
           </div>
           <div className="flex flex-col gap-4 px-6 pt-[22px] pb-[26px] sm:px-7">
             <p className="text-[17px] leading-[1.6] font-semibold text-ink-2">
-              When a word ends in a quiet e, the vowel says its name: tape, bike, home. Mia reads the short sound instead —
+              When a word ends in a quiet e, the vowel says its name: tape, bike, home. Mia reads the short sound instead:
               bike → “bik”.
             </p>
             <p className="rounded-[20px_20px_20px_6px] bg-indigo-tint px-[18px] py-3.5 text-base leading-[1.45] font-bold">

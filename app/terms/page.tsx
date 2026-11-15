@@ -18,7 +18,7 @@ export default function TermsPage() {
       current="/terms"
       title="Terms, in plain words"
       tone="lamp"
-      summary="Readly is a coaching tool for parents — not a medical or dyslexia diagnosis. If you're worried, talk to your child's teacher."
+      summary="Readly is a coaching tool for parents, not a medical or dyslexia diagnosis. If you're worried, talk to your child's teacher."
     >
       <LegalSection title="Plans and billing">
         <ul className="list-disc pl-[22px] leading-[1.7]">

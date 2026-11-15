@@ -82,15 +82,15 @@ export function SuccessScreen() {
   const sessions = state?.sessions;
   const profile = useMemo(() => (sessions && sessions.length ? computeProfile(sessions) : null), [sessions]);
   const tonight = profile
-    ? `A 10-minute session on ${SKILLS[profile.focus].name}, round ${profile.round} — with a new story.`
-    : "A 10-minute session built from the first check — with a new story.";
+    ? `A 10-minute session on ${SKILLS[profile.focus].name}, round ${profile.round}, with a new story.`
+    : "A 10-minute session built from the first check, with a new story.";
 
   if (!snap || status === "checking") {
     return (
       <Shell state={state}>
         <div role="status" className="flex flex-col items-start gap-4 py-10">
           <span className="h-12 w-12 animate-spin rounded-full border-4 border-indigo-tint border-t-indigo" aria-hidden="true" />
-          <p className="text-xl font-black">Confirming your payment…</p>
+          <p className="text-xl font-black">Confirming your payment...</p>
           <p className="text-base font-semibold text-ink-2">This takes a few seconds.</p>
         </div>
       </Shell>

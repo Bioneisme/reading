@@ -45,7 +45,7 @@ export const SPOT: Partial<Record<SkillId, SpotCopy>> = {
   },
   tricky: {
     name: "Tricky words",
-    explain: () => "Words like said, was and the don’t follow the usual rules — they’re learned by sight.",
+    explain: () => "Words like said, was and the don’t follow the usual rules. They’re learned by sight.",
     heard: "stuck on said, was, the",
   },
   guessing: {

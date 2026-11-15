@@ -71,12 +71,12 @@ export function SimulateOverlay({ name, onClose }: { name: string; onClose: () =
           Simulated week
         </span>
         <h2 id="sim-title" aria-live="polite" className="mt-3 text-[28px] font-black tracking-[-0.02em] max-sm:text-2xl">
-          {done ? `${NIGHTS} nights done.` : `Running ${NIGHTS} sample nights…`}
+          {done ? `${NIGHTS} nights done.` : `Running ${NIGHTS} sample nights...`}
         </h2>
         <p className="mt-1.5 text-base font-semibold leading-normal text-ink-2">
           {done
             ? `${focusName} went from ${plural(first, "miss", "misses")} to ${last}. ${name}’s journal is ready.`
-            : "Same engine, sample answers — sped up."}
+            : "Same engine, sample answers, sped up."}
         </p>
         <ol className="mt-[18px] flex flex-col gap-2">
           {rows.map((r, i) => {
@@ -96,7 +96,7 @@ export function SimulateOverlay({ name, onClose }: { name: string; onClose: () =
                   style={{ "--bar": shown ? r.misses / peak : 0 } as CSSProperties}
                 />
                 <span key={shown ? "on" : "off"} className={`w-16 flex-none text-right text-[15px] font-black ${shown ? "animate-fade" : ""}`}>
-                  {shown ? plural(r.misses, "miss", "misses") : "…"}
+                  {shown ? plural(r.misses, "miss", "misses") : "..."}
                 </span>
               </li>
             );
@@ -111,7 +111,7 @@ export function SimulateOverlay({ name, onClose }: { name: string; onClose: () =
         {done && (
           <div className="mt-5 animate-rise">
             <ButtonLink href="/journal" block className="animate-pop max-sm:px-4 max-sm:text-base motion-safe:[animation-delay:380ms]">
-              Open {name}&apos;s journal — Day {day}
+              Open {name}&apos;s journal, Day {day}
               <Icon name="next" size={18} strokeWidth={2.4} />
             </ButtonLink>
           </div>

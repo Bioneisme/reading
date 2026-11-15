@@ -115,7 +115,7 @@ function bdMixups(list: SessionRecord[]): Notice | null {
     kind: "info",
     skill: "bd",
     title: "Mixes up b and d",
-    detail: "Very common up to age 7 or 8. A quick trick: “bed” — the b and d are the bedposts.",
+    detail: "Very common up to age 7 or 8. A quick trick: in “bed”, the b and d are the bedposts.",
     swaps: [],
     examples: misses.slice(0, 4).map(({ word, said }) => ({ word, said })),
     evidence: `Based on ${plural(misses.length, "word")} over ${plural(nights.size, "night")}`,

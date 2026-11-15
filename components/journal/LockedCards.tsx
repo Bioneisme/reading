@@ -91,10 +91,10 @@ export function LockedTeaser({ name }: { name: string }) {
             {name}&apos;s journal comes with the plan
           </h2>
           <p className="mt-2 text-base font-semibold leading-normal text-ink-2">
-            Skills map, nightly progress, history and a weekly summary — updated after every night.
+            Skills map, nightly progress, history and a weekly summary, updated after every night.
           </p>
           <Link href="/plans" className={buttonClass("primary", "lg", true, "mt-4")}>
-            See plans — from $9.92/month
+            See plans from $9.92/month
           </Link>
         </div>
       </div>

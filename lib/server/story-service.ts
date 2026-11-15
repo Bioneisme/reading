@@ -1,7 +1,7 @@
 import "server-only";
 import { DOLCH, STORY_NAMES, WORDBANK } from "@/data/wordbank";
 import {
-  SKILLS, analyzeWord, annotateText, storyForSkill, validateStory,
+  SKILLS, analyzeWord, annotateText, plainPunctuation, storyForSkill, validateStory,
   type SkillId, type Story, type StoryToken,
 } from "@/lib/engine";
 import type { Lexicon } from "@/lib/engine/lexicon";
@@ -46,13 +46,14 @@ export function buildPrompt(req: StoryRequest, lex: Lexicon, rejected: string[] 
   const names = STORY_NAMES.filter((n) => analyzeWord(n, lex)?.decodable);
   const allowed = [...new Set([...focusWords, ...otherWords, ...DOLCH.filter((w) => !w.includes("'"))])].sort();
   return [
-    `Write a short practice story for a beginning reader (age 5–8) who is working on: ${skill.name} (${skill.example}).`,
+    `Write a short practice story for a beginning reader (age 5-8) who is working on: ${skill.name} (${skill.example}).`,
     `The child reads it aloud to a parent. Warm and simple, a tiny plot with a happy ending.`,
     ``,
     `The child can only read the words in ALLOWED WORDS. Any other word breaks the exercise.`,
     ``,
     `Rules:`,
-    `- 60 to 100 words. Short sentences of 3–9 words.`,
+    `- 60 to 100 words. Short sentences of 3-9 words.`,
+    `- Plain punctuation only: periods, commas, question marks, exclamation marks and quotes. No dashes, semicolons or ellipses.`,
     `- Every word of the title and the story must appear in ALLOWED WORDS, spelled exactly as listed.`,
     `- Do not add endings (-s, -es, -ed, -ing) unless that exact form is listed. No contractions, no possessive 's.`,
     `- Use at least 8 different FOCUS words; repeat them.`,
@@ -79,7 +80,8 @@ export async function generateStory(
     while (attempts < MAX_ATTEMPTS && Date.now() - started < (deps.deadlineMs ?? 40_000)) {
       attempts++;
       try {
-        const draft = await deps.writer.write(buildPrompt(req, deps.lex, rejected));
+        const raw = await deps.writer.write(buildPrompt(req, deps.lex, rejected));
+        const draft = { title: plainPunctuation(raw.title), text: plainPunctuation(raw.text) };
         const all = `${draft.title}. ${draft.text}`;
         const v = validateStory(all, [...req.allowed, req.focus], { names: STORY_NAMES, lex: deps.lex });
         const words = draft.text.split(/\s+/).filter(Boolean).length;

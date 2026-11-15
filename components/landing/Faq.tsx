@@ -5,14 +5,14 @@ import { H2, SECTION } from "./styles";
 const FAQ = [
   {
     q: "Is my child supposed to use the app?",
-    a: "No — you do. Your child just reads, from the screen or a printout. They never tap, swipe or log in.",
+    a: "No, you do. Your child just reads, from the screen or a printout. They never tap, swipe or log in.",
   },
   {
     q: "Is this a dyslexia test?",
     a: "No. Readly is a coaching tool, not a medical or dyslexia diagnosis. If you're worried, talk to your child's teacher or a reading specialist.",
   },
   { q: "How long does it take?", a: "About 10 minutes a night. The very first reading check takes about 3." },
-  { q: "What ages is it for?", a: "Kids 5–8, from kindergarten to 2nd grade, who are learning to read." },
+  { q: "What ages is it for?", a: "Kids 5-8, from kindergarten to 2nd grade, who are learning to read." },
   {
     q: "Do I need a microphone or an iPad?",
     a: "No. Any phone or laptop browser works, and nothing listens to your child.",

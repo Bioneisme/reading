@@ -36,7 +36,7 @@ function Caption({ children }: { children: ReactNode }) {
 const PAINS: { title: string; body: string; art: ReactNode }[] = [
   {
     title: "Reads “tap” for “tape”",
-    body: "The quiet e at the end gets skipped. That's one skill — and it's very fixable.",
+    body: "The quiet e at the end gets skipped. That's one skill, and it's very fixable.",
     art: (
       <>
         <div className="-mt-7 flex gap-[7px]">
@@ -51,7 +51,7 @@ const PAINS: { title: string; body: string; art: ReactNode }[] = [
   },
   {
     title: "Guesses from the first letter",
-    body: "Close enough to sound right — but it's guessing, not reading the whole word.",
+    body: "Close enough to sound right, but it's guessing, not reading the whole word.",
     art: (
       <>
         <div className="-mt-7 flex gap-[5px]">
@@ -67,24 +67,24 @@ const PAINS: { title: string; body: string; art: ReactNode }[] = [
   },
   {
     title: "The teacher says “just read more”",
-    body: "Good advice — but it doesn't tell you what to practice tonight.",
+    body: "Good advice, but it doesn't tell you what to practice tonight.",
     art: (
       <>
         <div className="relative -mt-[26px] rounded-[20px] border-2 border-edge bg-card px-5 py-3 text-[22px] font-black shadow-[0_5px_0_#E4DBCB]">
           “Just read more.”
         </div>
         <div className="-mt-1 size-[18px] rotate-45 border-r-2 border-b-2 border-edge bg-card" />
-        <div className="mt-1.5 text-[13px] font-extrabold text-ink-3">— the teacher, at pickup</div>
+        <div className="mt-1.5 text-[13px] font-extrabold text-ink-3">The teacher, at pickup</div>
       </>
     ),
   },
   {
-    title: "Tutors cost $30–80 an hour",
+    title: "Tutors cost $30-80 an hour",
     body: "Great if you can. Most families can't do it every week.",
     art: (
       <>
         <div className="-mt-[26px] flex items-baseline gap-1.5 rounded-[18px] border-2 border-[#E8AE1C] bg-lamp px-5 py-2.5 shadow-[0_5px_0_#D99A0B]">
-          <span className="text-[30px] font-black tracking-[-0.02em]">$30–80</span>
+          <span className="text-[30px] font-black tracking-[-0.02em]">$30-80</span>
           <span className="text-[15px] font-extrabold text-[#4A3500]">/ hour</span>
         </div>
         <div className="mt-3 text-sm font-extrabold text-ink-3">A private reading tutor</div>

@@ -25,3 +25,7 @@ export function wordsOf(text: string): string[] {
     .map((t) => t.word)
     .filter((w): w is string => !!w);
 }
+
+export function plainPunctuation(text: string): string {
+  return text.replace(/\s*[—–]\s*/g, ", ").replace(/…/g, "...").replace(/\s*;\s*/g, ", ");
+}

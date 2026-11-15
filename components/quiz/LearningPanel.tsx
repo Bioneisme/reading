@@ -16,7 +16,7 @@ export function LearningPanel({ name, facts, spots }: { name: string; facts: Fac
           <div key={f.k} className="flex items-start justify-between gap-3 border-b-2 border-sand py-2.5">
             <dt className="text-sm font-extrabold text-ink-3">{f.k}</dt>
             <dd key={f.v ? "on" : "off"} className={`m-0 text-right text-[15px] font-black ${f.v ? "animate-fade text-ink" : "text-[#B3AC9E]"}`}>
-              {f.v || "—"}
+              {f.v || "-"}
             </dd>
           </div>
         ))}

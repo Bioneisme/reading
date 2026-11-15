@@ -245,7 +245,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
           )}
           {calDone && (
             <p role="status" className="mt-2.5 animate-fade text-sm font-extrabold text-mastered-ink">
-              Calendar file downloaded — open readly-reading-reminder.ics to add it.
+              Calendar file downloaded. Open readly-reading-reminder.ics to add it.
             </p>
           )}
         </Row>
@@ -272,7 +272,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
                 }}
                 className={`${SMALL_BTN} disabled:opacity-60`}
               >
-                {planBusy ? "Cancelling…" : "Cancel plan"}
+                {planBusy ? "Cancelling..." : "Cancel plan"}
               </button>
             ) : null
           }

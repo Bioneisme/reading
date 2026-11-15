@@ -80,10 +80,10 @@ export function PlanPicker() {
       <Button onClick={go} disabled={busy} block className="mt-[22px] min-h-[60px] text-lg font-black max-sm:px-4">
         <Icon name="lock" size={18} strokeWidth={2.4} />
         {busy ? (
-          "Opening secure checkout…"
+          "Opening secure checkout..."
         ) : (
           <span>
-            Continue —{" "}
+            Continue ·{" "}
             <span key={chosen.id} className="inline-block animate-pop">
               <span className="inline-block animate-fade">{chosen.price}</span>
             </span>{" "}
@@ -117,7 +117,7 @@ export function PlanPicker() {
         </p>
       </div>
       <p className="mt-3.5 text-[13px] font-bold leading-[1.55] text-ink-3">
-        Plans renew automatically until you cancel. Cancel in Settings, in one click — no emails, no calls.
+        Plans renew automatically until you cancel. Cancel in Settings in one click. No emails, no calls.
       </p>
     </section>
   );

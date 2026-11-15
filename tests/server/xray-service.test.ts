@@ -29,3 +29,11 @@ describe("x-ray coach tip guardrails", () => {
     expect(await coachTip(x, "", { write: async () => "The quiet e in bike makes i say its name." })).toMatch(/quiet e/);
   });
 });
+
+describe("plain punctuation from the model", () => {
+  it("turns dashes, semicolons and ellipses into plain punctuation", async () => {
+    const { plainPunctuation } = await import("@/lib/engine");
+    expect(plainPunctuation("Jake ran — fast; then… home")).toBe("Jake ran, fast, then... home");
+    expect(acceptTip("The quiet e in bike — it makes i say its name.", x)).toBe("The quiet e in bike, it makes i say its name.");
+  });
+});

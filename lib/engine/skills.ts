@@ -56,9 +56,9 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     explain: (c, e) =>
       `In short words like bed, cat and sun, each vowel makes its short sound. ${c} swaps one vowel sound for another: ${ex(e, "bed → “bad”")}.`,
     scripts: () => [
-      "Say the middle sound with me: b – e – d. What sound is in the middle?",
+      "Say the middle sound with me: b, e, d. What sound is in the middle?",
       "Touch each letter and say its sound, then slide the sounds together.",
-      "Bed — bad. Which one do you sleep in?",
+      "Bed, bad. Which one do you sleep in?",
     ],
     pairs: [["bed", "bad"], ["pin", "pen"], ["hot", "hut"], ["cap", "cup"], ["sit", "set"]],
   },
@@ -71,7 +71,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "See the e at the end? It's quiet, but it makes the vowel say its name.",
       "Cover the e. Read it. Now uncover it. What changed?",
-      "Tap — tape. Which one is a sticky strip?",
+      "Tap, tape. Which one is a sticky strip?",
     ],
     pairs: [["tap", "tape"], ["kit", "kite"], ["hop", "hope"], ["cut", "cute"], ["pin", "pine"]],
   },
@@ -84,7 +84,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "When s and h are together, they make one sound: /sh/, like when we say “be quiet”.",
       "Put your finger under both letters. That's one sound. Say it with me.",
-      "Sip — ship. Which one floats on the water?",
+      "Sip, ship. Which one floats on the water?",
     ],
     pairs: [["sip", "ship"], ["cop", "chop"], ["tin", "thin"], ["sin", "sing"]],
   },
@@ -95,9 +95,9 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     explain: (c, e) =>
       `At the start of words like stop and trip, two consonants sit side by side and you hear both. ${c} drops one: ${ex(e, "stop → “sop”")}.`,
     scripts: () => [
-      "Both letters at the start make a sound. Let's say them slowly: s – t – op.",
+      "Both letters at the start make a sound. Let's say them slowly: s, t, op.",
       "Cover the rest of the word. Say just the first two sounds, then add the rest.",
-      "Top — stop. Which one does a red light tell you to do?",
+      "Top, stop. Which one does a red light tell you to do?",
     ],
     pairs: [["top", "stop"], ["lip", "slip"], ["rip", "trip"], ["pin", "spin"], ["lap", "clap"]],
   },
@@ -108,9 +108,9 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     explain: (c, e) =>
       `At the end of words like jump and hand, two consonants sit together and you hear both. ${c} drops one of them: ${ex(e, "jump → “jum”")}.`,
     scripts: () => [
-      "Listen to the very end of the word: ju – m – p. Two sounds at the end.",
+      "Listen to the very end of the word: ju, m, p. Two sounds at the end.",
       "Read it again and stretch out the last two sounds.",
-      "Had — hand. Which one do you wave?",
+      "Had, hand. Which one do you wave?",
     ],
     pairs: [["had", "hand"], ["bet", "best"], ["lap", "lamp"], ["ten", "tent"], ["ban", "band"]],
   },
@@ -123,7 +123,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "Look at the end of the word. Is there an -s, -ed or -ing? Say it.",
       "Cover the ending, read the word, then uncover the ending and add it.",
-      "Jump — jumped. Which one already happened?",
+      "Jump, jumped. Which one already happened?",
     ],
     pairs: [["jump", "jumped"], ["cat", "cats"], ["run", "running"], ["help", "helped"], ["sit", "sitting"]],
   },
@@ -136,7 +136,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "When two vowels go walking, the first one does the talking. It says its name.",
       "Point to the vowel team. What sound do they make together?",
-      "Ran — rain. Which one falls from the sky?",
+      "Ran, rain. Which one falls from the sky?",
     ],
     pairs: [["ran", "rain"], ["fed", "feed"], ["cot", "coat"], ["lit", "light"]],
   },
@@ -149,7 +149,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "The r is bossy. It changes the sound of the vowel in front of it.",
       "Read the vowel and the r together as one sound: /ar/, /or/, /er/.",
-      "Bid — bird. Which one can fly?",
+      "Bid, bird. Which one can fly?",
     ],
     pairs: [["bid", "bird"], ["cat", "cart"], ["hut", "hurt"], ["ban", "barn"]],
   },
@@ -162,7 +162,7 @@ export const SKILLS: Record<SkillId, SkillInfo> = {
     scripts: () => [
       "Make a bed with your hands: thumbs up, fists together. The left hand is b, the right hand is d.",
       "For b, your lips pop together: /b/. For d, your tongue taps behind your teeth: /d/.",
-      "Dig — big. Which one do you do with a shovel?",
+      "Dig, big. Which one do you do with a shovel?",
     ],
     pairs: [["big", "dig"], ["bad", "dad"], ["bug", "dug"]],
   },

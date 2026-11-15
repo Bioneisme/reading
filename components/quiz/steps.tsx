@@ -141,7 +141,7 @@ export function HeardStep({ name, signs, onToggle }: { name: string; signs: stri
 
 export function EveningsStep({ value, onPick }: { value: string | null; onPick: (v: string) => void }) {
   return (
-    <Question title="How do reading evenings usually go?" sub="No judgment — it sets the tone of your tips.">
+    <Question title="How do reading evenings usually go?" sub="No judgment. It sets the tone of your tips.">
       <div role="radiogroup" aria-label="Reading evenings" className="mt-2 grid grid-cols-3 gap-2 sm:gap-3">
         {EVENINGS.map((e) => (
           <PictureCard compact key={e} selected={value === e} onSelect={() => onPick(e)} art={EVENING_ART[e].art} artClass={EVENING_ART[e].artClass} title={e} />
@@ -223,7 +223,7 @@ export function BuildingStep({ possessive, letters, steps, t }: { possessive: st
           </span>
         ))}
       </div>
-      <h1 className={`${h1} mt-[22px] text-center`}>Building {possessive} reading profile…</h1>
+      <h1 className={`${h1} mt-[22px] text-center`}>Building {possessive} reading profile...</h1>
       <ol aria-live="polite" className="mx-auto mt-6 flex max-w-[460px] flex-col gap-2.5">
         {steps.map((s, i) => {
           const done = t >= i + 1;
@@ -252,7 +252,7 @@ export function BuildingStep({ possessive, letters, steps, t }: { possessive: st
                 </span>
                 <span className="text-base font-extrabold">
                   {s}
-                  {done && <span className="sr-only"> — done</span>}
+                  {done && <span className="sr-only">, done</span>}
                 </span>
               </span>
             </li>

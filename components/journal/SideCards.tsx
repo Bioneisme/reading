@@ -111,7 +111,7 @@ export function MissesChart({ sessions }: { sessions: SessionRecord[] }) {
         <p className="mt-3.5 text-sm font-bold leading-normal text-ink-2">
           {shown.length > 1
             ? "Fewer misses on the same skill means it is sticking."
-            : "Come back tomorrow — night 2 starts the trend line."}
+            : "Come back tomorrow. Night 2 starts the trend line."}
         </p>
       )}
     </section>

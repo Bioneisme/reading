@@ -104,7 +104,7 @@ export function WeakSpotHero({
         </p>
         {second && (
           <p className="mt-3.5 inline-flex items-center gap-2 rounded-full bg-[#3A3690] px-3.5 py-2 text-sm font-extrabold">
-            Also seen: {second.name} — {missLine(second.count)}
+            Also seen: {second.name}, {missLine(second.count)}
           </p>
         )}
       </div>

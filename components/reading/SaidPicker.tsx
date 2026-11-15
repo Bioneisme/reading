@@ -201,7 +201,7 @@ export function SaidPicker({
               onClick={() => set({ kind: "other", text: cur?.kind === "other" ? cur.text : "" })}
               className={`${choice} min-h-[60px] px-4 py-2 text-[17px] font-extrabold`}
             >
-              Something else…
+              Something else...
             </button>
             <button
               type="button"
@@ -238,7 +238,7 @@ export function SaidPicker({
         <p className="mt-4 text-sm font-bold text-ink-3">
           {demo
             ? `Example: ${childName}'s answers are already picked. Tap any to change it.`
-            : "Not sure? Pick the closest one — it still helps."}
+            : "Not sure? Pick the closest one. It still helps."}
         </p>
       </main>
 

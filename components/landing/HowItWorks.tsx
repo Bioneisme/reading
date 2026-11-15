@@ -11,7 +11,7 @@ const STEPS: { title: string; body: string; show: ReactNode }[] = [
     show: <div className={`${SHOW} font-read text-[22px] leading-[1.7]`}>Jake has a red bike.</div>,
   },
   {
-    title: "You tap the words they miss — and pick what they said.",
+    title: "You tap the words they miss and pick what they said.",
     body: "Tap again to undo. You don't need to be a teacher to get it right.",
     show: (
       <div className={`${SHOW} flex flex-wrap items-center gap-2`}>

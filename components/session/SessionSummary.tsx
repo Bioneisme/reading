@@ -69,7 +69,7 @@ export function SessionSummary(data: SummaryData) {
       : tonight < last
         ? { text: `${last - tonight} fewer than last time`, good: true }
         : tonight === last
-          ? { text: "Same as last time — steady", good: true }
+          ? { text: "Same as last time, steady", good: true }
           : { text: "A tougher night. That happens.", good: false };
 
   const moons = Array.from({ length: 7 }, (_, i) => i < Math.min(run, 7));
@@ -115,7 +115,7 @@ export function SessionSummary(data: SummaryData) {
         <div className="rounded-[22px] border-2 border-line bg-card p-[18px] shadow-edge">
           <div className="text-xs font-black uppercase tracking-[0.1em] text-ink-3">Last time</div>
           <div className="mt-1 text-[clamp(26px,3vw,34px)] font-black tabular-nums">
-            {last === null ? "—" : <CountMisses n={last} />}
+            {last === null ? "-" : <CountMisses n={last} />}
           </div>
         </div>
       </div>

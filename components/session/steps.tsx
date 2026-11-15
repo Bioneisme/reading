@@ -120,7 +120,7 @@ export function StoryLoading({ name, focus, word }: { name: string; focus: strin
         })}
       </div>
       <h1 className="mt-[22px] text-[clamp(28px,3vw,40px)] font-black leading-[1.12] tracking-[-0.02em]">
-        Writing tonight&apos;s story…
+        Writing tonight&apos;s story...
       </h1>
       <p className="mt-2.5 text-[17px] font-semibold leading-[1.55] text-ink-2">
         Every word is checked against what {name} can read. Usually a few seconds.

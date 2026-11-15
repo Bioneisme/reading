@@ -59,7 +59,7 @@ export function Reminder({ name, initial }: { name: string; initial: string }) {
       </Button>
       {done && (
         <p role="status" className="mt-3 text-sm font-extrabold text-mastered-ink">
-          Downloaded readly-reading-reminder.ics — open it to add {label} every night.
+          Downloaded readly-reading-reminder.ics. Open it to add {label} every night.
         </p>
       )}
     </section>

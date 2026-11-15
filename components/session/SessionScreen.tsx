@@ -159,7 +159,7 @@ function Session({ state }: { state: AppState }) {
   );
 
   const marked = (n: number, minutes: number) => `${plural(n, "word")} marked · about ${minutes} minutes`;
-  const stepTitle = `${focusName} — round ${plan.round}`;
+  const stepTitle = `${focusName} · round ${plan.round}`;
 
   let body: ReactNode = null;
   let footer: ReactNode = null;
@@ -169,7 +169,7 @@ function Session({ state }: { state: AppState }) {
       <StepMain>
         <StepTitle
           title="Warm-up: word pairs"
-          sub={`${name} reads each pair out loud. Tap any word ${name} misses — tap again to undo.`}
+          sub={`${name} reads each pair out loud. Tap any word ${name} misses. Tap again to undo.`}
         />
         <PairsGrid pairs={plan.pairs} marked={pairMarks} onToggle={(k) => setPairMarks((m) => toggled(m, k))} />
         <SayThis name={name} script={plan.scripts[0]} />

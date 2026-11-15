@@ -74,7 +74,7 @@ export function OwnTextPhase({
         Use a page from {name}&apos;s own book
       </h1>
       <p className="mt-2.5 text-[17px] font-semibold leading-[1.55] text-ink-2">
-        Paste or type 2–5 sentences from a book {name} is reading. We&apos;ll check every word against the 11 reading skills.
+        Paste or type 2-5 sentences from a book {name} is reading. We&apos;ll check every word against the 11 reading skills.
       </p>
       <label htmlFor="own-text" className="mt-[22px] block text-base font-black">
         Text from the book

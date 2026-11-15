@@ -33,7 +33,7 @@ export function ReturningCard() {
         </span>
         <div className="min-w-0 sm:flex-[1_1_240px]">
           <p className="text-[19px] font-black">
-            Welcome back. Continue with {child.name} — Day {day}
+            Welcome back. Continue with {child.name}, Day {day}
           </p>
           <p className="mt-0.5 text-[15px] font-semibold text-ink-2">{tonight}</p>
         </div>

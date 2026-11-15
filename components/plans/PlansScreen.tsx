@@ -52,7 +52,7 @@ export function PlansScreen() {
       <ChildHeader state={state} />
       <main className="mx-auto max-w-[1120px] px-6 pt-7 max-[399px]:px-4">
         {canceled && (
-          <Notice icon={<InfoIcon />} title="Checkout was cancelled — no charge was made.">
+          <Notice icon={<InfoIcon />} title="Checkout was cancelled. No charge was made.">
             {name ? `${name}'s` : "Your"} plan is still here whenever you&apos;re ready. Tomorrow&apos;s free plan works either way.
           </Notice>
         )}

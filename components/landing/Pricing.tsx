@@ -19,7 +19,7 @@ export function Pricing() {
         <Reveal>
           <p className={EYEBROW}>Pricing</p>
           <h2 id="price-title" className={`mt-2.5 text-balance ${H2}`}>
-            Less than one tutoring hour — for a whole month.
+            Less than one tutoring hour, for a whole month.
           </h2>
           <ul className="mt-6 flex flex-col gap-3">
             {PERKS.map((p) => (

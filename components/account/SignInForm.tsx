@@ -39,7 +39,7 @@ export function SignInForm() {
     return (
       <div className="text-center" role="status">
         <Glim pose="reading" size={140} className="mx-auto" />
-        <h1 className="mt-4 text-[clamp(28px,3vw,36px)] font-black leading-[1.1] tracking-[-0.02em]">Bringing back your progress…</h1>
+        <h1 className="mt-4 text-[clamp(28px,3vw,36px)] font-black leading-[1.1] tracking-[-0.02em]">Bringing back your progress...</h1>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export function SignInForm() {
         Sign in to Readly
       </h1>
       <p className="mx-auto mt-3 max-w-[460px] text-center text-lg font-semibold leading-[1.6] text-ink-2">
-        Keep your child&apos;s progress and plan on every device. No password — we email you a link.
+        Keep your child&apos;s progress and plan on every device. No password. We email you a link.
       </p>
       {expired && (
         <p role="alert" className="mx-auto mt-5 max-w-[460px] rounded-2xl bg-needs-tint px-4 py-3 text-center text-[15px] font-extrabold text-needs-ink">
@@ -143,7 +143,7 @@ export function SignInForm() {
           </p>
         )}
         <Button type="submit" block disabled={busy} className="mt-4 disabled:opacity-60">
-          {busy ? "Sending…" : "Email me a sign-in link"}
+          {busy ? "Sending..." : "Email me a sign-in link"}
           {!busy && <Icon name="next" size={18} strokeWidth={2.4} />}
         </Button>
         <p className="mt-4 text-center text-sm font-bold leading-normal text-ink-3">

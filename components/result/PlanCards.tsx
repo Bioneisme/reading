@@ -81,7 +81,7 @@ export function TomorrowPlan({ plan, pro }: { plan: Plan; pro: boolean }) {
         {pro ? (
           <Step min={5} title="Practice story">
             <span className="mt-0.5 block text-[15px] font-bold text-ink-2">
-              “{plan.story.title}” — every word checked.{" "}
+              “{plan.story.title}”, every word checked.{" "}
               <Link href={`/story/${plan.story.id}`} className="text-link font-extrabold text-indigo">
                 Read it
               </Link>
@@ -99,7 +99,7 @@ export function TomorrowPlan({ plan, pro }: { plan: Plan; pro: boolean }) {
             }
           >
             <span className="mt-0.5 block text-[15px] font-bold text-ink-2">
-              “{plan.story.title}” — every word checked. In the full plan.
+              “{plan.story.title}”, every word checked. In the full plan.
             </span>
           </Step>
         )}

@@ -74,7 +74,7 @@ export function sessionTitle(sessions: SessionRecord[], rec: SessionRecord): str
   const i = ordered.findIndex((s) => s.id === rec.id);
   let round = 1;
   for (let k = i - 1; k >= 0 && ordered[k].kind === "nightly" && ordered[k].focus === rec.focus; k--) round++;
-  return rec.focus ? `${SKILL_SHORT[rec.focus]} — round ${round}` : `Night ${rec.day}`;
+  return rec.focus ? `${SKILL_SHORT[rec.focus]} · round ${round}` : `Night ${rec.day}`;
 }
 
 export function weekdayShort(iso: string): string {
@@ -91,7 +91,7 @@ export function headerLine(profile: Profile, sessions: SessionRecord[], demo: bo
   if (locked) return checkedToday ? "Tonight’s check is done. Tomorrow’s plan is free." : "Tomorrow’s plan is free.";
   const focus = SKILL_SHORT[profile.focus];
   const hasNightly = sessions.some((s) => s.kind === "nightly");
-  if (!hasNightly) return `First check done — ${focus} is the place to start.`;
+  if (!hasNightly) return `First check done. ${focus} is the place to start.`;
   const status = profile.skills[profile.focus].status;
   const lead = status === "improving" ? `${focus} is improving.` : `${focus} is tonight’s focus.`;
   return profile.nextUp ? `${lead} Next up: ${SKILL_SHORT[profile.nextUp]}.` : lead;

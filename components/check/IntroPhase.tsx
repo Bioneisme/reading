@@ -147,7 +147,7 @@ export function IntroPhase({
             {ownActive ? `Using a page from ${name}'s own book` : `Or use a page from ${name}'s own book`}
           </span>
           <span className="block text-[15px] font-semibold text-ink-2">
-            {ownActive ? "Tap to change the text." : "Paste a few sentences — we check every word."}
+            {ownActive ? "Tap to change the text." : "Paste a few sentences. We check every word."}
           </span>
         </span>
         <Chevron className="flex-none text-indigo" />

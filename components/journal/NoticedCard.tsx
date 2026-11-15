@@ -73,7 +73,7 @@ export function NoticedCard({ sessions, name }: { sessions: SessionRecord[]; nam
       </div>
       {notices.length === 0 ? (
         <p className="mt-2 text-[15px] font-semibold leading-normal text-ink-2">
-          After two nights of reading, patterns in {name}&apos;s slips show up here — like the same sound read the same wrong way.
+          After two nights of reading, patterns in {name}&apos;s slips show up here, like the same sound read the same wrong way.
         </p>
       ) : (
         <ul className="mt-3.5 flex flex-col gap-3">

@@ -60,7 +60,7 @@ export function ProfileClient() {
       done={6}
       backHref="/start?step=6"
       aside={<LearningPanel name={name} facts={facts} spots={picked} />}
-      hint="You can change any answer — tap the back arrow."
+      hint="You can change any answer. Tap the back arrow."
     >
       <div className="flex flex-wrap items-center gap-2.5">
         <h1 className="m-0 text-[30px] font-black leading-[1.1] tracking-[-0.02em] lg:text-[clamp(30px,3.2vw,42px)]">

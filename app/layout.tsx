@@ -20,9 +20,9 @@ const andika = localFont({
   ],
 });
 
-const title = "Readly — find out why your child guesses words";
+const title = "Readly: find out why your child guesses words";
 const description =
-  "A 3-minute reading check for parents of K–2 kids. See which sound patterns trip your child up, then follow a 10-minute plan each night.";
+  "A 3-minute reading check for parents of K-2 kids. See which sound patterns trip your child up, then follow a 10-minute plan each night.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL ?? "https://readly.13lab.tech"),

@@ -1,7 +1,7 @@
 export function ExampleChip({ label = "Example", onDark = false }: { label?: string; onDark?: boolean }) {
   return (
     <span
-      title="Sample data — real parents never see this"
+      title="Sample data. Real parents never see this."
       className={`rounded-full border-[1.5px] px-2.5 py-[3px] text-[11px] font-black uppercase tracking-[0.08em] ${
         onDark ? "border-white/35 bg-transparent text-lamp" : "border-lamp-edge bg-lamp text-ink"
       }`}

@@ -70,7 +70,7 @@ function Journal({ state }: { state: AppState }) {
     sample,
   });
 
-  const focusTitle = `${SKILL_SHORT[profile.focus]} — round ${profile.round}`;
+  const focusTitle = `${SKILL_SHORT[profile.focus]} · round ${profile.round}`;
   const tonight: TonightCopy = !hasSessions
     ? {
         label: "Tonight",
@@ -94,7 +94,7 @@ function Journal({ state }: { state: AppState }) {
             label: "Next",
             title: focusTitle,
             sub: doneToday(sessions)
-              ? `Tomorrow evening is perfect — or start now if ${child.name} is up for it.`
+              ? `Tomorrow evening is perfect. Or start now if ${child.name} is up for it.`
               : "About 10 minutes: word pairs, a word list and a new story.",
             cta: { label: `Start round ${profile.round}`, href: "/session" },
             steps: true,

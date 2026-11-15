@@ -35,7 +35,7 @@ export function UnlockCard({ name, pro }: { name: string; pro: boolean }) {
       ) : (
         <>
           <ButtonLink href="/plans" block className="mt-5 text-center max-sm:px-3 max-sm:text-base">
-            See plans — from $9.92/month
+            See plans from $9.92/month
           </ButtonLink>
           <p className="mt-2.5 text-center text-sm font-bold text-ink-3">Cancel anytime in one click</p>
         </>
@@ -54,7 +54,7 @@ export function SimulateCard({ name, onStart }: { name: string; onStart: () => v
         What does a week look like?
       </h2>
       <p className="mt-2 text-base font-semibold leading-[1.55] text-indigo-soft">
-        Run five sample nights through the same engine — about 3 seconds — then open {name}&apos;s journal.
+        Run five sample nights through the same engine (about 3 seconds), then open {name}&apos;s journal.
       </p>
       <Button variant="lamp" block onClick={onStart} className="mt-[18px] font-black">
         <Icon name="play" size={18} />

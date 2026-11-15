@@ -1,4 +1,4 @@
-A web app for parents of children aged 5–8 who are learning to read. Every evening the child reads a short text aloud (from paper or the screen), the parent taps the words the child misses and picks what the child said. Readly works out which reading skill is weak and gives the parent a plan for tomorrow: what to practise, what to say, and a practice story in which every word is checked by code.
+A web app for parents of children aged 5-8 who are learning to read. Every evening the child reads a short text aloud (from paper or the screen), the parent taps the words the child misses and picks what the child said. Readly works out which reading skill is weak and gives the parent a plan for tomorrow: what to practise, what to say, and a practice story in which every word is checked by code.
 
 No microphone, no iPad, no sign-up. Child data stays in the browser (localStorage); signing in with an emailed link is optional and only syncs it across devices.
 
@@ -6,7 +6,7 @@ No microphone, no iPad, no sign-up. Child data stays in the browser (localStorag
 
 | Step | Who | Where |
 |---|---|---|
-| Splitting each word into letter-sound chunks over CMUdict (sh, ai, ar, silent e…) and tagging its skills | **Code** | `lib/engine/phonics.ts` |
+| Splitting each word into letter-sound chunks over CMUdict (sh, ai, ar, silent e, etc.) and tagging its skills | **Code** | `lib/engine/phonics.ts` |
 | Offering likely misreadings ("bike" → bik, bake, bite) | **Code**: skill rules applied in reverse | `lib/engine/distractors.ts`, `variants.ts` |
 | Deciding which skill explains a miss | **Code**: priority rules (ТЗ §5.4) | `lib/engine/classify.ts` |
 | Mastery, weak spot, focus for tomorrow | **Code**: decayed error rate `(errors+1)/(attempts+2)` | `lib/engine/mastery.ts` |
@@ -74,7 +74,7 @@ gh workflow run deploy.yml                       # redeploy main
 
 - **CMUdict 0.7b** (Carnegie Mellon University), BSD-style licence, commercial use allowed: `data/raw/cmudict.dict`.
 - **Dolch sight words** (220 service words, published 1936/1948): treated as public domain. To be re-checked before release.
-- **K–2 word bank, passages, stories, scripts**: written for Readly (`data/wordbank.ts`, `lib/engine/content.ts`, `lib/engine/skills.ts`).
+- **K-2 word bank, passages, stories, scripts**: written for Readly (`data/wordbank.ts`, `lib/engine/content.ts`, `lib/engine/skills.ts`).
 - **Andika** font (SIL), SIL Open Font License.
 - Not used (non-commercial licences): UFLI, CKLA, Open Source Phonics.
 

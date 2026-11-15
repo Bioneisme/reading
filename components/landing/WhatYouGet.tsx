@@ -75,7 +75,7 @@ export function WhatYouGet() {
           What you get every night
         </h2>
         <p className={`mt-3 max-w-[640px] ${LEAD}`}>
-          Each plan is built from that night&apos;s misses — not from a fixed curriculum.
+          Each plan is built from that night&apos;s misses, not from a fixed curriculum.
         </p>
       </Reveal>
       <div className="mt-9 grid gap-5 lg:grid-cols-2">
@@ -96,13 +96,13 @@ export function WhatYouGet() {
               “See the e at the end? It&apos;s quiet, but it makes the vowel say its name.”
             </p>
             <p className="max-w-[80%] self-start rounded-[22px_22px_22px_6px] bg-indigo-tint px-[18px] py-3.5 text-[17px] leading-[1.45] font-bold">
-              “Tap — tape. Which one is a sticky strip?”
+              “Tap, tape. Which one is a sticky strip?”
             </p>
           </div>
         </Feature>
         <Feature
           title="A practice story where every word is checked"
-          body="Only words your child can already decode — plus the skill they're practicing."
+          body="Only words your child can already decode, plus the skill they're practicing."
         >
           <div className="flex flex-wrap gap-x-[18px] gap-y-3.5 rounded-[18px] bg-paper p-[18px]">
             {STORY.map((w, i) => (

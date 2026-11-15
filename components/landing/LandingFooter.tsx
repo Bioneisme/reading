@@ -11,7 +11,7 @@ export function LandingFooter() {
       <div className="max-w-[520px] flex-[1_1_320px]">
         <ReadlyLogo size={30} />
         <p className="mt-3 text-[15px] leading-[1.6] font-semibold text-ink-2">
-          The reading coach for parents. 10 minutes a night — know exactly what to fix.
+          The reading coach for parents. 10 minutes a night to know exactly what to fix.
         </p>
         <p className="mt-2.5 text-[13px] leading-[1.6] font-semibold text-ink-3">
           Readly is a coaching tool, not a medical or dyslexia diagnosis.

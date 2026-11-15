@@ -14,14 +14,14 @@ const whiteTile = "bg-card border-edge";
 
 export const GRADE_ART: Record<string, { art: ReactNode; artClass: string; ages: string }> = {
   K: {
-    ages: "Ages 5–6",
+    ages: "Ages 5-6",
     artClass: "h-24 bg-lamp-tint",
     art: (
       <Tile className={`-mt-8 h-[74px] w-[66px] -rotate-[5deg] rounded-[18px] text-[42px] shadow-[0_6px_0_#D99A0B] ${lampTile}`}>K</Tile>
     ),
   },
   "1": {
-    ages: "Ages 6–7",
+    ages: "Ages 6-7",
     artClass: "h-24 bg-indigo-tint",
     art: (
       <span className="-mt-8 flex items-end gap-1">
@@ -31,7 +31,7 @@ export const GRADE_ART: Record<string, { art: ReactNode; artClass: string; ages:
     ),
   },
   "2": {
-    ages: "Ages 7–8",
+    ages: "Ages 7-8",
     artClass: "h-24 bg-[#E6F5EC]",
     art: (
       <span className="-mt-8 flex items-end gap-1">
@@ -41,7 +41,7 @@ export const GRADE_ART: Record<string, { art: ReactNode; artClass: string; ages:
     ),
   },
   "3": {
-    ages: "Ages 8–9",
+    ages: "Ages 8-9",
     artClass: "h-24 bg-needs-tint",
     art: (
       <span className="-mt-8 flex items-end gap-1">
