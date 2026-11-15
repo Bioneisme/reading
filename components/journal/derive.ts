@@ -88,7 +88,7 @@ export function missLabel(n: number): string {
 export function headerLine(profile: Profile, sessions: SessionRecord[], demo: boolean, locked: boolean): string {
   if (!sessions.length) return "Tonight starts with a 3‑minute reading check.";
   const checkedToday = doneTonight(sessions, demo);
-  if (locked) return checkedToday ? "Tonight’s check is done. Tomorrow’s plan is free." : "Tomorrow’s plan is free.";
+  if (locked) return checkedToday ? "Tonight’s check is done. Next: a 10‑minute session tomorrow." : "Next: a 10‑minute session tomorrow.";
   const focus = SKILL_SHORT[profile.focus];
   const hasNightly = sessions.some((s) => s.kind === "nightly");
   if (!hasNightly) return `First check done. ${focus} is the place to start.`;
@@ -161,4 +161,12 @@ export function weekSummary(profile: Profile, sessions: SessionRecord[]): WeekSu
   if (mastered) chips.push(`${SKILL_SHORT[mastered]}: mastered`);
   chips.push(`${name}: ${STATUS_LABEL[profile.skills[skill].status].toLowerCase()}`);
   return { headline, overall, next, chips };
+}
+
+export function prettyTime(t: string): string {
+  const [h, m] = t.split(":").map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return t;
+  const suffix = h >= 12 ? "pm" : "am";
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}:${String(m).padStart(2, "0")} ${suffix}`;
 }

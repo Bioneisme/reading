@@ -126,12 +126,11 @@ function Journal({ state }: { state: AppState }) {
       <div className="mx-auto flex max-w-[1120px] flex-wrap items-start gap-5 px-6 pt-6">
         <div className="flex min-w-0 flex-[2_1_560px] flex-col gap-5">
           {locked ? (
-            <>
-              {hasSessions ? <FreePlanCard plan={plan} /> : <TonightCard copy={tonight} />}
-              <Reveal delay={80}>
-                <LockedTeaser name={child.name} />
-              </Reveal>
-            </>
+            hasSessions ? (
+              <FreePlanCard plan={plan} name={child.name} reminderTime={state.reminderTime} />
+            ) : (
+              <TonightCard copy={tonight} />
+            )
           ) : (
             <>
               <TonightCard copy={tonight} />
@@ -145,7 +144,11 @@ function Journal({ state }: { state: AppState }) {
           )}
         </div>
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
-          {!locked && (
+          {locked ? (
+            <Reveal delay={80}>
+              <LockedTeaser name={child.name} />
+            </Reveal>
+          ) : (
             <>
               <Reveal delay={120}>
                 <WeekCard summary={weekSummary(profile, sessions)} sessions={sessions.length} />
@@ -158,9 +161,9 @@ function Journal({ state }: { state: AppState }) {
               </Reveal>
             </>
           )}
-          <Reveal delay={60}>
-            <SettingsCard state={state} locked={locked} />
-          </Reveal>
+        </div>
+        <div className="w-full">
+          <SettingsCard state={state} locked={locked} />
         </div>
       </div>
     </div>

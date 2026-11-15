@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import type { Plan } from "@/lib/engine";
-import { buttonClass } from "@/components/kit";
+import { buttonClass, Icon } from "@/components/kit";
+import { downloadReminderIcs } from "@/lib/client/ics";
+import { prettyTime } from "./derive";
 import { SKILL_SHORT } from "./skillCopy";
 import { SECTION } from "./TonightCard";
 
@@ -12,7 +17,8 @@ function LockGlyph({ size = 16 }: { size?: number }) {
   );
 }
 
-export function FreePlanCard({ plan }: { plan: Plan }) {
+export function FreePlanCard({ plan, name, reminderTime }: { plan: Plan; name: string; reminderTime: string }) {
+  const [added, setAdded] = useState(false);
   const pairs = plan.pairs.slice(0, 2).map((p) => p.join(" / ")).join(" · ");
   const words = plan.wordList.slice(0, 3).join(" · ");
   const rows = [
@@ -21,13 +27,13 @@ export function FreePlanCard({ plan }: { plan: Plan }) {
   ];
   return (
     <section aria-labelledby="free-title" className={`${SECTION} p-[22px] sm:p-[26px]`}>
-      <div className="flex flex-wrap items-center justify-between gap-2.5">
-        <h2 id="free-title" className="text-[26px] font-black tracking-[-0.02em]">
-          Tomorrow&apos;s plan
-        </h2>
-        <span className="rounded-full bg-mastered-tint px-3 py-1 text-[13px] font-black text-mastered-ink">Free</span>
-      </div>
-      <p className="mt-1.5 text-base font-semibold text-ink-2">Built from tonight&apos;s check: {SKILL_SHORT[plan.focus]}.</p>
+      <div className="text-[13px] font-black uppercase tracking-[0.1em] text-indigo">Next step</div>
+      <h2 id="free-title" className="mt-1.5 text-[clamp(26px,2.6vw,34px)] font-black leading-[1.1] tracking-[-0.02em] text-balance">
+        Tomorrow at {prettyTime(reminderTime)}, 10 minutes
+      </h2>
+      <p className="mt-2 text-base font-semibold leading-normal text-ink-2">
+        {name} practices {SKILL_SHORT[plan.focus]}, the skill from tonight&apos;s check. Here&apos;s what it looks like:
+      </p>
       <ol className="mt-4 flex flex-col gap-2.5">
         {rows.map((r) => (
           <li key={r.label} className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 rounded-2xl bg-paper px-3.5 py-3">
@@ -38,23 +44,37 @@ export function FreePlanCard({ plan }: { plan: Plan }) {
             <span className="ml-auto whitespace-nowrap text-right font-read text-[19px] text-ink-2">{r.words}</span>
           </li>
         ))}
-        <li className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 rounded-2xl border-2 border-dashed border-line-strong bg-[#F6F1E7] px-3.5 py-3">
-          <span className="w-[62px] flex-none rounded-[10px] bg-ink-3 py-1.5 text-center text-sm font-black text-white">5 min</span>
-          <span className="font-extrabold">Practice story</span>
-          <span className="ml-auto inline-flex items-center gap-1.5 whitespace-nowrap text-right text-sm font-extrabold text-ink-2">
-            <LockGlyph />
-            In the plan
-          </span>
+        <li className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 rounded-2xl bg-paper px-3.5 py-3">
+          <span className="w-[62px] flex-none rounded-[10px] bg-indigo py-1.5 text-center text-sm font-black text-white">5 min</span>
+          <span className="font-extrabold">A story written for {name}</span>
         </li>
       </ol>
-      <div className="mt-[18px] flex flex-wrap gap-3">
-        <Link href="/plans" className={buttonClass("primary", "lg", false, "flex-[1_1_220px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
-          Unlock nightly sessions
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Link href="/plans" className={buttonClass("primary", "lg", false, "flex-[1_1_240px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
+          <LockGlyph size={18} />
+          Unlock tomorrow&apos;s session
         </Link>
-        <Link href="/result" className={buttonClass("secondary", "lg", false, "flex-[1_1_200px] whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}>
-          Review tonight&apos;s results
-        </Link>
+        <button
+          type="button"
+          onClick={() => {
+            downloadReminderIcs(reminderTime, name);
+            setAdded(true);
+          }}
+          className={buttonClass("secondary", "lg", false, "flex-[1_1_200px] cursor-pointer whitespace-nowrap max-[400px]:px-4 max-[400px]:text-[15px]")}
+        >
+          <Icon name="calendar" size={18} strokeWidth={2.2} />
+          Add a reminder
+        </button>
       </div>
+      {added && (
+        <p role="status" className="mt-3 animate-fade text-sm font-extrabold text-mastered-ink">
+          Calendar file downloaded. Open it to get a nudge at {prettyTime(reminderTime)}.
+        </p>
+      )}
+      <Link href="/result" className="text-link mt-3 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-extrabold text-indigo">
+        Review tonight&apos;s results
+        <Icon name="next" size={16} strokeWidth={2.6} />
+      </Link>
     </section>
   );
 }
@@ -93,9 +113,7 @@ export function LockedTeaser({ name }: { name: string }) {
           <p className="mt-2 text-base font-semibold leading-normal text-ink-2">
             Skills map, nightly progress, history and a weekly summary, updated after every night.
           </p>
-          <Link href="/plans" className={buttonClass("primary", "lg", true, "mt-4")}>
-            See plans from $9.92/month
-          </Link>
+          <p className="mt-3 text-sm font-black text-indigo">Included in every plan</p>
         </div>
       </div>
     </section>

@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Grade } from "@/lib/engine";
 import { store, type AppState } from "@/lib/client/store";
+import { Icon } from "@/components/kit";
 import { changeSubscription, signOut, useAccount, type Account } from "@/lib/client/account";
 import type { PlanId } from "@/lib/client/api";
 import { GRADE_LABEL } from "@/lib/client/progress";
 import { downloadReminderIcs } from "@/lib/client/ics";
 import { Collapse } from "./motion";
-import { sortSessions } from "./derive";
+import { prettyTime, sortSessions } from "./derive";
 import { SECTION } from "./TonightCard";
 
 const DAY_MS = 86400000;
@@ -22,14 +23,6 @@ const SMALL_PRIMARY =
 const FIELD =
   "mt-1 block min-h-[46px] w-full rounded-xl border-2 border-line-strong bg-card px-3 text-base font-bold text-ink";
 const PANEL_BTN = "inline-flex min-h-[46px] flex-[1_1_120px] cursor-pointer items-center justify-center rounded-xl text-sm font-extrabold";
-
-function prettyTime(t: string): string {
-  const [h, m] = t.split(":").map(Number);
-  if (Number.isNaN(h) || Number.isNaN(m)) return t;
-  const suffix = h >= 12 ? "pm" : "am";
-  const hh = h % 12 === 0 ? 12 : h % 12;
-  return `${hh}:${String(m).padStart(2, "0")} ${suffix}`;
-}
 
 function shortDate(d: Date, year: boolean): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", ...(year ? { year: "numeric" } : {}) });
@@ -106,6 +99,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
   const [grade, setGrade] = useState<Grade>(child.grade);
   const [timeOpen, setTimeOpen] = useState(false);
   const [calDone, setCalDone] = useState(false);
+  const [open, setOpen] = useState(false);
   const [cancelled, setCancelled] = useState<{ plan: PlanId | null } | null>(null);
   const [resetOpen, setResetOpen] = useState(false);
   const keepRef = useRef<HTMLButtonElement>(null);
@@ -136,11 +130,29 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
   };
 
   return (
-    <section aria-labelledby="set-title" className={`${SECTION} p-6`}>
-      <h2 id="set-title" className="text-[22px] font-black">
-        Settings
+    <section aria-labelledby="set-title" className={`${SECTION} px-6 py-4`}>
+      <h2 id="set-title" className="m-0">
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls="settings-body"
+          onClick={() => setOpen((v) => !v)}
+          className="flex min-h-12 w-full cursor-pointer items-center gap-3 text-left"
+        >
+          <span className="text-[22px] font-black">Settings</span>
+          <span className="min-w-0 flex-1 truncate text-sm font-bold text-ink-3">
+            {child.name} · {GRADE_LABEL[child.grade]} · {prettyTime(state.reminderTime)}
+          </span>
+          <Icon
+            name="next"
+            size={18}
+            strokeWidth={2.6}
+            className={`flex-none text-ink-3 transition-transform duration-200 ${open ? "-rotate-90" : "rotate-90"}`}
+          />
+        </button>
       </h2>
-      <div className="@container mt-2 flex flex-col">
+      <Collapse open={open}>
+      <div id="settings-body" className="@container mt-2 flex flex-col pb-2">
         <Row
           label="Child"
           value={`${child.name} · ${GRADE_LABEL[child.grade]}`}
@@ -384,6 +396,7 @@ export function SettingsCard({ state, locked }: { state: AppState; locked: boole
           </Collapse>
         </Row>
       </div>
+      </Collapse>
     </section>
   );
 }
