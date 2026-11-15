@@ -33,22 +33,13 @@ export function FinalCta() {
             className="absolute inset-x-[6%] top-[24%] bottom-0 rounded-[999px_999px_32px_32px] bg-night-2 shadow-edge-night"
           />
           <Image
-            src="/images/cutout-mom-toddler.png"
-            alt="A mom checks her phone while holding her little one"
-            width={564}
-            height={647}
+            src="/images/cutout-mom-reminder.png"
+            alt="A mom checks her phone while holding her little one, with a nightly 7:30 pm reading reminder"
+            width={1000}
+            height={1109}
             sizes="(min-width: 1024px) 480px, 85vw"
             className="absolute bottom-0 left-1/2 block h-[98%] w-auto max-w-full -translate-x-1/2 object-contain object-bottom"
           />
-          <div className="absolute bottom-[8%] left-0 z-[2] flex -rotate-2 animate-float items-center gap-3 rounded-[20px] bg-card py-3 pr-4 pl-3 text-ink shadow-edge-night">
-            <span aria-hidden="true" className="inline-flex size-[42px] items-center justify-center rounded-xl bg-lamp text-ink">
-              <Icon name="calendar" size={22} strokeWidth={2.2} />
-            </span>
-            <span className="flex flex-col">
-              <span className="text-xs font-black tracking-[0.08em] text-indigo uppercase">Every night</span>
-              <span className="text-[17px] font-black">Reading time · 7:30 pm</span>
-            </span>
-          </div>
         </Reveal>
       </div>
     </section>
